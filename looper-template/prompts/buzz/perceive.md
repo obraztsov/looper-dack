@@ -1,5 +1,8 @@
 ---
 state: perceive
+# A cycle that produces NOTHING (no outward tool call, no baton) means the answer died in a
+# thought — a person asked and got silence. Tell the operator instead of hiding it.
+notify_on_silent: true
 mcp: [recall, recall-self, media]
 transitions: [buzz/express]
 reply_key: in_reply_to
