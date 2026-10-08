@@ -17,9 +17,13 @@ soul that a dack engine can boot and run on Telegram + Buzz.
 
 - **`research/looper_fetch.py`** — resolve a token's on-chain `tokenURI` → Arweave metadata → personality
   **codex**. `ALCHEMY_KEY=<key> research/looper_fetch.py <token_id>`.
-- **`research/compose_soul.py`** — the composer: codex + a base soul template → a complete dack soul under
-  `souls/looper-<id>/` (persona prompts, org/heartbeat/digest duties, Telegram + Buzz rails, an example
-  config). Deterministic, no LLM. See [`LOADING.md`](LOADING.md) for the full run.
+- **`research/compose_soul.py`** — the composer: codex + templates → a complete dack soul under
+  `souls/looper-<id>/` (persona files, duties, Telegram + Buzz rails, an example config). Deterministic,
+  no LLM. See [`LOADING.md`](LOADING.md) for the full run.
+- **`looper-template/`** — the **operational layer as editable files**: state prompts, duties, and the
+  Buzz skill doc, forked from the public dack soul template and shaped for a looper. The composer fills
+  in `{{TOKEN_ID}}` / `{{HANDLE}}` / `{{AGENT_CLASS}}` and resolves `{{#if bash_skills}}` blocks. Edit
+  prompts here — see [`looper-template/README.md`](looper-template/README.md).
 - **`research/FINDINGS.md`** — how a Looper's identity is laid out on-chain, the codex → soul mapping, and
   the trust/wall model the soul relies on.
 - **`research/agentic-skills-design.md`** — design notes for giving a looper plain-text skills + a
