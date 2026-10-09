@@ -1,8 +1,8 @@
 ---
 state: perceive
-# A cycle that produces NOTHING (no outward tool call, no baton) means the answer died in a
-# thought — a person asked and got silence. Tell the operator instead of hiding it.
-notify_on_silent: true
+# NO `notify_on_silent` here, deliberately: this is the PUBLIC rail, where staying quiet is the
+# correct answer (`[]` is the high-signal default below). Alerting on it turns the quiet-guest
+# rule into a pager. The ORG rails keep the flag — there, a person asked and got nothing.
 mcp: [recall, recall-self, media]
 transitions: [buzz/express]
 reply_key: in_reply_to

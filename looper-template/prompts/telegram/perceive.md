@@ -1,8 +1,8 @@
 ---
 state: perceive
-# A cycle that produces NOTHING (no outward tool call, no baton) means the answer died in a
-# thought — a person asked and got silence. Tell the operator instead of hiding it.
-notify_on_silent: true
+# NO `notify_on_silent` here, deliberately: this is the PUBLIC rail, where staying quiet is the
+# correct answer (`[]` is the high-signal default below). Alerting on it turns the quiet-guest
+# rule into a pager. The ORG rails keep the flag — there, a person asked and got nothing.
 # Context tools (read-only). cove-read = your own wallet (self-trust). twitter-read / rootai are
 # `public` — using them floors this cycle at Express (fine for chatting; you can't trade off a chat
 # anyway here). You hold NO telegram tool in Perceive — replying happens in telegram/express.
