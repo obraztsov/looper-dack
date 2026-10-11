@@ -314,13 +314,13 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     )
     tier_policy = (
         """tier_policy:
-  perceive: { import: [recall, recall-self, skills, media] }
+  perceive: { import: [recall, recall-self, skills, media, buzz-read] }
   express:  { import: [telegram, telegram-send, buzz-cli, outbox] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
-  perceive: { import: [recall, recall-self, media] }
+  perceive: { import: [recall, recall-self, media, buzz-read] }
   express:  { import: [telegram, telegram-send, buzz-cli, outbox] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
@@ -381,6 +381,16 @@ mcp_servers:
     tier: post
     scope_env: {{ BUZZ_REPLY_CHANNEL: conversation, BUZZ_REPLY_TO: in_reply_to }}   # default a reply to the woke channel/msg
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz" }}   # runtime binary (outside the soul), absolute — the MCP server's cwd is NOT /duck
+  - name: buzz-read                               # READ the Buzz workspace from Perceive (threads, issues, canvas)
+    # The read-only half of Buzz. Perceive is "explore and collect context"; without this a duck woken by a
+    # Buzz message planned from one payload message + memory and often decided nothing. An ALLOWLIST of read
+    # verbs (fail-closed) — nothing here can post. `trust: org`: reading an org channel is org data, so this
+    # does NOT floor a project cycle to public; import it on the ORG rails only.
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/buzz-read-mcp.ts] }}
+    auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
+    tier: read
+    trust: org
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz" }}
   - name: media                                   # read a PLAINTEXT attachment someone sent (.md/.txt/.csv…)
     # The ONLY way stored bytes enter context: the wall denies builtin reads of the store outright (media/ is
     # in classify.rs PRIVATE_DIRS), and this server confines the id to the store, caps it, and admits

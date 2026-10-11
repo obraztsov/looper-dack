@@ -3,7 +3,7 @@ state: perceive
 # The `buzz` tool lives in the EXPRESS step, so the queries happen there — this step decides what to look
 # at and what it means. (`recall-self` only: reading public chat here would floor the cycle and cost the
 # express step its org-tier reach.)
-mcp: [recall-self]
+mcp: [recall-self, buzz-read]
 transitions: [project/express]
 # A sweep that produces nothing at all is suspicious — it means even the LOOK didn't happen.
 notify_on_silent: true
@@ -15,8 +15,9 @@ only ever react to messages, assigned work sits untouched indefinitely.
 
 So: go and LOOK, then decide what to do about what you find.
 
-Emit ONE baton to `project/express` whose gist says to sweep the projects and what you care about. The
-express step holds the `buzz` tool and will run, in order:
+You hold the read-only `mcp__buzz-read__buzz_read { args }` here, so LOOK NOW — run the three reads below
+yourself, then emit ONE baton to `project/express` whose gist names the concrete move the state calls for
+(the express step holds the write-enabled `buzz` tool). The reads, in order:
 1. `["projects","list","--owner","<operator-hex>"]` — the org's projects. **`--owner` is required**: a bare
    `projects list`, or `projects get <slug>`, only sees projects YOU own, which is almost none of them.
    Need the hex? `["channels","members","--channel","<id>"]` → the member with `role: "owner"`. Each

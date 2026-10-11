@@ -5,7 +5,7 @@ state: perceive
 notify_on_silent: true
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. `media` is
 # trust:public ON PURPOSE — see the attachment note in the body: reading untrusted bytes floors the cycle.
-mcp: [recall-self, media]
+mcp: [recall-self, media, buzz-read]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }
@@ -53,6 +53,12 @@ Beyond replying here, in `buzz/org-express` you have **cross-channel reach**:
   channel **canvas** (the living scope doc), and file/triage **issues** (trackable tasks with a state) in
   the org's projects — see `skills/buzz/SKILL.md`. If the move is "write the spec down" or "turn this into
   a tracked task", say so in your baton; don't improvise a long chat post instead.
+- **LOOK before you plan — you can read Buzz from here.** `mcp__buzz-read__buzz_read { args: [...] }` is
+  read-only: pull the thread you woke in (`["messages","thread","--channel","<id>","--event","<root>"]`),
+  the issue a message refers to (`["issues","get","--event","<id>"]`), the project canvas
+  (`["canvas","get","--channel","<id>"]`), or who is in the room (`["channels","members",...]`). A reply
+  grounded in what is actually in the tracker beats one reconstructed from memory — and if the thread or
+  canvas already answers the point, `[]` is the right call. Acting still happens in the express step.
 - **To act, emit a baton** `{ to_prompt: buzz/org-express, reply_to: "<in_reply_to>", gist, tags }` — name
   the ONE move and the RIGHT room in your gist (reply here · delegate in research · announce to public).
 - Pull context with `recall-self` if the moment wants it.

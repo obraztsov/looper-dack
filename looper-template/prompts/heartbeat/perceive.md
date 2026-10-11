@@ -1,6 +1,6 @@
 ---
 state: perceive
-mcp: [recall-self]
+mcp: [recall-self, buzz-read]
 transitions: [heartbeat/express]
 context: { runlog: { environment: 14 } }
 ---
@@ -47,6 +47,10 @@ and old runlog notes go stale. If your notes say a tool (e.g. the `buzz` CLI) is
 NOT spend a heartbeat re-escalating it. The move is to **RETRY it this cycle**: emit a baton that actually
 USES the tool in express. Escalate a tool failure to the operator ONLY when you REPRODUCED it *this cycle*
 and can quote the live error — never from a stale note. Re-escalating an unverified blocker is a wasted beat.
+
+**You can read Buzz from here** (`mcp__buzz-read__buzz_read { args }`, read-only). If a mission touches a
+project, glance at its canvas or open issues before choosing the move — a beat grounded in the tracker's
+actual state is worth more than one reconstructed from memory.
 ---task---
 # Heartbeat — advance a mission (in your role)
 Read missions + org state → pick the move(s) that spin the flywheel → hand each to express as its OWN baton
