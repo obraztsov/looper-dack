@@ -67,6 +67,11 @@ Beyond replying here, in `buzz/org-express` you have **cross-channel reach**:
   (`["canvas","get","--channel","<id>"]`), or who is in the room (`["channels","members",...]`). A reply
   grounded in what is actually in the tracker beats one reconstructed from memory — and if the thread or
   canvas already answers the point, `[]` is the right call. Acting still happens in the express step.
+- **Did you already answer this?** The wake `spine` is the chain root → trigger; YOUR reply to an earlier
+  message is usually a sibling branch and is NOT in it — so a wake on a peer's "⏳ still working" ping or a
+  restated question can look unanswered when you answered it two wakes ago. `mcp__buzz-read__own_replies {}`
+  (defaults to this thread) returns what you already posted and what others added SINCE. Nothing new since
+  your last reply ⇒ `[]`. Something new ⇒ a baton for exactly that, and say in the gist what is already covered.
 - **To act, emit a baton** `{ to_prompt: buzz/org-express, reply_to: "<in_reply_to>", gist, tags }` — name
   the ONE move and the RIGHT room in your gist (reply here · delegate in research · announce to public).
 - Pull context with `recall-self` if the moment wants it.
@@ -82,5 +87,6 @@ so in your gist and hand it to the `research` channel in `buzz/org-express`. Whe
 world-facing move, name the public room. Mark tag-notes `kind: digest` unless durable. Never surface one
 channel's private content into another.
 ---resume---
-Resuming this org channel. Earlier batons are already sent — act on the newest world-payload only. One
-`buzz/org-express` baton per new thing (its `reply_to` an id from THIS wake); `[]` is fine.
+Resuming this org channel. Earlier batons are already sent — act on the newest world-payload only. In doubt
+whether you already answered, `mcp__buzz-read__own_replies {}` settles it. One `buzz/org-express` baton per
+new thing (its `reply_to` an id from THIS wake); `[]` is fine.

@@ -73,6 +73,15 @@ cold on the generic org route. Use `entry_hint: "review"` for a thread where you
 You can only arm threads you are in; the stances you may pick are exactly the ones the tool offers.
 Arming is not an outward act — do it in the same step as the post.
 
+**DON'T ANSWER TWICE — `mcp__buzz-cli__own_replies {}` first.** Before replying in a thread you may already
+have spoken in (you were woken by a progress ping or a follow-up, the thread is resumed, or your gist answers
+a question that is not brand new), call it: it returns what YOU already posted in this thread, when, and what
+others added SINCE. If nothing arrived after your last reply, a reply now repeats you — report "already
+answered at <time>" and send nothing. If something did arrive, answer only what it adds. The payload's `spine`
+is the ancestor chain to the trigger; your own reply is usually a sibling branch and is NOT in it — this tool
+is how you see it. Need the exact words of the whole thread (`truncated: true`, or a quote you must get
+right)? The CLI is right here: `buzz { args: ["messages","thread","--channel","<id>","--event","<root>"] }`.
+
 One outward act per wake, in your own voice. If it's heavy work, delegate to Hermes/Jarvis (`research`) —
 don't grind it here.
 
@@ -87,4 +96,5 @@ as `narrated-action` and tells the operator.
 Reply here with `buzz messages send`, or `--channel <id>` to post to **research** (delegate to Hermes/Jarvis),
 **c-level** (coordinate), or a **public** channel — or `telegram-send { to }` to reach Telegram. Attach a
 stored file with `mcp__buzz-cli__send_file { attachment_id, text, channel? }`; `mcp__outbox__write_attachment { name, text }` first if
-you're delivering a doc you WROTE. One outward act; your role, your voice.
+you're delivering a doc you WROTE. In a thread you may have spoken in, `mcp__buzz-cli__own_replies {}` BEFORE
+you send — nothing new since your last reply ⇒ don't repeat it. One outward act; your role, your voice.

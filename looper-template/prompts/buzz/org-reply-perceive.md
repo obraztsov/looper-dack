@@ -16,7 +16,8 @@ a task or brief you posted. Your wake payload carries the thread, `tags` naming 
 
 Before anything else, recover the task: `recall_self_by_tag` on the `issue:`/`project:` tag gives you what you
 asked for and why; `mcp__buzz-read__buzz_read` can pull the issue (`["issues","get","--event","<id>"]`), the
-canvas, or the full thread. Then judge the reply against the ask:
+canvas, or the full thread; `mcp__buzz-read__own_replies {}` shows what you already said here and what
+arrived since (a reply you already gave is not owed again). Then judge the reply against the ask:
 
 - **Does it actually answer the task?** Scope creep, a different question, or "done" with no artifact
   (no issue status, no canvas change, no file, no commit) is NOT done. A claim about work needs a
