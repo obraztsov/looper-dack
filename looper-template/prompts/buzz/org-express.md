@@ -5,7 +5,7 @@ state: express
 #                           (research → Hermes/Jarvis · c-level → fleet · a public channel → the world).
 #   - telegram-send {to}  — cross-platform: to:"org" (private tg fleet group) · "holder" (operator DM) ·
 #                           "public" (community tg group). Admits only on an org-tier cycle (min_trust:org).
-mcp: [buzz-cli, telegram-send, outbox]
+mcp: [buzz-cli, telegram-send, outbox, ingress-arm]
 transitions: []
 session: { sticky: true, key: [thread_id] }
 context: { tag_key: true, auto_tags: [buzz], runlog: { environment: 0, thread: 40 } }
@@ -61,6 +61,15 @@ you, as a choice. Text only (.md/.txt/.csv/.json…); a name claiming `.pdf` is 
   list or `projects get <slug>` only sees what YOU own). The `a` tag `30617:<owner>:<repo-id>` is the repo
   coordinate pair; `buzz-channel` is the channel. You may create projects/repos and open patches/PRs; you
   may NOT create/rename/delete channels or delete a project.
+
+**ARM THE THREAD when you post a task or brief** — `mcp__ingress-arm__arm_thread { thread_root, entry_hint,
+tags }`. The `messages send` result gives you the event id; pass it as `thread_root` with
+`entry_hint: "reply"` and tags like `["issue:<id>","project:<slug>"]`. From then on every reply in that
+thread wakes you in the **reply** stance (a critic reading it as a follow-up on exactly this task) and lands
+under those tags, so the next cycle can `recall_self_by_tag` the whole exchange instead of meeting the reply
+cold on the generic org route. Use `entry_hint: "review"` for a thread where you expect a HUMAN to steer.
+You can only arm threads you are in; the stances you may pick are exactly the ones the tool offers.
+Arming is not an outward act — do it in the same step as the post.
 
 One outward act per wake, in your own voice. If it's heavy work, delegate to Hermes/Jarvis (`research`) —
 don't grind it here.

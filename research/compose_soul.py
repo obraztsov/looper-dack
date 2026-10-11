@@ -315,13 +315,13 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     tier_policy = (
         """tier_policy:
   perceive: { import: [recall, recall-self, skills, media, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, outbox] }
+  express:  { import: [telegram, telegram-send, buzz-cli, outbox, ingress-arm] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
   perceive: { import: [recall, recall-self, media, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, outbox] }
+  express:  { import: [telegram, telegram-send, buzz-cli, outbox, ingress-arm] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
     return f"""# dack.config.example.yaml — Looper #{token_id} pond duck. Copy to dack.config.yaml (GITIGNORE it),
@@ -391,6 +391,20 @@ mcp_servers:
     tier: read
     trust: org
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz" }}
+  - name: ingress-arm                             # ARM a Buzz thread: future replies open with a stance + tags
+    # The pond-manager pattern: the duck never edits ingress config — it writes a row to a shared SQLite store
+    # (ingress-routes.sqlite) that buzz-ingress consults on its poll. A row says only "replies in this thread
+    # open with stance X and carry tags Y". NEVER a route: the webhook path (trust) is untouched; the harness
+    # resolves the hint against the duty's `entries:` allowlist. ARM_ENTRIES comes from the wake payload
+    # (`entry_hints`, advertised by the harness from the duty) so the tool's enum is exactly the allowed set.
+    # Only threads the duck is a participant of (verified on the relay). trust: self — arming is the duck's own
+    # act; tier: read — a local write, NOT an outward act (must not spend the one-outward budget).
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/ingress-arm-mcp.ts] }}
+    auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
+    tier: read
+    trust: self
+    scope_env: {{ ARM_ENTRIES: entry_hints, BUZZ_REPLY_CHANNEL: conversation }}
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey (same as buzz-ingress self_pubkey)
   - name: media                                   # read a PLAINTEXT attachment someone sent (.md/.txt/.csv…)
     # The ONLY way stored bytes enter context: the wall denies builtin reads of the store outright (media/ is
     # in classify.rs PRIVATE_DIRS), and this server confines the id to the store, caps it, and admits

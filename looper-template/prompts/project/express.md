@@ -2,7 +2,7 @@
 state: express
 # The project layer + the tools to act on what it says. `outbox` is here so a sweep can DELIVER a doc it
 # wrote (stage → attach) rather than only talk about it.
-mcp: [buzz-cli, outbox, telegram-send]
+mcp: [buzz-cli, outbox, telegram-send, ingress-arm]
 transitions: []
 ---
 Run the sweep, then make ONE move. Reading the tracker is not an outward act — query freely, then do a
@@ -25,6 +25,8 @@ single outward thing (or nothing).
 - **Delegate**: `["issues","create","--title","<t>","--content","<md>"]` (+ `--label`), then
   `["messages","send","--channel","<id>","--content","filed <title> — <one line>"]` so a human sees it.
   An issue has a state; a chat brief alone dies unanswered.
+  Then **arm the pointer's thread** — `mcp__ingress-arm__arm_thread { thread_root: <that message's event id>,
+  entry_hint: "reply", tags: ["issue:<id>","project:<slug>"] }` — so the answer wakes you as a critic with the task in hand.
 - **Deliver a document**: `mcp__outbox__write_attachment { name, text }` → `mcp__buzz-cli__send_file
   { attachment_id, text, channel? }`. Staging is free (not an outward act).
 - **Escalate** only a blocker you can SEE in the tracker: `mcp__telegram-send__send_message { to: "holder", text }`.
