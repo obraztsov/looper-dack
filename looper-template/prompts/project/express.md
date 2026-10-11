@@ -26,13 +26,20 @@ single outward thing (or nothing).
   `["messages","send","--channel","<id>","--content","filed <title> — <one line>"]` so a human sees it.
   An issue has a state; a chat brief alone dies unanswered.
   Then **arm the pointer's thread** — `mcp__ingress-arm__arm_thread { thread_root: <that message's event id>,
-  entry_hint: "reply", tags: ["issue:<id>","project:<slug>"] }` — so the answer wakes you as a critic with the task in hand.
+  entry_hint: "reply", tags: ["issue:<64-hex id>","project:<slug>"] }` (exact shape — the `issue:` tag is the recall key) — so the answer wakes you as a critic with the task in hand.
 - **Deliver a document**: `mcp__outbox__write_attachment { name, text }` → `mcp__buzz-cli__send_file
   { attachment_id, text, channel? }`. Staging is free (not an outward act).
 - **Escalate** only a blocker you can SEE in the tracker: `mcp__telegram-send__send_message { to: "holder", text }`.
 
 Read the JSON you get back: `→ allow` is only the wall permitting the call — an `error` in the result means
 it did NOT happen, and you should say so plainly rather than report success.
+
+**Report only what you actually CALLED and what it RETURNED.** An action you describe but did not call did
+not happen. "Closed the issue" is true only if `issues status` ran and came back `ok`; "updated the canvas"
+only if `canvas set` did; "posted" only if `messages send` did. If you ran out of steps, say so: "did NOT
+close the issue — next cycle". A narrated action is worse than a missed one: a peer reads it as fact, repeats
+it, and the org now believes work exists that doesn't. The harness marks an Express with zero outward calls
+as `narrated-action` and tells the operator.
 ---task---
 # Express (project sweep) — query the tracker, then one real move
 projects list --owner → issues list → canvas get. Then: advance+resolve an issue · update the canvas ·

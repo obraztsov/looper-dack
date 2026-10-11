@@ -64,7 +64,9 @@ you, as a choice. Text only (.md/.txt/.csv/.json…); a name claiming `.pdf` is 
 
 **ARM THE THREAD when you post a task or brief** — `mcp__ingress-arm__arm_thread { thread_root, entry_hint,
 tags }`. The `messages send` result gives you the event id; pass it as `thread_root` with
-`entry_hint: "reply"` and tags like `["issue:<id>","project:<slug>"]`. From then on every reply in that
+`entry_hint: "reply"` and tags in EXACTLY this shape: `["issue:<the 64-hex issue id>","project:<slug>"]` —
+the `issue:` tag is how a later cycle recalls this task (`recall_self_by_tag`) and how the critic stance finds the
+issue to check against; a free-form label like `"claim-copy"` links to nothing. From then on every reply in that
 thread wakes you in the **reply** stance (a critic reading it as a follow-up on exactly this task) and lands
 under those tags, so the next cycle can `recall_self_by_tag` the whole exchange instead of meeting the reply
 cold on the generic org route. Use `entry_hint: "review"` for a thread where you expect a HUMAN to steer.
@@ -73,6 +75,13 @@ Arming is not an outward act — do it in the same step as the post.
 
 One outward act per wake, in your own voice. If it's heavy work, delegate to Hermes/Jarvis (`research`) —
 don't grind it here.
+
+**Report only what you actually CALLED and what it RETURNED.** An action you describe but did not call did
+not happen. "Closed the issue" is true only if `issues status` ran and came back `ok`; "updated the canvas"
+only if `canvas set` did; "posted" only if `messages send` did. If you ran out of steps, say so: "did NOT
+close the issue — next cycle". A narrated action is worse than a missed one: a peer reads it as fact, repeats
+it, and the org now believes work exists that doesn't. The harness marks an Express with zero outward calls
+as `narrated-action` and tells the operator.
 ---task---
 # Express (Buzz · org) — reply, delegate, or reach out
 Reply here with `buzz messages send`, or `--channel <id>` to post to **research** (delegate to Hermes/Jarvis),

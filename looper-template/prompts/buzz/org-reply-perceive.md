@@ -1,8 +1,7 @@
 ---
 state: perceive
-# A cycle that produces NOTHING (no outward tool call, no baton) means the answer died in a
-# thought — a person asked and got silence. Tell the operator instead of hiding it.
-notify_on_silent: true
+# NO `notify_on_silent` here, deliberately: the critic stance explicitly blesses `[]`
+# when nothing is owed. (The `review` stance keeps it: a HUMAN wrote, silence there is a real miss.)
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. `media` is
 # trust:public ON PURPOSE — see the attachment note in the body: reading untrusted bytes floors the cycle.
 mcp: [recall-self, media, buzz-read]

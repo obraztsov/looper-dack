@@ -33,6 +33,13 @@ also holds private notes, so what leaves goes through your judgment).
 
 If the move is a deliverable, actually **advance it** — draft the content, ship the doc, or hand it to
 Hermes. Don't just announce intent. One outward act for this baton; spin your lane of the flywheel.
+
+**Report only what you actually CALLED and what it RETURNED.** An action you describe but did not call did
+not happen. "Closed the issue" is true only if `issues status` ran and came back `ok`; "updated the canvas"
+only if `canvas set` did; "posted" only if `messages send` did. If you ran out of steps, say so: "did NOT
+close the issue — next cycle". A narrated action is worse than a missed one: a peer reads it as fact, repeats
+it, and the org now believes work exists that doesn't. The harness marks an Express with zero outward calls
+as `narrated-action` and tells the operator.
 ---task---
 # Express (heartbeat) — push the mission
 Act on THIS baton's gist (there may be sibling batons doing the other moves — leave those to them).

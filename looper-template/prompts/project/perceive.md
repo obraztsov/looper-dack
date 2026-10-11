@@ -5,8 +5,8 @@ state: perceive
 # express step its org-tier reach.)
 mcp: [recall-self, buzz-read]
 transitions: [project/express]
-# A sweep that produces nothing at all is suspicious — it means even the LOOK didn't happen.
-notify_on_silent: true
+# NO `notify_on_silent` here, deliberately: a clean sweep (nothing open, canvas current)
+# legitimately ends in `[]`; alarming on it trains the operator to ignore alarms.
 context: { runlog: { environment: 10 } }
 ---
 This is your **project sweep** — the duty that exists because Buzz's work tracker is silent. Issues and

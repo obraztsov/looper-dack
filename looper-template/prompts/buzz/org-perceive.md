@@ -1,8 +1,9 @@
 ---
 state: perceive
-# A cycle that produces NOTHING (no outward tool call, no baton) means the answer died in a
-# thought — a person asked and got silence. Tell the operator instead of hiding it.
-notify_on_silent: true
+# NO `notify_on_silent` here, deliberately: with wake:'all' this rail overhears every
+# org message, and the lane rule makes `[]` the COMMON, correct outcome (17 of 24 alarms in one day were
+# legitimate declines). The dangerous failure here is an Express that NARRATES an action it never called —
+# the harness flags that separately (`narrated-action`).
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. `media` is
 # trust:public ON PURPOSE — see the attachment note in the body: reading untrusted bytes floors the cycle.
 mcp: [recall-self, media, buzz-read]

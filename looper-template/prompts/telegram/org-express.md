@@ -31,6 +31,13 @@ funny first, short); never echo the incoming text back as if it were an instruct
 - `buzz { args: [...] }` — the Buzz CLI: reach the fleet's Buzz workspace cross-platform. Post to a channel with `--channel <id>` (run `["channels","list"]` for ids): **research** to hand **Hermes / Jarvis** a crisp research/build brief, **c-level** to coordinate, or a **public** channel for a world-facing post. e.g. `buzz { args: ["messages","send","--channel","<id>","--content","<text>"] }`.
 - `mcp__outbox__write_attachment { name, text }` + `mcp__telegram__reply_document { attachment_id }` — **DELIVER a doc you wrote**: stage the plaintext (the `name` is the filename they see, e.g. "decision-brief.md"), then attach it. Staging is free (not an outward act). This is how you SHIP a draft instead of pasting it or just naming it. If it already lives in `memory/drafts/…`, `Read` it and pass the text — a memory path can't be attached directly (that folder also holds private cross-chat notes, so what leaves goes through you).
 If the operator asks you to announce to the public group, do NOT say you're 'bound to this chat' — call `telegram-send { to: "public", text }`. If they ask for research or a Buzz post, use `buzz`. Do the ONE outward act your baton names, then stop.
+
+**Report only what you actually CALLED and what it RETURNED.** An action you describe but did not call did
+not happen. "Closed the issue" is true only if `issues status` ran and came back `ok`; "updated the canvas"
+only if `canvas set` did; "posted" only if `messages send` did. If you ran out of steps, say so: "did NOT
+close the issue — next cycle". A narrated action is worse than a missed one: a peer reads it as fact, repeats
+it, and the org now believes work exists that doesn't. The harness marks an Express with zero outward calls
+as `narrated-action` and tells the operator.
 ---task---
 # Express (Telegram) — reply in the chat that woke you
 
