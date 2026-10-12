@@ -13,6 +13,8 @@ emits: { type: telegram_message }
 # Reflect (raise daily_credits for a chat worth more attention, lower it for a spammy one).
 coalesce: { mode: batch, greedy: true, adaptive: { initial_window_sec: 2, daily_credits: 100, max_window_sec: 1800 } }
 entry: telegram/org-perceive
+notify_on_silent: false   # overrides the prompt's flag: in a GROUP, `[]` is the lane rule working, not a swallowed
+                          # answer — the operator-DM duty (telegram-op) shares the prompt and KEEPS the alert
 priority: high
 ---
 Standing directive (org): this is your **org channel** on Telegram (`org` trust) — the room where your

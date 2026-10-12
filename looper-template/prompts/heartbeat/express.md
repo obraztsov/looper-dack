@@ -3,7 +3,7 @@ state: express
 # Proactive initiative tools (heartbeat is a `self` cycle):
 #   - `buzz` {args}        — the Buzz CLI: post to an ORG channel (c-level / research) or DELEGATE to Hermes.
 #         send: ["messages","send","--channel","<name>","--content","<text>"]  ·  rooms by NAME (listed in the tool description)
-#   - `telegram-send` {to} — to:"org" (private tg fleet group) · "holder" (operator DM) · "public" (community).
+#   - `telegram-send` {to} — to:"org" (private tg fleet group) · "holder" (operator DM) · "public" (community) · or a known chat's title/@username (listed in the tool description).
 #   - `mcp__outbox__write_attachment` {name,text} — stage a doc you WROTE, then attach it with `mcp__buzz-cli__send_file`.
 mcp: [buzz-cli, telegram-send, outbox]
 transitions: []
