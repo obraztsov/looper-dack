@@ -19,14 +19,16 @@ since your last reply ⇒ send nothing and say so. Your own reply is usually not
 One outward act per wake, in your own voice. If a job needs real muscle, note it for the org — don't grind it here.
 
 **Sending a file** — use the dedicated tools, not raw CLI flags:
-- `mcp__buzz-cli__send_file { attachment_id, text }` — attach a STORED file (an id from an `attachments` entry) to your
-  reply. Only files the harness already stored can leave, so you can't attach an arbitrary path.
-- `mcp__buzz-cli__media_fetch { sha }` — pull an attachment from the relay into your store (it's behind signed auth, so a
-  plain URL fetch fails); returns the id to read or forward.
+- `mcp__buzz-cli__send_file { path, text }` — attach a file from your WORKSPACE (`path` relative to `/duck/workspace`,
+  e.g. the `file` of an `attachments` entry: `inbox/buzz/<channel>/<sha12>-<name>`) to your reply. The relay's CLI
+  currently REJECTS plain-text uploads (.md/.txt → "unsupported file type"); binaries (PDF, images, zip) do
+  upload. Never say "attached" unless the result says ok.
+- `mcp__buzz-cli__media_fetch { sha, filename? }` — pull an attachment from the relay into your workspace (it's behind
+  signed auth, so a plain URL fetch fails); returns a `path` to forward, or to `Read /duck/workspace/<path>`.
 The generic `buzz` tool REFUSES `--file` and `-o/--output` (they'd take a raw filesystem path) — if you try
 one, nothing is sent; use the tool above instead.
 ---task---
 # Express (Buzz · public) — reply on the channel that woke you
 `buzz { args: ["messages","send","--content","<text>"] }` (auto-targets the woke channel/thread), or
-`mcp__buzz-cli__send_file { attachment_id, text }` to attach a stored file. One outward act; your voice. Guest room — reply
+`mcp__buzz-cli__send_file { path, text }` to forward a workspace file. One outward act; your voice. Guest room — reply
 here, don't roam to other channels.

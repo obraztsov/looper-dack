@@ -1,8 +1,8 @@
 ---
 state: express
-# The project layer + the tools to act on what it says. `outbox` is here so a sweep can DELIVER a doc it
-# wrote (stage → attach) rather than only talk about it.
-mcp: [buzz-cli, outbox, telegram-send, ingress-arm]
+# The project layer + the tools to act on what it says. `buzz-git` is here so a sweep can DELIVER a doc it
+# wrote (`Write` into a repo clone → commit → push → pointer) rather than only talk about it.
+mcp: [buzz-cli, buzz-git, telegram-send, ingress-arm]
 transitions: []
 ---
 Run the sweep, then make ONE move. Reading the tracker is not an outward act — query freely, then do a
@@ -27,8 +27,12 @@ single outward thing (or nothing).
   An issue has a state; a chat brief alone dies unanswered.
   Then **arm the pointer's thread** — `mcp__ingress-arm__arm_thread { thread_root: <that message's event id>,
   entry_hint: "reply", tags: ["issue:<64-hex id>","project:<slug>"] }` (exact shape — the `issue:` tag is the recall key) — so the answer wakes you as a critic with the task in hand.
-- **Deliver a document**: `mcp__outbox__write_attachment { name, text }` → `mcp__buzz-cli__send_file
-  { attachment_id, text, channel? }`. Staging is free (not an outward act).
+- **Deliver a document**: `Write` it under `/duck/workspace/repos/<repo>/…` (`mcp__buzz-git__repo_clone { owner, repo }`
+  first if you don't hold the clone — `owner` = the announcing agent's 64-hex pubkey, `repo` = its id; `repo_pull { dir }`
+  if you do) → `mcp__buzz-git__repo_commit { dir, message, paths? }` → `mcp__buzz-git__repo_push { dir }` → a one-line
+  pointer with the commit id in the channel. Writing is free (not an outward act); the push is the act. A binary goes
+  as `mcp__buzz-cli__send_file { path, text, channel? }` (workspace-relative `path`); plain text does NOT upload as an
+  attachment — commit it.
 - **Escalate** only a blocker you can SEE in the tracker: `mcp__telegram-send__send_message { to: "holder", text }`.
 
 Read the JSON you get back: `→ allow` is only the wall permitting the call — an `error` in the result means

@@ -314,14 +314,14 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     )
     tier_policy = (
         """tier_policy:
-  perceive: { import: [recall, recall-self, skills, media, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, outbox, ingress-arm] }
+  perceive: { import: [recall, recall-self, skills, buzz-read] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
-  perceive: { import: [recall, recall-self, media, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, outbox, ingress-arm] }
+  perceive: { import: [recall, recall-self, buzz-read] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
     return f"""# dack.config.example.yaml — Looper #{token_id} pond duck. Copy to dack.config.yaml (GITIGNORE it),
@@ -406,29 +406,22 @@ mcp_servers:
     trust: self
     scope_env: {{ ARM_ENTRIES: entry_hints, BUZZ_REPLY_CHANNEL: conversation }}
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey (same as buzz-ingress self_pubkey)
-  - name: media                                   # read a PLAINTEXT attachment someone sent (.md/.txt/.csv…)
-    # The ONLY way stored bytes enter context: the wall denies builtin reads of the store outright (media/ is
-    # in classify.rs PRIVATE_DIRS), and this server confines the id to the store, caps it, and admits
-    # plaintext only. `trust: public` is deliberate — the bytes are whatever a stranger/peer wrote, so
-    # reading them FLOORS the cycle to the public ceiling exactly like `recall`. A cycle that reads an
-    # attachment therefore cannot also cross-post/settle; reply on the rail you woke on, act on the next wake.
-    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/media-read-mcp.ts] }}
-    tier: read
-    trust: public
-    # MEDIA_DIR is harness-injected. Raise/lower the text cap with MEDIA_READ_MAX_BYTES (default 64KB).
-  - name: outbox                                  # stage a PLAINTEXT file the duck AUTHORED, so it can send it
-    # Core-agent FileWrite is gated to the soul's writable_dirs (= `memory/` in Express), so a duck could
-    # author a brief but had nowhere an egress tool could reach it. This takes {{name, text}} — CONTENT, not a
-    # path — deliberately: a path-based upload would reopen "which dirs may be published", and `memory/` is
-    # the wrong answer (high INTEGRITY but high SENSITIVITY — social.md is kilobytes of cross-chat notes;
-    # taint tracks integrity, not confidentiality). Content-based keeps egress a visible, runlog-recorded act.
-    # `trust: self` (the duck's own words — staging must not floor the cycle) ⇒ a SEPARATE server from
-    # `media` (trust: public), since a server's trust applies to all its tools. `tier: read` because staging
-    # is a benign local write and must NOT consume the cycle's one outward act (which `post` would).
-    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/outbox-mcp.ts] }}
-    tier: read
-    trust: self
-    # Cap with OUTBOX_MAX_BYTES (default 128KB).
+  - name: buzz-git                                # git on Buzz repos, inside the WORKSPACE (repos/) — how documents are DELIVERED
+    # Documents no longer go through a content-based staging server: the duck has a WORKSPACE beside its soul
+    # (/duck/workspace — inbox/ outbox/ repos/) that the ordinary file tools reach (Read/Grep/Glob anywhere,
+    # Write/Edit in Express+), and the wall caps a cycle that touches it at `org`. This server is git on the
+    # repos/ clones: repo_clone/pull/status/diff/log/commit/push/create. A duck delivers a doc it wrote by
+    # `Write` into repos/<repo>/…, `repo_commit`, `repo_push`, then a one-line pointer with the commit id; a
+    # result from Hermes/Jarvis comes back as a commit it clones and `Read`s (or as an attachment in inbox/).
+    # Express-only + `min_trust: org`: pushing is an outward act on the org's repos, never from a public cycle.
+    # A `repo_create` id must NOT equal a channel name (the relay never provisions such a repo).
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/buzz-git-mcp.ts] }}
+    auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
+    tier: post
+    trust: org
+    min_trust: org
+    scope_env: {{ BUZZ_REPLY_CHANNEL: conversation }}   # the woke channel (absent on a heartbeat — skipped, not an error)
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite" }}   # fill: this duck's buzz pubkey; routes db = channel index (names → ids) for `repo_create --channel`
 {bash_servers}
 {tier_policy}
 

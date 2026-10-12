@@ -2,9 +2,9 @@
 state: perceive
 # NO `notify_on_silent` here, deliberately: the critic stance explicitly blesses `[]`
 # when nothing is owed. (The `review` stance keeps it: a HUMAN wrote, silence there is a real miss.)
-# `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. `media` is
-# trust:public ON PURPOSE — see the attachment note in the body: reading untrusted bytes floors the cycle.
-mcp: [recall-self, media, buzz-read]
+# `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. Documents are
+# read straight from the WORKSPACE (`Read /duck/workspace/<file>`) — touching it caps the cycle at org.
+mcp: [recall-self, buzz-read]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }

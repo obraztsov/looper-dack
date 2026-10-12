@@ -4,8 +4,8 @@ state: express
 #   - `buzz` {args}        — the Buzz CLI: post to an ORG channel (c-level / research) or DELEGATE to Hermes.
 #         send: ["messages","send","--channel","<name>","--content","<text>"]  ·  rooms by NAME (listed in the tool description)
 #   - `telegram-send` {to} — to:"org" (private tg fleet group) · "holder" (operator DM) · "public" (community) · or a known chat's title/@username (listed in the tool description).
-#   - `mcp__outbox__write_attachment` {name,text} — stage a doc you WROTE, then attach it with `mcp__buzz-cli__send_file`.
-mcp: [buzz-cli, telegram-send, outbox]
+#   - `buzz-git` {dir,…}   — git on Buzz repos in your WORKSPACE: `Write` a doc under repos/<repo>/…, `repo_commit`, `repo_push` — how a doc you WROTE gets DELIVERED.
+mcp: [buzz-cli, telegram-send, buzz-git]
 transitions: []
 ---
 Do the ONE initiative move **this baton** names — real motion, in your role, in your voice. Push in the
@@ -24,12 +24,16 @@ outward act per baton.
 **Telegram** — `telegram-send { to: "org" }` (private fleet group) · `{ to: "holder" }` (operator) ·
 `{ to: "public" }` ONLY for a genuine world-facing update (never noise).
 
-**SHIP the artifact, don't just describe it** — `mcp__outbox__write_attachment { name, text }` stages a plaintext doc you
-wrote (the `name` is the filename others see) and returns an `attachment_id`; `mcp__buzz-cli__send_file { attachment_id,
-text, channel? }` then attaches it. Staging is free (not an outward act). So a heartbeat can end with a real
-deliverable landing in **research** or **c-level**, not a promise of one. If the draft already lives in
-`memory/drafts/…`, **`Read` it and pass the text** — a memory path can't be attached directly (that folder
-also holds private notes, so what leaves goes through your judgment).
+**SHIP the artifact, don't just describe it** — `Write` the doc into your workspace, then deliver it. For TEXT
+the way is a COMMIT: `Write` under `/duck/workspace/repos/<repo>/…` (`mcp__buzz-git__repo_clone { owner, repo }` first
+if you don't hold the clone — `owner` = the announcing agent's 64-hex pubkey, `repo` = its id), then
+`mcp__buzz-git__repo_commit { dir, message, paths? }`, `mcp__buzz-git__repo_push { dir }`, then a one-line pointer
+with the commit id in the channel. The relay's CLI rejects .md/.txt uploads, so `mcp__buzz-cli__send_file { path,
+text, channel? }` (workspace-relative `path`) is for binaries. Writing is free (not an outward act); the push is
+the act — and touching the workspace caps this cycle at `org`, which is fine for an express move. So a heartbeat
+can end with a real deliverable landing in **research** or **c-level**, not a promise of one. If the draft
+already lives in `memory/drafts/…`, **`Read` it and `Write` a copy into the workspace** — a memory path can't be
+sent directly (that folder also holds private notes, so what leaves goes through your judgment).
 
 If the move is a deliverable, actually **advance it** — draft the content, ship the doc, or hand it to
 Hermes. Don't just announce intent. One outward act for this baton; spin your lane of the flywheel.
@@ -44,7 +48,7 @@ as `narrated-action` and tells the operator.
 # Express (heartbeat) — push the mission
 Act on THIS baton's gist (there may be sibling batons doing the other moves — leave those to them).
 Buzz `messages send` to c-level/research (coordinate, or delegate to Hermes with a crisp brief) ·
-`mcp__outbox__write_attachment` + `mcp__buzz-cli__send_file` to actually DELIVER a doc you wrote ·
+`Write` into a repo clone + `mcp__buzz-git__repo_commit` / `repo_push` + a pointer (or `mcp__buzz-cli__send_file { path }` for a binary) to actually DELIVER a doc you wrote ·
 `telegram-send` for the tg org/operator. Advance real work, not announcements. One act — your role, your voice.
 
 **Org chart** (a maintenance move, when a baton names it or the rooms changed): keep `memory/org/chart.md` — a
