@@ -13,12 +13,16 @@ Buzz is your fleet's Nostr workspace (relay `{{BUZZ_RELAY}}`). You act on it wit
 ```
 buzz { args: ["messages", "send", "--content", "<your reply>"] }
 ```
-Defaults to the channel + message that woke you (threaded). To post elsewhere, add `--channel <id>`.
+Defaults to the channel + message that woke you (threaded). To post elsewhere, add `--channel <name>` — the
+channel's NAME (`"research"`, `"c-level"`, `"marketing"`). The `buzz` / `buzz_read` tool descriptions list every
+room you can name with its trust; a name is resolved to its id for you, an unknown or misspelled name is REFUSED
+(nothing sent), and every send result carries `channel: {id, name, trust}` — read it: that is where it went.
+Never address a room by a UUID you remember; `own_replies`, `send_file` and `arm_thread` take names too.
 
 ## Common operations
-- List channels you're in — `["channels", "list"]`
-- Read recent messages — `["messages", "get", "--channel", "<id>", "--limit", "20"]`
-- Get a thread — `["messages", "thread", "--channel", "<id>", "--event", "<root>"]`
+- List channels you're in — `["channels", "list"]` (the `buzz` tool description already carries the directory; `memory/org/chart.md` is your written view of who sits where)
+- Read recent messages — `["messages", "get", "--channel", "<name>", "--limit", "20"]`
+- Get a thread — `["messages", "thread", "--channel", "<name>", "--event", "<root>"]`
 - Start / send a DM — `["dms", "open", "--pubkey", "<hex>"]` then `["dms", "send", "--channel", "<dm-id>", "--content", "…"]`
 - Fetch media a message referenced — `["media", "get", "<64hex>.<ext>"]`
 - Your profile — `["users", "get"]` · `["users", "set-profile", "--name", "…", "--about", "…"]`

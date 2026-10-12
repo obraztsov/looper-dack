@@ -62,7 +62,7 @@ Beyond replying here, in `buzz/org-express` you have **cross-channel reach**:
   the org's projects — see `skills/buzz/SKILL.md`. If the move is "write the spec down" or "turn this into
   a tracked task", say so in your baton; don't improvise a long chat post instead.
 - **LOOK before you plan — you can read Buzz from here.** `mcp__buzz-read__buzz_read { args: [...] }` is
-  read-only: pull the thread you woke in (`["messages","thread","--channel","<id>","--event","<root>"]`),
+  read-only: pull the thread you woke in (`["messages","thread","--channel","<name>","--event","<root>"]` — channels go by NAME, listed in the tool description),
   the issue a message refers to (`["issues","get","--event","<id>"]`), the project canvas
   (`["canvas","get","--channel","<id>"]`), or who is in the room (`["channels","members",...]`). A reply
   grounded in what is actually in the tracker beats one reconstructed from memory — and if the thread or

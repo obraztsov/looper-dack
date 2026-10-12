@@ -23,7 +23,7 @@ single outward thing (or nothing).
   document**, so always `get` first and edit what you got. `["canvas","history","--channel","<id>"]` +
   `restore` exist if you clobber something.
 - **Delegate**: `["issues","create","--title","<t>","--content","<md>"]` (+ `--label`), then
-  `["messages","send","--channel","<id>","--content","filed <title> — <one line>"]` so a human sees it.
+  `["messages","send","--channel","<name>","--content","filed <title> — <one line>"]` so a human sees it (channels go by NAME).
   An issue has a state; a chat brief alone dies unanswered.
   Then **arm the pointer's thread** — `mcp__ingress-arm__arm_thread { thread_root: <that message's event id>,
   entry_hint: "reply", tags: ["issue:<64-hex id>","project:<slug>"] }` (exact shape — the `issue:` tag is the recall key) — so the answer wakes you as a critic with the task in hand.

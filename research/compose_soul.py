@@ -380,7 +380,7 @@ mcp_servers:
     auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
     tier: post
     scope_env: {{ BUZZ_REPLY_CHANNEL: conversation, BUZZ_REPLY_TO: in_reply_to, BUZZ_THREAD_ROOT: root }}   # default a reply to the woke channel/msg; root → `own_replies`
-    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey — `own_replies` tells its posts apart by it   # runtime binary (outside the soul), absolute — the MCP server's cwd is NOT /duck
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # routes db = the channel index (names → ids) the ingress publishes; fill: this duck's buzz pubkey — `own_replies` tells its posts apart by it   # runtime binary (outside the soul), absolute — the MCP server's cwd is NOT /duck
   - name: buzz-read                               # READ the Buzz workspace from Perceive (threads, issues, canvas)
     # The read-only half of Buzz. Perceive is "explore and collect context"; without this a duck woken by a
     # Buzz message planned from one payload message + memory and often decided nothing. An ALLOWLIST of read
@@ -391,7 +391,7 @@ mcp_servers:
     tier: read
     trust: org
     scope_env: {{ BUZZ_REPLY_CHANNEL: conversation, BUZZ_THREAD_ROOT: root }}   # `own_replies` defaults to the woke thread (absent on a heartbeat — skipped, not an error)
-    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # routes db = channel index for `--channel <name>`; fill: this duck's buzz pubkey
   - name: ingress-arm                             # ARM a Buzz thread: future replies open with a stance + tags
     # The pond-manager pattern: the duck never edits ingress config — it writes a row to a shared SQLite store
     # (ingress-routes.sqlite) that buzz-ingress consults on its poll. A row says only "replies in this thread
