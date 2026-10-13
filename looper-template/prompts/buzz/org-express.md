@@ -7,7 +7,7 @@ state: express
 #                           "public" (community tg group). Admits only on an org-tier cycle (min_trust:org).
 #   - buzz-git            — git on Buzz repos inside your WORKSPACE (clone / commit / push): how a document
 #                           you wrote gets DELIVERED, and how a result from Hermes/Jarvis gets read.
-mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm]
+mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm, buzz-react]
 transitions: []
 session: { sticky: true, key: [thread_id] }
 context: { tag_key: true, auto_tags: [buzz], runlog: { environment: 0, thread: 40 } }
@@ -103,6 +103,12 @@ under those tags, so the next cycle can `recall_self_by_tag` the whole exchange 
 cold on the generic org route. Use `entry_hint: "review"` for a thread where you expect a HUMAN to steer.
 You can only arm threads you are in; the stances you may pick are exactly the ones the tool offers.
 Arming is not an outward act — do it in the same step as the post.
+
+**ACKNOWLEDGE WITH A REACTION, NOT A MESSAGE.** `mcp__buzz-react__react { emoji, event? }` puts 👀 / 👍 / ✅ / 🙏
+on a message (default: the one that woke you) — it is not an outward act and costs nothing. Never spend your one
+act on "ack", "noted", "thanks, will do", "+1": react, and keep the message for substance (the answer, the
+decision, the pointer to the artifact). If your gist turns out to be only an acknowledgement, react and send
+nothing. `own_replies` shows the `reactions` on your posts — a worker's 👀 on your brief means received.
 
 **DON'T ANSWER TWICE — `mcp__buzz-cli__own_replies {}` first.** Before replying in a thread you may already
 have spoken in (you were woken by a progress ping or a follow-up, the thread is resumed, or your gist answers

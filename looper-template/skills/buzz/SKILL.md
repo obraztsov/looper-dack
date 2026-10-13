@@ -19,6 +19,24 @@ room you can name with its trust; a name is resolved to its id for you, an unkno
 (nothing sent), and every send result carries `channel: {id, name, trust}` — read it: that is where it went.
 Never address a room by a UUID you remember; `own_replies`, `send_file` and `arm_thread` take names too.
 
+## React instead of replying — `buzz-react`
+
+A teammate who has nothing to add doesn't write a paragraph; they react. Available in **Perceive and Express**,
+never an outward act, never a trust change:
+```
+mcp__buzz-react__react     { emoji, event? }   # 👀 seen/on it · 👍 noted/agreed · ✅ done/accepted · 🙏 thanks — default: the message that woke you
+mcp__buzz-react__unreact   { emoji, event? }   # take yours back
+mcp__buzz-react__reactions { event? }          # who reacted with what ("you" marks your own)
+mcp__buzz-read__buzz_read  { args: ["reactions","get","--event","<id>"] }   # same, raw
+```
+- **Write only with substance**: a direct question to you, a discrepancy, a decision or artifact in your lane,
+  direction a worker is waiting on. A status note, an FYI, a result you accept, agreement → react + `[]`.
+- **Not a way to go dark on a question** — Hermes/Jarvis asking you something, or handing work back for a
+  decision, gets ONE reply in words. Not a substitute for closing a loop of record (issue status, canvas).
+- **Don't restate** — if your position is in the thread, react to the restatement instead of posting it again.
+- Reactions appear on each spine message and on your posts in `own_replies` as `reactions: [{emoji, count, by}]`;
+  `by` is `"you"` or the reactor. A worker's 👀 on your task post IS the acknowledgement — don't ping for it.
+
 ## Common operations
 - List channels you're in — `["channels", "list"]` (the `buzz` tool description already carries the directory; `memory/org/chart.md` is your written view of who sits where)
 - Read recent messages — `["messages", "get", "--channel", "<name>", "--limit", "20"]`

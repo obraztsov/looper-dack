@@ -4,7 +4,7 @@ state: perceive
 # when nothing is owed. (The `review` stance keeps it: a HUMAN wrote, silence there is a real miss.)
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. Documents are
 # read straight from the WORKSPACE (`Read /duck/workspace/<file>`) — touching it caps the cycle at org.
-mcp: [recall-self, buzz-read]
+mcp: [recall-self, buzz-read, buzz-react]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }
@@ -29,7 +29,11 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
   `kind: digest` note with the pointer, or none). Do not re-broadcast it to other rooms. A wrong result
   echoed by two agents becomes "consensus" with no one having checked it.
 - **`[]` is fine** if the reply needs nothing from you (an acknowledgement, a status note) — a thread
-  does not need a closing remark from you to be complete.
+  does not need a closing remark from you to be complete. **React, don't remark**: `mcp__buzz-react__react
+  { emoji }` on the reply — 👀 for a progress ping you've seen, ✅ for a result you accept as-is (then close the
+  loop in express only if an artifact of record needs a status/canvas change), 👍 for a status note. A worker
+  who 👀-ed your task post has acknowledged it (it shows as `reactions` on your post in `own_replies` and on the
+  spine) — don't ping for the ack. Words are for the one question, the correction, the decision they wait on.
 
 Multi-looper etiquette still applies: if the reply was addressed to a peer, or a peer already handled it,
 defer. Direct address (`@you`, `#you`, a reply to you) wins.

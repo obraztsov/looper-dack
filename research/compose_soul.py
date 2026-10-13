@@ -314,14 +314,14 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     )
     tier_policy = (
         """tier_policy:
-  perceive: { import: [recall, recall-self, skills, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm] }
+  perceive: { import: [recall, recall-self, skills, buzz-read, buzz-react] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
-  perceive: { import: [recall, recall-self, buzz-read] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm] }
+  perceive: { import: [recall, recall-self, buzz-read, buzz-react] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
     return f"""# dack.config.example.yaml — Looper #{token_id} pond duck. Copy to dack.config.yaml (GITIGNORE it),
@@ -406,6 +406,18 @@ mcp_servers:
     trust: self
     scope_env: {{ ARM_ENTRIES: entry_hints, BUZZ_REPLY_CHANNEL: conversation }}
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey (same as buzz-ingress self_pubkey)
+  - name: buzz-react                              # emoji REACTIONS — the acknowledgement that needs no words (perceive + express)
+    # 👀 "seen / on it", 👍 "noted", ✅ "done / agreed": a teammate reacts instead of writing a reply with nothing in it.
+    # tier: read + trust: self so it is reachable from PERCEIVE (operator decision 2026-10-13) and never spends the
+    # one-outward-act budget or moves trust. One emoji per call, on the message that woke the duck by default.
+    # The ingress polls kind:7 reactions into ingress-routes.sqlite, so the duck also SEES reactions on its spine
+    # and in `own_replies` (a 👀 from Jarvis on a task post = acknowledged, no ping needed).
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/buzz-react-mcp.ts] }}
+    auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
+    tier: read
+    trust: self
+    scope_env: {{ BUZZ_REPLY_TO: in_reply_to, BUZZ_REPLY_CHANNEL: conversation }}
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # fill: this duck's buzz pubkey
   - name: buzz-git                                # git on Buzz repos, inside the WORKSPACE (repos/) — how documents are DELIVERED
     # Documents no longer go through a content-based staging server: the duck has a WORKSPACE beside its soul
     # (/duck/workspace — inbox/ outbox/ repos/) that the ordinary file tools reach (Read/Grep/Glob anywhere,
