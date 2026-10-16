@@ -462,7 +462,7 @@ modules:
 # The `buzz` OUTBOUND skill (skills/buzz/) is a SIGNED pack, not an MCP: drop in bin/buzz, set the org
 # channel in its manifest, provide buzz_key, then `dack skill sign --dir skills/buzz --role soul`.
 media_dir: "media"
-reflect_schedule: "0 4 * * *"    # nightly Reflect; the interval below MUST stay < 24h or the daily fire is skipped
+reflect_schedule: "30 4 * * *"   # nightly Reflect, off DeepSeek peak (01–04 UTC); the interval below MUST stay < 24h
 reflect_min_interval_secs: 79200
 default_entry: perceive         # self-tier wakes (back-online, heartbeat, `dack say`) enter here;
                                  # telegram wakes enter telegram/perceive via their stimulus `entry:`
