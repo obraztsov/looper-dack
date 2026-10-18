@@ -83,6 +83,9 @@ mcp__buzz-git__repo_create { id, channel, name?, description? }   # announce a n
 ```
 
 - Edit repo files with `Write`/`Edit`, like any workspace file.
+- **One clone per repo.** The clone of record is `repos/<repo-id>`; `repo_pull` it before you read or write.
+  Never clone a second copy (`-fresh`, `-v2`, `-check`, `-verify`) because you are unsure of the first — 60 stale
+  clones is what that produces. Unsure? `repo_status` + `repo_log` the one you have; if it is diverged, say so.
 - **Delivering a document** = `Write` it under `/duck/workspace/repos/<repo>/…` → `repo_commit` → `repo_push` →
   post a one-line pointer with the commit id in the channel. Not a path on your disk, not a 3000-word chat post.
 - **A result from Hermes/Jarvis arrives as a COMMIT** (clone the repo, `Read` the files) **or as an attachment**
@@ -150,12 +153,36 @@ get no reply for hours.
 
 - **`create` needs no coordinates** when the project's home channel is wired for you — it infers the repo.
   Add `--label <l>` (repeatable) to classify.
-- **Delegating to Hermes/Jarvis: file an ISSUE, then mention it in the channel.** A chat brief alone has no
-  state; an issue can be listed, assigned, and closed. Post a one-line pointer in `research` so he sees it.
 - **When you finish something, set its status** — `resolved` with a `--content` note saying what you did.
   An issue you completed but left `open` is indistinguishable from one nobody touched.
 - You may **assign yourself** anything; assigning *others* is only trusted when you are the issue author or
   the repo owner.
+
+### The delegation protocol (one task = one issue = one owner = one pointer)
+
+1. **Look before you file.** `issues list` in EVERY repo `memory/org/chart.md` names (the operator's umbrella
+   project and the live app repo both hold issues). If the job exists — yours or a peer's — add to THAT issue.
+   A job in a peer's lane is theirs to file: one `@looper-<n>` line, not a parallel issue of yours.
+2. **File + assign.** `issues create` with: what · why · the shape of the answer · done-when (tests green,
+   evidence posted, issue resolved). Then `issues assign --assignee <worker hex>`.
+3. **ONE pointer post** in `research`: `"@jarvis <one line> — issue <id>"`. The literal `@jarvis` is what the
+   relay turns into a mention tag; **"Jarvis —" in plain text tags nobody** and the task is never seen. The send
+   result's `mention_pubkeys` lists who was tagged — read it. Arm the thread (`arm_thread`, `issue:<id>` tag).
+4. **Addenda are status notes, not issues.** New detail, a correction, a superseding decision → `issues status
+   --issue <id> --status open --content "addendum: …"` on the SAME issue, or a line on the canvas. Never an
+   issue titled ADDENDUM / RECORD / SUPERSEDES — that is how one job became seven issues in a morning.
+5. **Duplicates close, today.** Two issues for one job → the newer: `issues status --status closed --content
+   "duplicate of <older id>"`, and one line in the thread pointing at the survivor. Whoever notices closes;
+   making a duplicate is forgivable, leaving it open is not.
+6. **Chase in the thread, once.** A silent worker gets one `@jarvis` reply under the pointer, never a new root,
+   never a re-paste of the brief.
+
+### Who writes which canvas
+
+Canvases have owners (`memory/org/chart.md`): you `set` only the ones you own ({{OWN_CANVASES}}); a peer's
+({{PEER_CANVASES}}) you read, and if it is wrong you tell the owner in one @-mentioned line. The plan canvas's
+tracks are rewritten only by the daily `plan-review`; push beats edit a track's `next` line and the sweep
+regenerates the `## Task board` section — nothing else.
 
 ## Projects and repos
 

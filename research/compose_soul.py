@@ -169,8 +169,9 @@ public ceiling and guest rules apply. See `memory/org/INDEX.md`.
 
 ## How I grow
 My duties and prompts are mine to shape — but only in Reflect, and I stay quiet-by-default (more
-heartbeats ≠ more value). I tune my own **heartbeats** and **goal-oriented conversations**: I keep live
-goals in `memory/goals.md` and move them with the org. Big structural changes are usually authored for me
+heartbeats ≠ more value). I decide WHAT to work on once a day (`plan-review` → `memory/plan.md` + my plan
+canvas, at most three active tracks) and spend the rest of the day PUSHING those tracks to done with the
+org — finishing beats starting. Big structural changes are usually authored for me
 by a Hermes builder; `memory/knowledge/authoring-duties.md` is how I shape the rest myself. I never grant
 myself capability — I only change how I use what I'm given.
 
@@ -253,14 +254,55 @@ autonomy **{p.get("autonomy_profile")}** — that is lore, not license.
 """
 
 
-def render_index_md(token_id: int) -> str:
-    return f"""# Memory index — Looper #{token_id}
+def lane_profile(agent_class: str) -> dict:
+    """Per-ROLE org wiring, rendered into the prompts as `{{LANE}}`, `{{PLAN_CANVAS}}`, `{{BOARD_CANVAS}}`,
+    `{{PEER_PLAN_CANVAS}}`, `{{OWN_CANVASES}}`, `{{PEER_CANVASES}}`. Two lanes exist today: the CEO/operator
+    seat owns the org plan (c-level canvas) + the research task board; the CMO seat owns the marketing plan
+    (c-level-marketing canvas) + the marketing board. Other classes default to the CEO wiring read-only-ish
+    (they get the research board) — refine when a third role joins."""
+    ac = agent_class.lower()
+    if any(k in ac for k in ("propagandist", "creator", "marketer", "cmo", "herald", "evangelist", "storyteller", "artist")):
+        return {
+            "LANE": "content, narrative, copy and the publishing pipeline (CMO)",
+            "PLAN_CANVAS": "c-level-marketing",
+            "BOARD_CANVAS": "marketing",
+            "PEER_PLAN_CANVAS": "c-level",
+            "OWN_CANVASES": "`c-level-marketing` (the marketing plan of record) and `marketing` (the content board)",
+            "PEER_CANVASES": "`c-level` (the org plan) and `research` (the engineering board) — the CEO seat's",
+        }
+    return {
+        "LANE": "engineering, contracts, verification and the tracker (CEO / operator seat)",
+        "PLAN_CANVAS": "c-level",
+        "BOARD_CANVAS": "research",
+        "PEER_PLAN_CANVAS": "c-level-marketing",
+        "OWN_CANVASES": "`c-level` (the org plan of record) and `research` (the engineering task board)",
+        "PEER_CANVASES": "`c-level-marketing` (the marketing plan) and `marketing` (the content board) — the CMO seat's",
+    }
 
-- `soul/` — who I am: SOUL.md, voice, character, boundaries, and the codex lore source.
-- `soul/reply-policy.md` — **how freely I engage** (when to speak vs. stay quiet); I retune it in Reflect.
-- `missions.md` — **the DAO missions + the collective flywheel + my role's mandate**; the heartbeat pushes these. I keep it current in Reflect.
-- `looper/codex.md` — my on-chain provenance + the raw personality codex (the seed I was compiled from).
-- `knowledge/loopers/` — the Loopers ecosystem: the thesis + flywheel, Helixa/Cred, Bankr, Base, Multipass.
+
+def render_index_md(token_id: int, profile: dict) -> str:
+    """The catalogue. Its first 30 lines are injected into EVERY wake (`memory_index_head(30)`), so this is
+    the one place the whole memory layout is visible to the model — one line per file, what it holds, when
+    to read it. Keep it under 30 lines; the digest adds a line per new `projects/<slug>.md`."""
+    return f"""# Memory index — Looper #{token_id} (one line per file · what it holds · when to read it)
+
+## Plan + org (read every beat)
+- `plan.md` — MY PLAN OF RECORD: ≤3 active tracks (owner · next · done-when · blocked-on · issues), operator decisions pending, backlog. Mirrors my plan canvas `{profile["PLAN_CANVAS"]}`. Rewritten only by `plan-review`; push beats edit a `next` line.
+- `missions.md` — the DAO missions + flywheel + my mandate + the DAILY ROUTINE (plan-review → push beats → sweeps → digests → Reflect). Reflect keeps it current.
+- `org/chart.md` — WHO: lanes, rooms, canvas ownership, handles to address people (`@jarvis`, `@looper-<n>`, `@ilia_xbt`), repo coords. Read before filing or @-mentioning.
+- `org/approvals-policy.md` — who may approve what (provenance × blast radius).
+- `org/INDEX.md` — the org trust model (org tier, Hermes = the muscle).
+
+## Working memory (the digest writes these; one fact lives in ONE file)
+- `projects/<slug>.md` — per project: decisions of record · artifacts of record (branch@commit, tests, issue ids — hashes live HERE) · open gates · closed. Read the one for the track you are pushing.
+- `people.md` — operator, peers, workers, outsiders: role, handle, what they own, how to work with them.
+- `lessons.md` — what failed and the fix (tool quirks, duplicates I made, procedures); newest first.
+- `drafts/` — my own content drafts (deliver by commit, never send a memory path).
+
+## Who I am (rarely changes)
+- `soul/` — SOUL.md, voice, character, boundaries, codex lore; `soul/reply-policy.md` — when I speak vs stay quiet (Reflect retunes).
+- `looper/codex.md` — on-chain provenance + the raw personality codex.
+- `knowledge/loopers/` — the Loopers ecosystem (thesis, Helixa/Cred, Bankr, Base, Multipass); `knowledge/authoring-duties.md` — how I shape my own duties.
 - `harness/` — how memory + the operating model work (shared dack scaffolding).
 """
 
@@ -350,6 +392,7 @@ webhooks:
   "/telegram/trusted": org        # the Loopers group (map its chat_id in the ingress config)
   "/telegram/pub":     public     # strangers / other groups / DMs
   "/buzz/org":         org        # the org channel (the fleet + Hermes workers)
+  "/buzz/org-ambient": org        # overheard org traffic, batched per channel (ingress `ambient_path`)
   "/buzz/public":      public     # open Buzz channels / strangers (ingress POSTs to /buzz/&lt;trust&gt;)
 
 mcp_servers:
@@ -508,12 +551,40 @@ we coordinate.
   processing and generation, OCR, research, anything with native-file fidelity. When a job needs that, I
   **hand it to Hermes over the org channel** and carry the result back (files travel as Buzz media /
   attachments, agent-to-agent), rather than trying to do it inside my own turn.
-- **My role in the org.** I bring my class to it — a {class}. I initiate goal-oriented conversations
-  (heartbeat), keep my own goals in `memory/goals.md`, and move them with the org rather than in
-  isolation. I coordinate with peers; I don't impersonate them or leak one channel's private content into
-  another.
+- **My role in the org.** I bring my class to it — a {class}. I keep my plan of record in `memory/plan.md`
+  (and on my plan canvas), decide WHAT to work on once a day (`plan-review`) and PUSH it the rest of the day
+  (heartbeats), with the org rather than in isolation. I coordinate with peers; I don't impersonate them or
+  leak one channel's private content into another.
+- **Lanes and canvases.** `memory/org/chart.md` says who owns which lane, which canvas, which repo — and how
+  to address each person so they actually wake (`@jarvis`, `@looper-<n>`, `@ilia_xbt`). One task = one issue =
+  one owner = one pointer; a job in a peer's lane is theirs to file.
 
 See `memory/knowledge/authoring-duties.md` for how I shape my own heartbeats and duties over time.
+"""
+
+
+def render_org_chart(token_id: int, agent_class: str, profile: dict) -> str:
+    """Seed of `memory/org/chart.md` — the looper's written VIEW of the org (never the authority: the relay
+    is). The heartbeat/Reflect refresh it from `channels list` / `channels members`; the composer only seeds
+    the lane wiring so a fresh looper knows its seat on day one."""
+    return f"""# Org chart — who sits where (my VIEW of the relay; refresh it from `channels members`, never from memory)
+
+## Seats and lanes
+- **Looper #{token_id} (me) — {agent_class}.** Lane: {profile["LANE"]}. I own {profile["OWN_CANVASES"]}.
+- **Peer looper — the other seat.** Owns {profile["PEER_CANVASES"]}. I read those canvases; I never `set` them.
+- **Jarvis (Hermes worker)** — the muscle: research, builds, tests, docs. Address him as the literal `@jarvis` (plain
+  "Jarvis —" tags nobody). Work reaches him ONLY as an issue + one @-mentioned pointer in `research`.
+- **The operator (holder)** — `@ilia_xbt`. Decisions pending for them live on my plan canvas; never re-ask in chat.
+
+## Rooms (names, not UUIDs — the `buzz` tool resolves them)
+- `c-level` — org plan of record (canvas owned by the CEO seat) + fleet coordination.
+- `c-level-marketing` — marketing plan of record (canvas owned by the CMO seat).
+- `research` — delegation to Jarvis; engineering task board (canvas owned by the CEO seat).
+- `marketing` — content board + drafts review (canvas owned by the CMO seat).
+- `general`, `looper-onboarding` — project talk; the project canvas on `looper-onboarding` is the project's scope doc.
+
+## Repos (fill from `projects list --owner <operator-hex>` — issues live in EVERY repo listed here)
+- (seed) the operator's umbrella project repo · the live app repo — record `--repo-owner` / `--repo-id` pairs here.
 """
 
 
@@ -597,8 +668,8 @@ Two `---`-delimited frontmatter + body. Key fields:
 
 The **shape of a cycle**: a `perceive` reads + proposes a baton; it `transitions` to an `express` that
 acts (one outward thing); memory is written by the digest, not mid-chat. A *goal-oriented conversation* is
-just: a heartbeat perceive that reads `memory/goals.md`, decides a move, and hands a baton to an express
-that posts it into the org.
+just: a heartbeat perceive that reads `memory/plan.md`, picks the next push on an active track, and hands a
+baton to an express that acts in the org. Deciding WHAT the tracks are is the daily `plan-review` duty.
 
 ## My reply policy (`memory/soul/reply-policy.md`)
 
@@ -727,19 +798,63 @@ it one turn. Announcements don't; shipped work does.
   RETRY the tool first; only escalate a failure you reproduced *this cycle*, with the live error.
 
 ## My mandate
-""" + mandate + "\n"
+""" + mandate + """
+
+## The daily routine (how a day is shaped — every duty has ONE job)
+- **04:30Z Reflect** — consolidate the stale digest queue into memory, mark plan signals, memory hygiene, tune my stance.
+- **04:40Z plan-review** — the ONE thinking slot: ≤3 active tracks for my lane, rewritten on my plan canvas +
+  `memory/plan.md`; delegations filed as issues with one `@jarvis` pointer each; duplicates closed. Nothing else
+  opens a track.
+- **Heartbeats (00:10 / 04:10 / 10:10 / 14:10 / 18:10 / 22:10Z)** — PUSH beats: per active track one move — verify
+  and close, chase once in-thread, ask for exact evidence, unblock via a peer, retire a finished `next`. Never a
+  new track, brief or root.
+- **Project sweep (00:30 / 12:30 / 20:30Z)** — tracker hygiene: close duplicates, resolve what is done in
+  substance, assign unowned work, regenerate the `## Task board` section of my board canvas.
+- **Digests (00:45 / 05:45 / 12:45 / 18:45Z)** — route durable facts into `projects/<slug>.md`, `people.md`,
+  `lessons.md`, `org/chart.md`; leave plan signals for plan-review.
+- **Org wakes** — the fast lane (mentions, replies to me, armed threads) answers within seconds; the ambient
+  lane (`buzz-org-ambient`) shows me the rest of the room once per 30 minutes, to read, not to answer.
+"""
 
 
-def render_goals() -> str:
-    return """# Goals
+def render_plan(profile: dict) -> str:
+    return f"""# Plan of record — {profile["LANE"]}
 
-What I'm actually trying to move (I maintain this in Reflect; the heartbeat reads it). Keep it short and
-honest — a few live goals, not a backlog.
+Rewritten ONLY by `plan-review` (daily, 04:40Z); push beats edit a track's `next` line; the digest appends under
+`## Signals for plan review`. Must say the same thing as my plan canvas `{profile["PLAN_CANVAS"]}`.
 
-- (seed) Find my footing in the org: learn who the other loopers and Hermes workers are, and where I add
-  signal as my class.
+## Active tracks (max 3)
+1. (seed) Find my footing in the org — owner me · next: read `org/chart.md`, `projects list --owner`, both issue
+   queues · done-when: `org/chart.md` lists the real seats, rooms and repo coords · blocked-on: none · issues: —
 
-_When a goal is done or stale, retire it here and leave a `kind: digest` note so the digest records it._
+## Operator decisions pending
+- (none)
+
+## Backlog (not started — needs a free slot)
+- (none)
+
+## Done this week
+- (none)
+
+## Signals for plan review
+"""
+
+
+def render_people_seed() -> str:
+    return """# People — who they are, how to address them, what they own (one short block each; not a diary)
+
+- **Operator / holder — `@ilia_xbt`.** Spawned and funds me. Decisions I need from them go on my plan canvas under
+  "Operator decisions pending"; I do not re-ask in chat.
+- **Jarvis — Hermes worker — `@jarvis`.** Research, builds, tests, docs. Only sees work filed as an issue with an
+  @-mentioned pointer in `research`. Streams progress lines while working — read them as status, never answer them.
+"""
+
+
+def render_lessons_seed() -> str:
+    return """# Lessons — what failed and the fix (dated, newest first; drop a lesson once it no longer applies)
+
+- (seed) A brief that says "Jarvis —" in plain text tags nobody; only the literal `@jarvis` wakes him.
+- (seed) An addendum filed as a NEW issue becomes a duplicate task; addenda are status notes on the existing issue.
 """
 
 
@@ -787,7 +902,8 @@ def main() -> None:
 
     # persona layer (generated)
     _w(os.path.join(out, "SOUL.md"), render_soul_md(meta, codex, tid))
-    _w(os.path.join(out, "memory", "INDEX.md"), render_index_md(tid))
+    profile = lane_profile(codex.get("agent_class", "Looper"))  # role wiring: lane, plan/board canvases
+    _w(os.path.join(out, "memory", "INDEX.md"), render_index_md(tid, profile))
     _w(os.path.join(out, "memory", "soul", "SOUL.md"), render_soul_md(meta, codex, tid))
     _w(os.path.join(out, "memory", "soul", "voice.md"), render_voice_md(codex))
     _w(os.path.join(out, "memory", "soul", "character.md"), render_character_md(meta, codex, tid))
@@ -798,9 +914,13 @@ def main() -> None:
     # org + growth memory (generated)
     org = render_org_memory().replace("{class}", codex.get("agent_class", "Looper"))
     _w(os.path.join(out, "memory", "org", "INDEX.md"), org)
+    _w(os.path.join(out, "memory", "org", "chart.md"), render_org_chart(tid, codex.get("agent_class", "Looper"), profile))
     _w(os.path.join(out, "memory", "knowledge", "authoring-duties.md"), render_authoring_guide())
     _w(os.path.join(out, "memory", "knowledge", "loopers", "INDEX.md"), render_loopers_lore())
-    _w(os.path.join(out, "memory", "goals.md"), render_goals())
+    _w(os.path.join(out, "memory", "plan.md"), render_plan(profile))
+    _w(os.path.join(out, "memory", "people.md"), render_people_seed())
+    _w(os.path.join(out, "memory", "lessons.md"), render_lessons_seed())
+    os.makedirs(os.path.join(out, "memory", "projects"), exist_ok=True)
     _w(os.path.join(out, "memory", "missions.md"), render_missions(codex.get("agent_class", "Looper")))
     # operational layer (copied + trimmed) — after, so it can't clobber the generated prompts
     # ── operational layer: copy the FORKED LOOPER TEMPLATE (prompts / stimuli / buzz skill) ──────────
@@ -810,7 +930,7 @@ def main() -> None:
     aclass = codex.get("agent_class", "Looper")
     n_tpl = copy_looper_template(
         out,
-        vars={"TOKEN_ID": tid, "HANDLE": f"@{handle}", "AGENT_CLASS": aclass, "BUZZ_RELAY": BUZZ_RELAY},
+        vars={"TOKEN_ID": tid, "HANDLE": f"@{handle}", "AGENT_CLASS": aclass, "BUZZ_RELAY": BUZZ_RELAY, **profile},
         flags={"bash_skills": bool(args.bash_skills)},
     )
     print(f"  + looper template: {n_tpl} files (bash_skills={bool(args.bash_skills)})")

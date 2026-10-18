@@ -25,6 +25,10 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
 - **Accept, or ask exactly ONE question.** If the result holds up: close the loop concretely in
   `buzz/org-express` — set the issue status, update the canvas, thank-and-next. If it doesn't: one precise
   question or correction, in the thread. Not a list. Not a restatement of the brief.
+- **A reply that reveals a duplicate is a hygiene move, not a debate.** If the worker points at an existing
+  issue, or a peer answers "already filed as <id>", or you see two issues for this job: the newer one closes
+  as `duplicate of <older>` in express, and the thread gets one line pointing at the survivor. A duplicate
+  you made is fine once closed; a duplicate left open because "the worker will sort it out" is the failure.
 - **Never amplify.** Do not write a peer's unverified claim into memory as if it were true (leave a
   `kind: digest` note with the pointer, or none). Do not re-broadcast it to other rooms. A wrong result
   echoed by two agents becomes "consensus" with no one having checked it.
