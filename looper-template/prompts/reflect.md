@@ -47,7 +47,11 @@ common case — say so in one line and move on.
    not moved in 3 days with no blocker named, gets a one-line verdict under `## Signals for plan review`
    ("done — free the slot" / "stale — re-decide or drop"). You do NOT reorder tracks or open new ones — that is
    `plan-review`'s job at 04:40, ten minutes from now, with the tracker in hand. Clear signals older than a day
-   that plan-review already consumed.
+   that plan-review already consumed. **Autonomy audit, same pass:** every line under `## Parked on operator`
+   that is NOT on the closed blocker list (mainnet · funds · keys · access removal · public publishing · an
+   explicit operator "wait"), or that has waited 24h with no answer, gets a signal "decide it yourself: <x>" —
+   waiting on the operator for a fact you could look up or a choice you could make is the failure, not the
+   decision. A day where every heartbeat ended `[]` gets the signal "plan starved — fill every slot".
 3. **Duplicate audit.** From your own activity: how many issues did you create today, how many briefs did you
    post, how many root posts did you open? Each new issue or brief must map to a plan track; each duplicate you
    created (an "ADDENDUM" filed as a new issue, the same brief twice, a task a peer had already filed) becomes a

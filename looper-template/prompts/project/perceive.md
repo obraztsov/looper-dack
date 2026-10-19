@@ -30,8 +30,10 @@ tracker TRUE. Your lane: **{{LANE}}**; your board canvas: **{{BOARD_CANVAS}}**.
 - **Resolved in substance, still open.** The artifact exists (commit on the branch, test line posted, doc
   landed, canvas updated) but the issue is `open` → resolve it WITH the evidence pointer.
 - **Unowned work in your lane.** An open issue with no assignee → assign (a worker, a peer, or yourself) so
-  it has a name; an issue assigned to someone who has not touched it in 24h gets a `digest` note for the
-  heartbeat (the chase itself is the heartbeat's move, not yours).
+  it has a name. **Assigning a worker is not done until ONE pointer with a literal `@jarvis` sits in `research`
+  and is armed** — `issues assign` wakes nobody, so an assignment without a pointer is a buried task; put the
+  pointer line in the baton. An issue assigned to someone who has not touched it in 24h gets a `digest` note
+  for the heartbeat (the chase itself is the heartbeat's move, not yours).
 - **Board drift.** Your board canvas has a `## Task board` section that must equal the issue lists: id · title ·
   assignee · state · age. Regenerate that SECTION from what you just read; every other section of that canvas
   (a ship plan, a spec) is preserved verbatim.

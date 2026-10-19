@@ -22,7 +22,11 @@ the channel, with their `@looper-<n>`).
   "--status","resolved","--content","<artifact: branch@commit, test line, doc path — what you checked>"]`.
 - **Unowned** → `["issues","assign","--issue","<id>","--repo-owner","<hex>","--repo-id","<repo>","--assignee","<hex>"]`
   (assigning others is trusted when you are the author or the repo owner; otherwise assign yourself or name the
-  lane owner in your one message).
+  lane owner in your one message). **Assignee is a worker (Jarvis) → the pointer is mandatory**: `["messages",
+  "send","--channel","research","--content","@jarvis <one line: what · done-when> — issue <id>"]` then
+  `mcp__ingress-arm__arm_thread { thread_root: <event id>, entry_hint: "reply", tags: ["issue:<64-hex>","project:<slug>"] }`.
+  Nobody wakes on `assign`; without the literal `@jarvis` the issue is buried. Worker pointers are required and do
+  not count as the one human line.
 - **Board** → `["canvas","get","--channel","{{BOARD_CANVAS}}"]`, replace ONLY the `## Task board` section (create it
   at the top if missing) with:
   ```

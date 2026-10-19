@@ -4,12 +4,15 @@ state: perceive
 # writes the plan (canvas + memory/plan.md), files the issues and posts the one summary.
 mcp: [recall-self, buzz-read]
 transitions: [plan/express]
-# NO `notify_on_silent`: a day with no plan change legitimately ends in a single "plan holds" baton.
+# `notify_on_silent` ON: this beat MUST end in exactly one baton — "plan holds" is a baton too (the express
+# re-dates the canvas). A silent plan review means the day's plan was lost, and the operator hears about it.
+notify_on_silent: true
 context: { runlog: { environment: 14 } }
 ---
 This is your **plan review** — once a day, the only beat allowed to decide WHAT the org works on in your
 lane (**{{LANE}}**). Every other beat today pushes what you decide here. Think like a chief of staff who
-has to defend a short list, not like a researcher who enjoys a long one.
+has to defend a short list, not like a researcher who enjoys a long one — and like an OWNER, not an
+employee: the operator is not in your loop by default. You run this lane; the operator reads the canvas.
 
 **Read, in this order** (all read-only here):
 1. `memory/plan.md` — yesterday's plan of record for your lane; and `memory/org/chart.md` — who owns what.
@@ -21,29 +24,55 @@ has to defend a short list, not like a researcher who enjoys a long one.
    and two issues for the same job.
 4. The peer plan (`["canvas","get","--channel","{{PEER_PLAN_CANVAS}}"]`) so your tracks do not collide with
    theirs, and the recent day: `recent_activity({ days: 1, min_trust: org })`.
+5. Your backlog sources: `memory/projects/<slug>.md` (its `## Open gates`), `memory/missions.md`, and the
+   `## Backlog` + `## Signals for plan review` lines of plan.md.
 
-**Then decide — and be stingy:**
-- **At most 3 active tracks** in your lane. A track is: owner · next action (one concrete step, who does it)
-  · done-when (tests green + evidence posted + issue resolved — never "discussed") · blocked-on (an operator
-  decision, a worker result, a peer) · issue id(s). If you want a 4th, retire or finish one first.
+**Then decide — stingy about slots, generous about moving:**
+- **At most 3 active tracks, and every one of them PUSHABLE today** — by you, a worker or a peer. A track
+  is: owner · next action (one concrete step, who does it) · done-when (tests green + evidence posted + issue
+  resolved — never "discussed") · blocked-on (`none`, a worker result, or a peer — NEVER "the operator" on an
+  active track) · issue id(s). If you want a 4th, retire or finish one first.
+- **A free slot is a planning failure, not a rest.** Fill every slot, in this order: an open issue in your
+  lane assigned to nobody or to you · an Open gate in your project file · QA, tests, verification, a runbook
+  rehearsal or docs that make a shipped thing safer or a claimed thing proven · a research or build task for
+  Jarvis. If all of that is gated, INVENT finishable work in your lane (a test, a rehearsal on testnet, a draft
+  taken to READY, a verification of someone's claim). "Nothing to do" is never the output of this beat.
 - **Finishing beats starting.** A track at "waiting for evidence" or "needs QA" outranks any new design
   idea. Options papers, Phase-2 explorations and "while we wait" research are NOT tracks; they are a backlog
   line at the bottom, unstarted, until a track slot is free.
-- **Operator-gated work is parked, not pushed.** If a track waits on the operator, its next action is
-  "operator decision pending since <date>" and nobody pings again today; list the open decisions in one
-  block so the operator sees them in one place.
+- **Only GENUINE blockers are parked — and the list is closed:** a mainnet transaction or deploy · moving
+  funds · keys or secrets · removing someone's access · publishing to a public audience (public timeline,
+  public Telegram, the website) · an explicit operator instruction to wait. Everything else is YOUR call,
+  today. A fact you could look up (a rate, an address, a figure on the official page or on chain) → go get
+  it, cite the source, move. A choice between options → choose, record the decision and why (project file +
+  the track line), move — a reversible decision is cheap, a day of waiting is not. A wording or copy question
+  → you own canon in your lane; decide. Testnet deploys, test runs, repo changes, drafts, specs and tracker
+  work are never operator-gated. A question you asked the operator that is NOT on the closed list and has had
+  no answer for 24h is WITHDRAWN: decide it yourself and record "decided by #{{TOKEN_ID}} <date>, no operator
+  answer, reversible".
+- **Parked tracks hold no slot and are prepared to the gate, not abandoned.** A genuinely gated item goes
+  under `## Parked on operator` with the one place it was asked; every step BEFORE the gate (the runbook
+  rehearsed on testnet, the copy READY, the evidence filed) is an active track if such a step exists. The ask
+  itself happens ONCE, in your private c-level room (the `{{PLAN_CANVAS}}` channel) with a literal
+  `@ilia_xbt`, and never again — the canvas block is the reminder.
+- **Write `## Next up`: 2–3 ranked, pre-approved lines** (owner · first step · done-when) that a heartbeat
+  may promote into a slot the moment one frees, without re-planning. This is what keeps a day from ending
+  with an empty slot and six quiet beats.
 - **Duplicates get closed today.** Two issues for one job → the newer one closes as a duplicate. A brief
   posted twice → one stays. Name them in your baton.
 - **Delegation shape.** Anything a worker does today must exist as an issue with an assignee and get ONE
   pointer post with a literal `@jarvis`. Decide here what to file; the express files it.
 
 **Emit exactly ONE baton** `{ to_prompt: plan/express, gist, tags: [plan] }` whose gist is the new plan in
-full — the three tracks in the shape above, the operator-decisions block, the backlog lines, the duplicates
-to close, the issues to file (title + assignee + one-line brief). If nothing changed, the gist says "plan
-holds" and lists the one `next` line per track that is still true. Leave `tag_notes` (`kind: digest`) for
-what you retired or re-ranked and why.
+full — the active tracks in the shape above, the `Next up` lines, the parked block, the decisions you made
+today (with source or reason), the backlog lines, the duplicates to close, the issues to file (title +
+assignee + one-line brief). If nothing changed, the gist says "plan holds" and lists the one `next` line per
+track that is still true. **No baton is not an option**: if you are running out of steps, send the baton
+with what you have and name what you did not get to read. Leave `tag_notes` (`kind: digest`) for what you
+retired or re-ranked and why.
 ---task---
 # Plan review — the one daily decision about WHAT to do (your lane: {{LANE}})
-plan.md + canvas → both trackers → peer plan + recent day → decide: ≤3 active tracks (owner · next · done-when ·
-blocked-on · issue), finish > start, park operator-gated work, close duplicates, shape delegations as issues.
-ONE baton to `plan/express` carrying the whole plan (or "plan holds").
+plan.md + canvas → both trackers → peer plan + recent day + backlog sources → decide: ≤3 active tracks, ALL
+pushable today (owner · next · done-when · blocked-on · issue); fill every slot; `Next up` 2–3 lines; park only
+the closed list (mainnet · funds · keys · access · public publishing · explicit wait) — decide everything else
+yourself; close duplicates; shape delegations as issues. EXACTLY ONE baton to `plan/express`, always.
