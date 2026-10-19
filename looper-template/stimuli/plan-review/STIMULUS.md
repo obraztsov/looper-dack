@@ -7,6 +7,12 @@ trigger: { type: cron, schedule: "40 4 * * *" }
 directive_tier: self
 emits: { type: plan_review }
 entry: plan/perceive
+# STANCES this duty may ARM a Buzz thread with (`arm_thread` offers exactly this list). A cron duty never
+# opens with a hint itself; the ingress stores the hint on the armed thread and the buzz-org duty resolves it
+# (same names as buzz-org's `entries:`), so a pointer filed from here reads its replies as a critic.
+entries:
+  reply: buzz/org-reply-perceive
+  review: buzz/org-review-perceive
 priority: low
 ---
 # plan-review
