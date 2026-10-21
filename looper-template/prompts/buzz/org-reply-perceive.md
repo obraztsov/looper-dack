@@ -32,6 +32,20 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
 - **Never amplify.** Do not write a peer's unverified claim into memory as if it were true (leave a
   `kind: digest` note with the pointer, or none). Do not re-broadcast it to other rooms. A wrong result
   echoed by two agents becomes "consensus" with no one having checked it.
+- **Promote a finding to a track.** A worker's reply sometimes surfaces something bigger than the ask: a
+  defect in a product we own, a blocked path with a named cause, a doc every new user will hit wrong. If it
+  sits inside the operator's stated priority (`memory/plan.md` signals, `projects/<slug>.md` decisions), do
+  not fold it into the current issue as "a row's fix half" and move on — form the stream: ONE baton whose
+  gist reads "promote finding → track: <what> · owner · first step · done-when". The express files it as its
+  own issue (or names the existing survivor), writes it at the TOP of `## Next up` on the plan canvas +
+  `memory/plan.md` — straight into a free slot, in track shape, if fewer than 3 tracks are active — and posts
+  one `@jarvis` pointer if the owner is a worker. Once per thread; a second finding there joins that line.
+  This is the ONE place a push beat may open a track; plan-review still owns the rest of the plan.
+- **A stated wait gets a reminder.** "I'll submit after block N", "in ~25 minutes", "once Y lands" — or your
+  own "submit only after the clock clears" — means nothing wakes you at that moment: a worker's silence sends
+  no event. Put the clock in the baton's gist; the express sets `mcp__watchlist__watch_set { in_minutes,
+  note }` (lead ≈ the stated wait plus a margin; the note names what to check and the one move if it did not
+  happen). One reminder per awaited step, never one per message.
 - **`[]` is fine** if the reply needs nothing from you (an acknowledgement, a status note) — a thread
   does not need a closing remark from you to be complete. **React, don't remark**: `mcp__buzz-react__react
   { emoji }` on the reply — 👀 for a progress ping you've seen, ✅ for a result you accept as-is (then close the

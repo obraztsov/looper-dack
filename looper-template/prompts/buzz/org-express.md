@@ -7,7 +7,9 @@ state: express
 #                           "public" (community tg group). Admits only on an org-tier cycle (min_trust:org).
 #   - buzz-git            — git on Buzz repos inside your WORKSPACE (clone / commit / push): how a document
 #                           you wrote gets DELIVERED, and how a result from Hermes/Jarvis gets read.
-mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm, buzz-react]
+#   - watchlist           — `watch_set { in_minutes | at, note }`: wake yourself when a stated clock clears
+#                           ("after block N", "in ~25 min"). A local write, not an outward act.
+mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm, buzz-react, watchlist]
 transitions: []
 session: { sticky: true, key: [thread_id] }
 context: { tag_key: true, auto_tags: [buzz], runlog: { environment: 0, thread: 40 } }
@@ -94,7 +96,14 @@ goes through you, as a choice.
      "--content","duplicate of <older>"]`. Whoever notices closes; a duplicate left open is the failure.
   **Canvas ownership**: you `set` only {{OWN_CANVASES}}; {{PEER_CANVASES}} you read and, if something is wrong
   there, tell the owner in one @-mentioned line. The plan canvas's TRACKS are rewritten only by `plan-review`;
-  from here you may touch a track's `next` line, nothing else.
+  from here you may touch a track's `next` line — and, for a baton whose gist reads "promote finding → track"
+  (the critic stance found a defect/blocked path inside the operator's priority), insert that ONE line: at the
+  top of `## Next up`, or straight into a free slot in track shape (owner · next · done-when · blocked-on ·
+  issues) when fewer than 3 tracks are active; mirror it in `memory/plan.md`; file the issue (or name the
+  survivor) and post one `@jarvis` pointer if a worker owns it. Nothing else on the plan moves from here.
+  **A stated clock gets a reminder**: when you tell a worker "submit after block N / in ~25 min", or the baton
+  names a wait, call `mcp__watchlist__watch_set { in_minutes: <wait + margin>, note: "<what to check; the one
+  move if absent>" }` in the same step — one per awaited step. It is a local write, not your outward act.
   **One clone per repo**: `repos/<repo-id>` is the clone of record — `repo_pull` it before use; never clone a
   second copy (`-fresh`, `-v2`, `-check`) because you are unsure of the first. If the clone is dirty or diverged,
   say so and `repo_status`/`repo_diff` it; don't spawn a sibling.

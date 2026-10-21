@@ -46,7 +46,11 @@ is deliberately narrow. Your lane: **{{LANE}}**. You run it — the operator is 
 - **A slot is free → promote the top `## Next up` line.** Fewer than 3 active tracks after the moves above (or
   one retired this beat) and `## Next up` is not empty → its top line becomes the next track: the express
   rewrites that block on the canvas + plan.md and, if the owner is a worker, files the issue with ONE `@jarvis`
-  pointer. One promotion per beat, always the top line, never anything not on the list — that is plan-review's.
+  pointer. One promotion per beat, always the top line, never anything not on the list — that is plan-review's
+  (the one exception lives in the critic stance: a worker's finding inside the operator's priority may be
+  promoted to a track from the thread it surfaced in, and then sits at the top of `## Next up` or in a slot).
+- **A stated clock is a reminder, not a wait.** If a track's next move is "after block N / once Y lands", the
+  express sets `watch_set` for that time so the step is caught when it is due — not at the beat after next.
 
 **Never in a heartbeat**: open a track that is not the top `## Next up` line, start an options paper or a
 "while we wait" research brief, file an issue that is not a sub-step of an active track or a promotion, re-brief

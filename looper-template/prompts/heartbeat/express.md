@@ -5,7 +5,8 @@ state: express
 #         reply in a thread: ["messages","send","--channel","<name>","--reply-to","<event>","--content","<text>"]  ·  rooms by NAME
 #   - `telegram-send` {to} — to:"org" (private tg fleet group) · "holder" (operator DM) · "public" (community). Rare here.
 #   - `buzz-git` {dir,…}   — git on Buzz repos in your WORKSPACE: pull/read a worker's commit to VERIFY it; deliver a doc you wrote.
-mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm]
+#   - `watchlist`          — `watch_set { in_minutes, note }`: wake yourself when a stated clock clears, instead of waiting ~4h for the next beat.
+mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm, watchlist]
 transitions: []
 ---
 Do the ONE push move **this baton** names — on the track and issue it names, in the thread it names. You may
@@ -23,7 +24,9 @@ re-send what another baton carries. One chat message at most; tracker writes as 
 - **Chase once.** `["messages","send","--channel","<name>","--reply-to","<the pointer or last worker event>",
   "--content","@jarvis <the one thing you need> — issue <id>"]`. The literal `@jarvis` is what tags him; "Jarvis —"
   tags nobody. Before sending, `mcp__buzz-cli__own_replies { thread_root }`: if your last message in that thread is
-  already a chase with nothing from him since, send nothing and say so.
+  already a chase with nothing from him since, send nothing and say so. A chase, or any reply that names a clock
+  ("after block N", "in ~25 min"), gets a reminder in the same step: `mcp__watchlist__watch_set { in_minutes:
+  <wait + margin>, note: "<what to check; the one move if absent>" }` — so the follow-up is not left to the next beat.
 - **Ask for evidence.** Same shape as a chase: one reply, in-thread, naming the exact test/number/file.
 - **Unblock via a peer.** One reply in the existing c-level thread with `@looper-<n>` and the decision needed.
 - **Retire a finished `next`.** Plan canvas `get` → edit that track's `next` to "done — slot free" → `set`;

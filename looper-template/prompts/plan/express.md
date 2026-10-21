@@ -2,7 +2,8 @@
 state: express
 # Writes the plan of record: the plan CANVAS + `memory/plan.md`, files the day's delegations as issues and
 # posts the one summary. `buzz-git` is here so a plan step can read a repo it is deciding about.
-mcp: [buzz-cli, buzz-git, ingress-arm]
+# `watchlist` so a track whose first step has a clock ("after block N") gets `watch_set` instead of a wait.
+mcp: [buzz-cli, buzz-git, ingress-arm, watchlist]
 transitions: []
 ---
 You carry the day's plan from `plan/perceive` (your lane: **{{LANE}}**). Make it the record, in this order.

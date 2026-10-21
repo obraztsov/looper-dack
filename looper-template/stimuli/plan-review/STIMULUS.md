@@ -3,6 +3,8 @@ id: plan-review
 # The ONE thinking slot of the day. Every other beat PUSHES work that is already planned; this one is
 # allowed to open a track, close a track, reorder priorities, or commission research. Fires once, right after
 # Reflect (04:30Z) has tidied memory, and OUTSIDE DeepSeek's peak-price windows (01–04 + 06–10 UTC weekdays).
+# ONE exception: a worker's finding inside the operator's stated priority may be promoted to a track from the
+# armed thread it surfaced in (`buzz/org-reply-perceive` → "promote finding → track"); this review then ranks it.
 trigger: { type: cron, schedule: "40 4 * * *" }
 directive_tier: self
 emits: { type: plan_review }

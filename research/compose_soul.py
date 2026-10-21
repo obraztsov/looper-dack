@@ -357,13 +357,13 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     tier_policy = (
         """tier_policy:
   perceive: { import: [recall, recall-self, skills, buzz-read, buzz-react] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
   perceive: { import: [recall, recall-self, buzz-read, buzz-react] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
     return f"""# dack.config.example.yaml — Looper #{token_id} pond duck. Copy to dack.config.yaml (GITIGNORE it),
@@ -394,6 +394,7 @@ webhooks:
   "/buzz/org":         org        # the org channel (the fleet + Hermes workers)
   "/buzz/org-ambient": org        # overheard org traffic, batched per channel (ingress `ambient_path`)
   "/buzz/public":      public     # open Buzz channels / strangers (ingress POSTs to /buzz/&lt;trust&gt;)
+  "/watchlist":        org        # the duck's OWN reminders (watchlist-ingress) — self-set, org-trust by path
 
 mcp_servers:
   - name: recall                                  # verbatim short-term memory (taints public)
@@ -477,6 +478,19 @@ mcp_servers:
     min_trust: org
     scope_env: {{ BUZZ_REPLY_CHANNEL: conversation }}   # the woke channel (absent on a heartbeat — skipped, not an error)
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite" }}   # fill: this duck's buzz pubkey; routes db = channel index (names → ids) for `repo_create --channel`
+  - name: watchlist                               # REMINDERS the duck sets itself — "wake me at T with this note, in this thread"
+    # A plugin, not an engine feature: `watch_set` writes a row to watchlist.sqlite; the `watchlist-ingress`
+    # module POSTs each due row to the `/watchlist` webhook, so the reminder returns as an ordinary stimulus the
+    # `watchlist` duty coalesces and routes by prompt. Express-only by placement (tier_policy); tier: read — a
+    # local write, NOT an outward act; trust: self; min_trust: org — a public cycle never sees it, and that floor
+    # is what WATCH_TRUST records on the row. Origin (thread/channel/event) comes from the wake payload via
+    # scope_env, so a reminder always points back at where it was set — the model cannot aim one elsewhere.
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/watchlist-mcp.ts] }}
+    tier: read
+    trust: self
+    min_trust: org
+    scope_env: {{ WATCH_ORIGIN_KEY: dedup_key, WATCH_ORIGIN_CHANNEL: conversation, WATCH_ORIGIN_CHANNEL_JSON: channel, WATCH_ORIGIN_ROOT: root, WATCH_ORIGIN_EVENT: in_reply_to }}
+    env: {{ WATCHLIST_DB: "/duck/watchlist.sqlite", WATCH_TRUST: org }}
 {bash_servers}
 {tier_policy}
 
@@ -501,6 +515,9 @@ modules:
     command: [bun, run, {engine}/mcp/buzz-ingress.ts]
     secrets: [buzz_key]
     env: {{ BUZZ_INGRESS_CONFIG: buzz-ingress.config.json }}
+  - name: watchlist-ingress                        # fires the duck's own reminders (watchlist.sqlite → /watchlist webhook)
+    command: [bun, run, {engine}/mcp/watchlist-ingress.ts]
+    env: {{ WATCHLIST_DB: "/duck/watchlist.sqlite", WATCHLIST_WEBHOOK: "http://127.0.0.1:8787/watchlist" }}
 
 # The `buzz` OUTBOUND skill (skills/buzz/) is a SIGNED pack, not an MCP: drop in bin/buzz, set the org
 # channel in its manifest, provide buzz_key, then `dack skill sign --dir skills/buzz --role soul`.
