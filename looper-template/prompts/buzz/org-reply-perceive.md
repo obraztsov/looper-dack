@@ -24,7 +24,10 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
   pointer; a claim without one is an open question, not a fact.
 - **Accept, or ask exactly ONE question.** If the result holds up: close the loop concretely in
   `buzz/org-express` — set the issue status, update the canvas, thank-and-next. If it doesn't: one precise
-  question or correction, in the thread. Not a list. Not a restatement of the brief.
+  question or correction, in the thread. Not a list. Not a restatement of the brief. **An acceptance says how it
+  was checked**: put `verified: <what you read>` or `accepted first-party: <whose report, why not re-derived>` in
+  the gist so the express writes it as the first line of the status note, and name the successor (next row,
+  merge, docs, or the QA of a first-party close) so the express writes it into `## Next up` in the same step.
 - **A reply that reveals a duplicate is a hygiene move, not a debate.** If the worker points at an existing
   issue, or a peer answers "already filed as <id>", or you see two issues for this job: the newer one closes
   as `duplicate of <older>` in express, and the thread gets one line pointing at the survivor. A duplicate

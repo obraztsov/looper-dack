@@ -38,6 +38,13 @@ tracker TRUE. Your lane: **{{LANE}}**; your board canvas: **{{BOARD_CANVAS}}**.
   assignee · state · age. Regenerate that SECTION from what you just read; every other section of that canvas
   (a ship plan, a spec) is preserved verbatim.
 - **Operator-filed work nobody picked up** → assign it in your lane, or name the lane owner in your note.
+- **An issue owned by the operator** (an umbrella parent, a decision packet) is not a chase target in chat — but
+  it must sit on the c-level canvas under `## Operator decisions pending`. If it does not, leave a `digest` note
+  "operator decision unlisted: <id> — <what is pending>" so plan-review adds it to the ledger (the Monday digest
+  is the only reminder the operator gets).
+- **A resolve with no verification label** (status note not opening with `verified:` / `accepted first-party:`)
+  or a first-party close with no QA line anywhere → `digest` note "unchecked close: <id>" for plan-review. Do not
+  reopen; the fix is a QA line, not a status flip.
 
 **Don't re-report what you already reported.** A sweep that re-escalates the same stalled issue every 8 hours
 is noise; a sweep that CLOSES a duplicate every 8 hours is hygiene. If the trackers are clean and the board

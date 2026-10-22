@@ -23,6 +23,11 @@ is deliberately narrow. Your lane: **{{LANE}}**. You run it — the operator is 
   against the track's done-when in express: pull or clone the repo and read the test or the file, count the
   test line, confirm the commit sits on the named branch. Then resolve the issue WITH the evidence and update
   the track's `next` line. Accepting a claim without an artifact is not closing; a claim is an open question.
+  **A close names how it was checked and what comes next**: the resolve note opens with `verified:` (what you
+  read or recomputed yourself) or `accepted first-party:` (whose report, and why you could not re-derive it);
+  and the same baton names the successor — the next matrix row, the merge after the branch, the docs after the
+  fix, or the QA of what you just accepted first-party (a peer read or a read-only Jarvis re-derivation). A close
+  with no successor is "last step of its mission" and says so.
 - **Worker silent too long → chase ONCE, in the thread.** No reply for >4 hours on an issue assigned to a
   worker: one reply INSIDE the existing pointer thread, with the literal `@jarvis` and the one thing you need.
   Never a new root, never a re-paste of the brief, never two chases in a row — if the last message in that

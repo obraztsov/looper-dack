@@ -27,6 +27,10 @@ a `public` stranger's needs a real signal first.
 - `lessons.md` — operational lessons: what failed, why, the fix; dated; newest first; drop lessons that no longer
   apply (a tool got fixed) rather than letting them pile up.
 - `org/chart.md` — lanes, rooms, canvas ownership, membership: edit the line that changed.
+- `missions.md` → ONLY its `## Operator-stated direction` section (create the heading at the bottom if absent):
+  one dated line per direction — who said it, where (room + event id), their words in short, one-line gloss of
+  what it asks of your lane. A newer direction on the same subject supersedes the older line (edit, don't
+  stack). The mission list above that heading is Reflect's — it reads this section nightly and promotes.
 - `plan.md` — NOT yours to rewrite. If the gist flags a track as done or stale, append one line under a `## Signals
   for plan review` heading at the bottom of `plan.md` ("<date>: track X looks done — artifact Y"); `plan-review`
   and Reflect consume it.
@@ -40,14 +44,14 @@ a `public` stranger's needs a real signal first.
 - No commit hashes or issue ids outside `projects/*.md` (and the issue ids on plan tracks).
 - `INDEX.md`: if you created a file, add its one-line entry; if a line there is wrong, fix it. Keep it under
   30 lines — one line per file, what it holds, when to read it.
-- You don't write tag-notes (your chats do that live), and you don't write `missions.md`, `soul/`, `prompts/` or
-  `stimuli/` (Reflect's).
+- You don't write tag-notes (your chats do that live), and you don't write `soul/`, `prompts/`, `stimuli/` or the mission list in `missions.md` (Reflect's) —
+  only its `## Operator-stated direction` section, as above.
 
 Return your `thought` (which files you touched and what moved), then stop (`transition.to_prompt: null`).
 ---task---
 # Distil — consolidate the routed digest into the right memory files (terminal)
 
 Per block of the gist: `Read` → merge into the right section → `Write`: `projects/<slug>.md` (decisions ·
-artifacts · open gates · closed), `people.md`, `lessons.md`, `org/chart.md`; plan signals as one line under
-`## Signals for plan review` in `plan.md`. New file ⇒ its line in `INDEX.md`. Current state, one fact one file,
+artifacts · open gates · closed), `people.md`, `lessons.md`, `org/chart.md`; an operator direction/epoch as a dated line under
+`## Operator-stated direction` in `missions.md`; plan signals as one line under `## Signals for plan review` in `plan.md`. New file ⇒ its line in `INDEX.md`. Current state, one fact one file,
 hashes only in projects. A quiet digest writes nothing and says so.

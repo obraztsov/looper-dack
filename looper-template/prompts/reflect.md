@@ -51,7 +51,10 @@ common case — say so in one line and move on.
    that is NOT on the closed blocker list (mainnet · funds · keys · access removal · public publishing · an
    explicit operator "wait"), or that has waited 24h with no answer, gets a signal "decide it yourself: <x>" —
    waiting on the operator for a fact you could look up or a choice you could make is the failure, not the
-   decision. A day where every heartbeat ended `[]` gets the signal "plan starved — fill every slot".
+   decision. A day where every heartbeat ended `[]` gets the signal "plan starved — fill every slot". **Operator
+   decisions are audited by age, not re-asked**: every line under `## Operator decisions pending` older than 7
+   days gets the signal "operator decision open <n> days: <x> — weekly digest owes it" so plan-review's Monday
+   digest carries it; a line that is not actually the operator's to make gets "decide it yourself".
 3. **Duplicate audit.** From your own activity: how many issues did you create today, how many briefs did you
    post, how many root posts did you open? Each new issue or brief must map to a plan track; each duplicate you
    created (an "ADDENDUM" filed as a new issue, the same brief twice, a task a peer had already filed) becomes a
@@ -60,8 +63,13 @@ common case — say so in one line and move on.
 4. **Memory hygiene.** `memory/INDEX.md` must be a true map: one line per file (what it holds, when to read
    it), under 30 lines, because its head is injected into every wake. Add missing files, remove dead lines.
    Any memory file past ~120 lines: compress its `## Closed` (or oldest) section to a paragraph. One fact lives
-   in one file; a paragraph duplicated across files is deleted from the wrong one. `missions.md` is yours: keep
-   the mission list current (add on landing, retire on ship) and the operating routine true.
+   in one file; a paragraph duplicated across files is deleted from the wrong one. `missions.md` is yours, and it is the GOAL layer, not a
+   memo: read its `## Operator-stated direction` section first (the digests append the operator's own words there);
+   a direction that has stood a day becomes — or re-ranks — a line under `## Current DAO missions`, written as an
+   EPOCH: one line, priority order, a done-when ("the eight-row DAC matrix green on 84532 + a skill any agent can
+   run"), and the operator event it came from. Retire a mission on ship, never on silence. The top mission line
+   is what tomorrow's plan-review puts on the canvas as the epoch of record, so if this list is stale the whole
+   day serves the wrong thing. Keep the operating routine section true as well.
 5. **Stance and budget.** `memory/soul/reply-policy.md` — did you over-post (answering status pings, restating
    positions) or under-post (an owed answer that never went out)? Small, reversible edits, with the why. Each
    chat duty's `STIMULUS.md` carries a `coalesce` block: the fast org lane is `adaptive` `{ initial_window_sec,

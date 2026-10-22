@@ -21,6 +21,12 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   "--status","resolved","--content","<artifact + the evidence you checked>"]`, then update the track's `next`
   line on your plan canvas (`["canvas","get","--channel","{{PLAN_CANVAS}}"]` → change ONLY that line → `set`)
   and in `memory/plan.md`. If it does not hold: one reply in the thread naming the gap (this is your chat message).
+  **The resolve note's first line is the verification label**: `verified: <what you read / recomputed, at which
+  SHA>` or `accepted first-party: <whose report; why not re-derived (no shell, no fetch-by-ref…)>`. **Closing opens
+  the next**: in the same step write the successor into `## Next up` on the canvas + plan.md (owner · first step ·
+  done-when) — the next row, the merge, the docs, or for a first-party close its QA line (owner = the peer, or
+  Jarvis read-only against the named SHA). A first-party close stays conditional until that QA line closes; say
+  so in the note. If there is genuinely no successor, the note says "last step of <mission>".
 - **Chase once.** `["messages","send","--channel","<name>","--reply-to","<the pointer or last worker event>",
   "--content","@jarvis <the one thing you need> — issue <id>"]`. The literal `@jarvis` is what tags him; "Jarvis —"
   tags nobody. Before sending, `mcp__buzz-cli__own_replies { thread_root }`: if your last message in that thread is
@@ -72,7 +78,8 @@ ran out of steps, say what is NOT done so the next beat picks it up. An Express 
 ---task---
 # Express (heartbeat) — one push move on one track
 Act on THIS baton: verify-and-close (pull the clone of record, read the artifact, `issues status resolved` with
-evidence, fix the `next` line on `{{PLAN_CANVAS}}` + plan.md) · chase once in-thread with literal `@jarvis` (after
+evidence, first line `verified:` or `accepted first-party:`, write the successor/QA line into `Next up`, fix the
+`next` line on `{{PLAN_CANVAS}}` + plan.md) · chase once in-thread with literal `@jarvis` (after
 `own_replies`) · ask for the exact evidence · do your own `next` step · one @-mention to a blocking peer · decide
 it yourself ("decided: …" in the ask's thread + canvas) · keep a promise you made (+ `watch_set` on any new one) ·
 retire a finished `next` · promote the top `Next up` line, or the top `Backlog` line, or write the emergency

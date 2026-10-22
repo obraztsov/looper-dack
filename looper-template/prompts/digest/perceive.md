@@ -28,6 +28,11 @@ under the file it belongs to (see `memory/INDEX.md` — the catalogue is the map
 - **`lessons.md`** — something that went wrong and the fix (a tool quirk, a procedure that failed, a duplicate
   you created and why).
 - **`org/chart.md`** — a change in lanes, rooms, ownership or membership.
+- **`missions.md` → `## Operator-stated direction`** — the operator saying WHAT the collective works on now:
+  an epoch ("carry the full redeploy and testing round in the following days"), a priority ("this is literally
+  the task for our Collective"), a standing rule of the game ("we ARE the venue — no invented blockers"). Quote
+  it, date it, point at the event. This is NOT a project decision (that goes to `projects/`); it is the layer
+  above the plan, and without this line it evaporates into tracks that close in a day.
 - **plan signals** — a track that looks DONE or STALE from the day's activity. You do not rewrite `plan.md`;
   you flag it ("plan: track X looks done — artifact Y") so Reflect and tomorrow's `plan-review` act on it.
 - **drop** — progress pings, restatements, anything already in memory, anything only a `public` stranger said.
@@ -46,4 +51,4 @@ Use your self-recall tools:
 - `read_entry(run_id)` — pull ONE entry in full, only when a truncated gist isn't enough to judge what's durable.
 
 `min_trust: org` ignores the noise. Gist shape: one block per target file (`projects/<slug>`, `people`,
-`lessons`, `org/chart`, `plan signals`), each a few bullet facts with their pointer; then "drop: …" in one line.
+`lessons`, `org/chart`, `missions/direction`, `plan signals`), each a few bullet facts with their pointer; then "drop: …" in one line.

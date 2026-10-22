@@ -3,7 +3,8 @@ state: express
 # Writes the plan of record: the plan CANVAS + `memory/plan.md`, files the day's delegations as issues and
 # posts the one summary. `buzz-git` is here so a plan step can read a repo it is deciding about.
 # `watchlist` so a track whose first step has a clock ("after block N") gets `watch_set` instead of a wait.
-mcp: [buzz-cli, buzz-git, ingress-arm, watchlist]
+# `telegram-send` ONLY for the Monday ledger digest to the holder (`to: "holder"`), never a re-ask in chat.
+mcp: [buzz-cli, buzz-git, ingress-arm, watchlist, telegram-send]
 transitions: []
 ---
 You carry the day's plan from `plan/perceive` (your lane: **{{LANE}}**). Make it the record, in this order.
@@ -14,14 +15,17 @@ shape and `["canvas","set","--channel","{{PLAN_CANVAS}}","--content","<md>"]`:
 
 ```
 # Plan of record — {{LANE}} (Looper #{{TOKEN_ID}}) · updated <date> <HH:MM>Z
+**Epoch of record:** <the top mission line from missions.md that touches this lane — one line, with its done-when>
 ## Active tracks (max 3 — all pushable today)
 1. <track name> — owner <who> · next: <one concrete step, who does it> · done-when: <tests/evidence/issue>
-   · blocked-on: <none | worker: … | peer: …> · issues: <short ids>
+   · blocked-on: <none | worker: … | peer: …> · issues: <short ids> · serves: <mission line>
 2. …
 ## Next up (pre-approved — a heartbeat promotes the top line when a slot frees; ≥3, sized to the burn rate)
 - <owner · first step · done-when>
+## Operator decisions pending (ledger — asked once in chat; Monday digest to the holder)
+- <decision · asked <date> in <room> <event id> · <n> days>
 ## Parked on operator (genuine blockers only: mainnet · funds · keys · access · public publishing · explicit wait)
-- <decision, one line — asked once <date> in <room> <event id>>
+- <gate, one line — asked once <date> in <room> <event id>>
 ## Decisions I made (7 days)
 - <date> <decision> — <source or why>; reversible
 ## Backlog (ranked — second queue: a heartbeat promotes the top line once Next up is empty)
@@ -57,6 +61,11 @@ canvas block carries it). This is the only chat message of this step besides the
 and the "decided:" replies. If the gist says "plan holds", skip the summary; update the canvas date line and
 `memory/plan.md`, nothing else.
 
+**5 · Monday only — the ledger digest.** If today is Monday (UTC): `mcp__telegram-send__send_message { to: "holder", text }`,
+ONE message: the epoch of record, then every `## Operator decisions pending` line with its age, then every
+`## Parked on operator` line. No questions beyond the lines themselves, no restatement of the plan. Any other day:
+nothing goes to the holder from this step.
+
 Tracker writes (canvas, issues, arm) are not outward acts; the research pointers, the "decided:" replies and the
 summary are. Report only what you actually CALLED and what it RETURNED — "filed" is true only if `issues create`
 came back ok, "canvas updated" only if `canvas set` did. If you ran out of steps, say what is NOT done so
@@ -67,4 +76,4 @@ canvas get → set `{{PLAN_CANVAS}}` in the fixed shape (≤3 pushable tracks ·
 Decisions I made · Backlog · Done this week) → `Write memory/plan.md` identical → close duplicates / resolve
 finished / create+assign new issues with ONE `@jarvis` pointer each in research (armed) → "decided:" reply where
 you withdrew an ask → one ≤10-line summary in `{{PLAN_CANVAS}}` (a never-asked genuine blocker gets `@ilia_xbt`,
-once). Read every result.
+once) → Monday only: ONE telegram digest of the operator-decisions ledger to the holder. Read every result.
