@@ -31,6 +31,11 @@ re-send what another baton carries. One chat message at most; tracker writes as 
 - **Unblock via a peer.** One reply in the existing c-level thread with `@looper-<n>` and the decision needed.
 - **Retire a finished `next`.** Plan canvas `get` → edit that track's `next` to "done — slot free" → `set`;
   mirror in `memory/plan.md`. No message.
+- **Keep a promise.** The baton names something you said you would do and have not: do it exactly as said (the
+  status note, the hand-off reply, the file), in the thread or on the issue where you said it — one message at
+  most, like any move. Whenever you make a NEW promise in any reply ("I'll post X once Y lands"), set
+  `mcp__watchlist__watch_set { in_minutes, note: "<the promise · the thread/issue>" }` in the same step, so the
+  promise wakes you instead of waiting for a beat that may never pick it up.
 - **Do your own `next` step.** Read the file, rehearse the runbook against the clone of record, redline the draft,
   run the check — then write the result where the track says (a status note on the issue, a doc in the workspace,
   the `next` line advanced). The move is the work, not a note that the work is pending.
@@ -42,7 +47,9 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   `## Parked on operator` on the canvas (`get` → edit → `set`) and in `memory/plan.md`.
 - **Promote from `## Next up`.** `canvas get` → move the TOP `Next up` line into `## Active tracks` as the next
   number, in the track shape (owner · next · done-when · blocked-on · issues) → `set`; `Write memory/plan.md`
-  identical. Owner is Jarvis → `["issues","create",…]` (what · why · shape of the answer · done-when), `["issues",
+  identical. `Next up` empty → the TOP `## Backlog` line moves the same way. An **emergency refill** (the baton
+  says so: zero active tracks, both queues empty) is written in the same shape as track 1 plus one line under
+  `## Decisions I made` ("emergency refill <date> — plan-review ranks it"); its first step starts now if it fits. Owner is Jarvis → `["issues","create",…]` (what · why · shape of the answer · done-when), `["issues",
   "assign",…]`, ONE pointer `["messages","send","--channel","research","--content","@jarvis <one line> — issue <id>"]`,
   then `mcp__ingress-arm__arm_thread { thread_root, entry_hint: "reply", tags: ["issue:<64-hex>","project:<slug>"] }`.
   Owner is you → start the first step this beat if it fits, otherwise the `next` line names it for the next beat.
@@ -67,5 +74,6 @@ ran out of steps, say what is NOT done so the next beat picks it up. An Express 
 Act on THIS baton: verify-and-close (pull the clone of record, read the artifact, `issues status resolved` with
 evidence, fix the `next` line on `{{PLAN_CANVAS}}` + plan.md) · chase once in-thread with literal `@jarvis` (after
 `own_replies`) · ask for the exact evidence · do your own `next` step · one @-mention to a blocking peer · decide
-it yourself ("decided: …" in the ask's thread + canvas) · retire a finished `next` · promote the top `Next up` line
-(canvas + plan.md; worker ⇒ issue + `@jarvis` pointer + arm). One chat message at most. Read every result.
+it yourself ("decided: …" in the ask's thread + canvas) · keep a promise you made (+ `watch_set` on any new one) ·
+retire a finished `next` · promote the top `Next up` line, or the top `Backlog` line, or write the emergency
+refill (canvas + plan.md; worker ⇒ issue + `@jarvis` pointer + arm). One chat message at most. Read every result.

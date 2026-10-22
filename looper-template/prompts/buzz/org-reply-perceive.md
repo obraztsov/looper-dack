@@ -45,7 +45,9 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
   own "submit only after the clock clears" — means nothing wakes you at that moment: a worker's silence sends
   no event. Put the clock in the baton's gist; the express sets `mcp__watchlist__watch_set { in_minutes,
   note }` (lead ≈ the stated wait plus a margin; the note names what to check and the one move if it did not
-  happen). One reminder per awaited step, never one per message.
+  happen). One reminder per awaited step, never one per message. Your own promise ("I'll post the split status
+  note once he confirms") is an awaited step too — put it in the gist the same way, so it is kept by a reminder
+  and not by the next heartbeat's memory.
 - **`[]` is fine** if the reply needs nothing from you (an acknowledgement, a status note) — a thread
   does not need a closing remark from you to be complete. **React, don't remark**: `mcp__buzz-react__react
   { emoji }` on the reply — 👀 for a progress ping you've seen, ✅ for a result you accept as-is (then close the

@@ -101,8 +101,8 @@ goes through you, as a choice.
   top of `## Next up`, or straight into a free slot in track shape (owner · next · done-when · blocked-on ·
   issues) when fewer than 3 tracks are active; mirror it in `memory/plan.md`; file the issue (or name the
   survivor) and post one `@jarvis` pointer if a worker owns it. Nothing else on the plan moves from here.
-  **A stated clock gets a reminder**: when you tell a worker "submit after block N / in ~25 min", or the baton
-  names a wait, call `mcp__watchlist__watch_set { in_minutes: <wait + margin>, note: "<what to check; the one
+  **A stated clock — or a promise of yours — gets a reminder**: when you tell a worker "submit after block N /
+  in ~25 min", when you say "I'll post X once Y lands", or the baton names a wait, call `mcp__watchlist__watch_set { in_minutes: <wait + margin>, note: "<what to check; the one
   move if absent>" }` in the same step — one per awaited step. It is a local write, not your outward act.
   **One clone per repo**: `repos/<repo-id>` is the clone of record — `repo_pull` it before use; never clone a
   second copy (`-fresh`, `-v2`, `-check`) because you are unsure of the first. If the clone is dirty or diverged,

@@ -32,6 +32,10 @@ is deliberately narrow. Your lane: **{{LANE}}**. You run it — the operator is 
   the commit on branch X" is.
 - **The `next` step is yours → do it.** If the track's next action names you (read a file, rehearse a runbook,
   redline a draft, write a doc, run a check), the move is to DO it in express, not to note that it is pending.
+- **A promise you made is a `next` step.** Anything you said you would do in a thread ("I'll post the status
+  note", "I'll carry it to #370 once he confirms") and have not done — `own_replies` / `recall_self` show it — is
+  yours to do NOW, whether or not a track names it. It needs no track and no promotion, and an undone promise
+  outranks every other move this beat: a plan that waits on the planner is the one stall nobody else can clear.
 - **Blocked on a peer → ONE @-mention** to that peer, in the existing c-level thread, naming the decision you
   need from them.
 - **"Blocked on the operator" → check the closed list first.** Genuine blockers are ONLY: a mainnet transaction
@@ -49,15 +53,27 @@ is deliberately narrow. Your lane: **{{LANE}}**. You run it — the operator is 
   pointer. One promotion per beat, always the top line, never anything not on the list — that is plan-review's
   (the one exception lives in the critic stance: a worker's finding inside the operator's priority may be
   promoted to a track from the thread it surfaced in, and then sits at the top of `## Next up` or in a slot).
+  **`## Next up` empty → the top `## Backlog` line is the next line**: the review ranked the backlog as the
+  second queue for exactly this moment, so promoting from it is still a push, not a re-plan.
 - **A stated clock is a reminder, not a wait.** If a track's next move is "after block N / once Y lands", the
   express sets `watch_set` for that time so the step is caught when it is due — not at the beat after next.
 
-**Never in a heartbeat**: open a track that is not the top `## Next up` line, start an options paper or a
-"while we wait" research brief, file an issue that is not a sub-step of an active track or a promotion, re-brief
-a worker from scratch, post to a public room, re-ask the operator anything, or redo the project sweep (the
-tracker-wide hygiene pass is its job, every 8 hours). `[]` is the right beat ONLY when every active track has a
-move pending on someone you already chased AND `## Next up` is empty — then say so in your thought, one line
-per track, and leave a `kind: digest` note "plan starved — plan-review must refill" so tomorrow's review sees it.
+**Never in a heartbeat**: open a track that is not the top `## Next up` line (or, with `Next up` empty, the
+top `## Backlog` line or the one emergency refill below), start an options paper or a "while we wait" research
+brief, file an issue that is not a sub-step of an active track or a promotion, re-brief a worker from scratch,
+post to a public room, re-ask the operator anything, or redo the project sweep (the tracker-wide hygiene pass is
+its job, every 8 hours). `[]` is the right beat ONLY when at least one track is ACTIVE and every active track
+has a move pending on someone you already chased — then say so in your thought, one line per track.
+
+**Zero active tracks is never `[]`.** A starved plan (no active track AND `## Next up` AND `## Backlog` empty)
+gets exactly ONE emergency refill this beat, chosen in plan-review's own order: an open issue in your lane
+assigned to nobody or to you · an Open gate in `memory/projects/<slug>.md` · QA, a test, a runbook rehearsal or
+a verification of a claim someone made in your lane · a promise of yours still undone. It becomes track 1 in the
+track shape, with one line under `## Decisions I made` ("emergency refill <date> — plan-review ranks it"), and
+its first step starts this beat if it fits. That is a push, not a re-plan: you pick from lists the review already
+wrote, you do not invent scope. Also leave the `kind: digest` note "plan starved — plan-review must size the
+queue to the burn rate" so tomorrow's review writes a longer `Next up`. Fourteen quiet hours with the plan
+finished is the failure this paragraph exists to prevent.
 
 **You may emit SEVERAL batons — one per track you move**, each `{ to_prompt: heartbeat/express, gist, tags }`
 with the issue id in `tags` (`issue:<64-hex>`) and the move AND its destination (channel, thread root) named
@@ -67,11 +83,18 @@ one move into several rooms. A move that should wait is marked `priority: low`. 
 
 **Verify before you escalate — a remembered blocker is a HYPOTHESIS.** A "tool broken" note is stale until you
 reproduce it this cycle; a "worker silent" impression is stale until you read the thread and quote the time of
-its last message. Escalate only what you reproduced, with the live error or the exact timestamp.
+its last message. Escalate only what you reproduced, with the live error or the exact timestamp. **Exception —
+a tool GAP is a fact, not a hypothesis**: a step you already reproduced as impossible from this state and
+recorded in `memory/lessons.md` within the last 7 days (no shell or hash primitive in Express, no issue-edit
+verb, a CLI output cap) is not re-proved — spending a beat re-trying it is the stall. Delegate that step in THIS
+beat (a sub-step issue + one `@jarvis` pointer, as a baton) and move on.
 ---task---
 # Heartbeat — PUSH the plan one step (never re-plan)
 plan.md + live issue/thread per active track → per track ONE move: verify-and-close · chase once in-thread
-(literal `@jarvis`) · ask for the exact evidence · do your own `next` step · one @-mention to a blocking peer ·
-decide/look up anything not on the closed blocker list (mainnet · funds · keys · access · public publishing ·
-explicit wait) · retire a finished `next` · promote the top `Next up` line into a free slot. Operator ⇒ never
-re-asked. 1–3 batons; `[]` only if every track is chased-and-waiting AND `Next up` is empty.
+(literal `@jarvis`) · ask for the exact evidence · do your own `next` step · keep a promise you made (outranks
+all) · one @-mention to a blocking peer · decide/look up anything not on the closed blocker list (mainnet · funds ·
+keys · access · public publishing · explicit wait) · retire a finished `next` · promote the top `Next up` line
+(or, if empty, the top `Backlog` line) into a free slot. A known tool gap (lessons.md, ≤7d) ⇒ delegate now, not
+re-prove. Operator ⇒ never re-asked. 1–3 batons; `[]` only if ≥1 track is active and every track is
+chased-and-waiting. Zero active tracks ⇒ ONE emergency refill (unassigned issue · Open gate · QA/verification ·
+undone promise), never `[]`.

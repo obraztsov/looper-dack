@@ -18,14 +18,14 @@ shape and `["canvas","set","--channel","{{PLAN_CANVAS}}","--content","<md>"]`:
 1. <track name> — owner <who> · next: <one concrete step, who does it> · done-when: <tests/evidence/issue>
    · blocked-on: <none | worker: … | peer: …> · issues: <short ids>
 2. …
-## Next up (pre-approved — a heartbeat promotes the top line when a slot frees)
+## Next up (pre-approved — a heartbeat promotes the top line when a slot frees; ≥3, sized to the burn rate)
 - <owner · first step · done-when>
 ## Parked on operator (genuine blockers only: mainnet · funds · keys · access · public publishing · explicit wait)
 - <decision, one line — asked once <date> in <room> <event id>>
 ## Decisions I made (7 days)
 - <date> <decision> — <source or why>; reversible
-## Backlog (not started)
-- <one line each>
+## Backlog (ranked — second queue: a heartbeat promotes the top line once Next up is empty)
+- <one line each, in order>
 ## Done this week
 - <date> <track or issue> — <artifact>
 ```

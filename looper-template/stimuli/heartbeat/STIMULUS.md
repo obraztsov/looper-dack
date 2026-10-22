@@ -1,7 +1,9 @@
 ---
 id: heartbeat
 # Every ~4h, kept OUTSIDE DeepSeek's peak-price windows (01–04 + 06–10 UTC weekdays, 2× price).
-trigger: { type: cron, schedule: "10 0,4,10,14,18,22 * * *" }
+# 05:10 (not 04:10) so the first push beat lands 30 min AFTER plan-review (04:40) and pushes the fresh plan at
+# once, instead of re-doing bookkeeping the review is about to redo and leaving the new plan untouched until 10:10.
+trigger: { type: cron, schedule: "10 0,5,10,14,18,22 * * *" }
 directive_tier: self
 emits: { type: heartbeat }
 entry: heartbeat/perceive

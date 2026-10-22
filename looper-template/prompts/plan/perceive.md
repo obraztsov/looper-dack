@@ -55,9 +55,19 @@ employee: the operator is not in your loop by default. You run this lane; the op
   rehearsed on testnet, the copy READY, the evidence filed) is an active track if such a step exists. The ask
   itself happens ONCE, in your private c-level room (the `{{PLAN_CANVAS}}` channel) with a literal
   `@ilia_xbt`, and never again — the canvas block is the reminder.
-- **Write `## Next up`: 2–3 ranked, pre-approved lines** (owner · first step · done-when) that a heartbeat
-  may promote into a slot the moment one frees, without re-planning. This is what keeps a day from ending
-  with an empty slot and six quiet beats.
+- **Write `## Next up`: ranked, pre-approved lines sized to your BURN RATE** (owner · first step · done-when)
+  — at least 3, and at least as many as the tracks that were retired or promoted since yesterday's review
+  (count them in `## Done this week` and `## Decisions I made`; a worker closes a track in hours, not days, so
+  a 3-line queue can be gone by noon). A heartbeat promotes the top line the moment a slot frees, without
+  re-planning. **Then RANK `## Backlog`** — it is the second queue: once `Next up` is empty a heartbeat
+  promotes its top line, so its order is a decision you make here. If a heartbeat found both queues empty it
+  made one emergency refill (a line under `## Decisions I made` says so) — rank or retire that track now, and
+  treat the empty queue as yesterday's planning failure: make today's list longer.
+- **A fact only the operator holds never blocks a track.** An allocation, a date, a window, a figure the
+  operator has not given: ask ONCE in your c-level room, and make the fact-light version the track TODAY (the
+  draft with the slot marked, the doc without the number, the copy that says what is true now) — the fact
+  upgrades it when it arrives. "Operator-owned fact" is not on the closed list; a day spent waiting for one is
+  a planning failure, not a park.
 - **Duplicates get closed today.** Two issues for one job → the newer one closes as a duplicate. A brief
   posted twice → one stays. Name them in your baton.
 - **Delegation shape.** Anything a worker does today must exist as an issue with an assignee and get ONE
@@ -73,6 +83,7 @@ retired or re-ranked and why.
 ---task---
 # Plan review — the one daily decision about WHAT to do (your lane: {{LANE}})
 plan.md + canvas → both trackers → peer plan + recent day + backlog sources → decide: ≤3 active tracks, ALL
-pushable today (owner · next · done-when · blocked-on · issue); fill every slot; `Next up` 2–3 lines; park only
-the closed list (mainnet · funds · keys · access · public publishing · explicit wait) — decide everything else
-yourself; close duplicates; shape delegations as issues. EXACTLY ONE baton to `plan/express`, always.
+pushable today (owner · next · done-when · blocked-on · issue); fill every slot; `Next up` ≥3 lines sized to the
+burn rate + a RANKED `Backlog` (second queue); park only the closed list (mainnet · funds · keys · access ·
+public publishing · explicit wait) — decide everything else yourself; an operator-held fact ⇒ fact-light track
+today; close duplicates; shape delegations as issues. EXACTLY ONE baton to `plan/express`, always.
