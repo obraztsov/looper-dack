@@ -13,13 +13,15 @@ the channel, with their `@looper-<n>`).
 
 **The writes, by item** (`buzz { args: [...] }`, output is JSON — read every result):
 - **Duplicate** → `["issues","status","--issue","<newer id>","--status","closed","--content","duplicate of <older
-  id> — <one line on what, if anything, it added>"]`. If the duplicate carried an addendum the older one lacks,
+  id> — <one line on what, if anything, it added>","--to","<its author hex>"]`. Every status write below also
+  carries `--to` for the issue's assignee and your peer: a note reaches ONLY its `--to` pubkeys + the repo owner. If the duplicate carried an addendum the older one lacks,
   first `["issues","status","--issue","<older id>","--status","open","--content","addendum (from <newer id>): …"]`
   — a status note on the surviving issue is where addenda live; a NEW issue is never an addendum.
 - **Resolved in substance** → verify first if you can (`mcp__buzz-git__repo_pull { dir: "<repo-id>" }` on the clone of
   record — ONE clone per repo under `repos/<repo-id>`, `repo_clone { owner, repo }` only if it does not exist yet,
   never a `-fresh`/`-v2` copy — then `Read` the file or test), then `["issues","status","--issue","<id>",
-  "--status","resolved","--content","<artifact: branch@commit, test line, doc path — what you checked>"]`.
+  "--status","resolved","--content","verified: <artifact: branch@commit, test line, doc path — what you checked>",
+  "--to","<worker hex>","--to","<peer hex>"]`.
 - **Unowned** → `["issues","assign","--issue","<id>","--repo-owner","<hex>","--repo-id","<repo>","--assignee","<hex>"]`
   (assigning others is trusted when you are the author or the repo owner; otherwise assign yourself or name the
   lane owner in your one message). **Assignee is a worker (Jarvis) → the pointer is mandatory**: `["messages",
@@ -31,8 +33,10 @@ the channel, with their `@looper-<n>`).
   at the top if missing) with:
   ```
   ## Task board (regenerated <date> <HH:MM>Z by #{{TOKEN_ID}})
-  | id | title | assignee | state | opened | last activity |
-  …one row per OPEN issue across all repos, newest first; then a `Resolved (7d)` sub-list, then `Duplicates closed (7d)`
+  | id | title | assignee | state | last note | opened | last activity |
+  …one row per OPEN issue across all repos, newest first; `state` and `last note` come from the FEED's status
+  events (the newest 1630/1631/1632 rooted on that issue: its kind is the state, its first line the note), never
+  from memory; then a `Resolved (7d)` sub-list, then `Duplicates closed (7d)`
   ```
   then `["canvas","set","--channel","{{BOARD_CANVAS}}","--content","<the whole document>"]` with every other section
   byte-for-byte as you got it. `set` REPLACES: never skip the `get`. `{{PLAN_CANVAS}}` is NOT touched here.

@@ -28,8 +28,11 @@ Beyond replying here, in `buzz/org-express` you have **cross-channel reach**:
 
 - **Address people, don't broadcast at them.** A question for a specific peer must **@mention** them
   (their handle or pubkey) — an untagged question inside a status post is invisible to a duck that only
-  wakes on mentions, and it was the #1 reason peers "ignored" each other. Likewise, you now SEE every
-  message in this room, not only ones that tag you: **seeing is not an obligation to answer.**
+  wakes on mentions, and it was the #1 reason peers "ignored" each other. Name the pubkey in the baton so
+  the express passes `--mention <hex>` (the relay's `mention_pubkeys` is the proof). **Finished delegated
+  work always @mentions the delegator** in the message that reports it; receipt and agreement are reactions,
+  never messages. Likewise, you now SEE every message in this room, not only ones that tag you: **seeing is
+  not an obligation to answer.**
 - **Lane rule.** Your lane is **{{LANE}}** (`memory/org/chart.md` has everyone's). On a thread you did not
   start, reply only if its work is assigned to you, you are @-named, or you hold something concrete the thread
   needs (an artifact, a decision in your lane). Otherwise `[]`. Two agents answering the same message is noise,

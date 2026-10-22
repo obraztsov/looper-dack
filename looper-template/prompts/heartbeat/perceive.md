@@ -13,7 +13,11 @@ is deliberately narrow. Your lane: **{{LANE}}**. You run it — the operator is 
 1. `memory/plan.md` — your plan of record: ≤3 active tracks (owner · next · done-when · blocked-on · issue
    ids), the `## Next up` queue, the `## Parked on operator` block. `memory/org/chart.md` — lanes, who owns
    which canvas, how people are addressed.
-2. For each ACTIVE track, look at the LIVE state, not your memory of it: the issue
+2. `mcp__buzz-read__buzz_read ["feed","get","--types","mentions,needs_action","--limit","50"]` — the tracker's
+   record addressed to you: status notes (`kind` 1630 = a note, 1631 = resolved, 1632 = closed) on your issues,
+   issues assigned to you, approvals, reminders. This is where a worker's "status note" actually lands; chat
+   pointers are the echo. A note you have not acted on is a move this beat.
+3. For each ACTIVE track, look at the LIVE state, not your memory of it: the issue
    (`mcp__buzz-read__buzz_read ["issues","get","--event","<id>"]`), the thread under its pointer post
    (`["messages","thread","--channel","research","--event","<root>"]`), and what you yourself did last
    (`recall_self_by_tag` on `issue:<id>`, or `recent_activity({ days: 1 })`) so you never redo or re-ask it.

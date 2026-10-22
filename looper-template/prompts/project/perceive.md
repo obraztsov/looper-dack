@@ -19,9 +19,14 @@ tracker TRUE. Your lane: **{{LANE}}**; your board canvas: **{{BOARD_CANVAS}}**.
    YOU own; the hex is the `role: "owner"` member of the project channel, also in `memory/org/chart.md`).
 2. `["issues","list","--repo-owner","<hex>","--repo-id","<repo>"]` for **EVERY repo the chart names** — the
    operator's umbrella project AND the live app repo both hold issues. One repo is half the picture.
-3. `["canvas","get","--channel","{{BOARD_CANVAS}}"]` — your task board; and `["canvas","get","--channel",
+3. `["feed","get","--types","mentions","--limit","50"]` — the relay's record of status events addressed to
+   you: for each issue the NEWEST 1630 (open + note) / 1631 (resolved) / 1632 (closed) rooted on it is its
+   state of record. The board is regenerated from THIS plus the issue lists, never from memory. Limit: the
+   feed shows only notes that name you (or the repo owner); an issue with no note addressed to you is "open,
+   no note" on the board — and a sign its writer forgot `--to`.
+4. `["canvas","get","--channel","{{BOARD_CANVAS}}"]` — your task board; and `["canvas","get","--channel",
    "{{PLAN_CANVAS}}"]` — the plan, read-only here (only `plan-review` rewrites it).
-4. `recall-self` (`recent_activity({ days: 1 })`) — what you already fixed or reported last sweep.
+5. `recall-self` (`recent_activity({ days: 1 })`) — what you already fixed or reported last sweep.
 
 **Then build the hygiene list** — every item is a tracker WRITE, not a conversation:
 - **Duplicates.** Two open issues for one job (same title modulo wording, same artifact, "ADDENDUM"/"RECORD"/
@@ -55,6 +60,6 @@ each item with the exact issue ids, the target state and the one-line `--content
 or "board: current". Leave `tag_notes` (`kind: digest`) for stale assignees the heartbeat should chase.
 ---task---
 # Project sweep — keep the tracker TRUE (not a plan, not a chase)
-projects → issues in EVERY repo → board + plan canvases → recent activity. Build the hygiene list: close
+projects → issues in EVERY repo → feed (state of record per issue) → board + plan canvases → recent activity. Build the hygiene list: close
 duplicates (newer = duplicate of older) · resolve what is done in substance, with evidence · assign unowned
 work · regenerate the `## Task board` section of `{{BOARD_CANVAS}}`. ONE baton to `project/express`; `[]` if clean.

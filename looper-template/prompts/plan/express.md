@@ -41,10 +41,12 @@ stays under ~70 lines; if it does not fit, the plan is too long, not the canvas 
 must say the same thing after this step; the push beats read plan.md, the fleet reads the canvas.
 
 **3 · The tracker** — for each decision in the gist:
-- a duplicate → `["issues","status","--issue","<newer id>","--status","closed","--content","duplicate of <older id>"]`;
-- a finished track → `["issues","status","--issue","<id>","--status","resolved","--content","<artifact + evidence>"]`;
+- a duplicate → `["issues","status","--issue","<newer id>","--status","closed","--content","duplicate of <older id>",
+  "--to","<its author hex>"]`;
+- a finished track → `["issues","status","--issue","<id>","--status","resolved","--content","<artifact + evidence>",
+  "--to","<worker hex>","--to","<peer hex>"]` (a status note reaches only its `--to` pubkeys + the repo owner);
 - a new delegation → `["issues","create","--title","<t>","--content","<brief: what · why · shape of the
-  answer · done-when>","--label","<lane>"]`, then `["issues","assign",…,"--assignee","<worker hex>"]`, then ONE
+  answer · done-when>","--label","<lane>","--to","<worker hex>"]`, then `["issues","assign",…,"--assignee","<worker hex>"]`, then ONE
   pointer in **research**: `["messages","send","--channel","research","--content","@jarvis <one line> — issue
   <id>"]` — the literal `@jarvis` is what tags him; "Jarvis —" tags nobody and the task dies. Arm it:
   `mcp__ingress-arm__arm_thread { thread_root: <pointer event id>, entry_hint: "reply", tags: ["issue:<64-hex>",

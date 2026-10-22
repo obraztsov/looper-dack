@@ -18,7 +18,8 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   don't hold it, `repo_clone { owner, repo }` ONCE into that name; never a second copy named `-fresh`, `-v2`,
   `-check`: one clone per repo, pulled before use), then `Read`/`Grep` the file or test the worker named; or
   `buzz ["messages","thread",…]` to read the exact test line. If it holds: `["issues","status","--issue","<id>",
-  "--status","resolved","--content","<artifact + the evidence you checked>"]`, then update the track's `next`
+  "--status","resolved","--content","<artifact + the evidence you checked>","--to","<worker hex>","--to","<peer hex>"]` (a status
+  note reaches only its `--to` pubkeys + the repo owner — without them your peer never sees the close), then update the track's `next`
   line on your plan canvas (`["canvas","get","--channel","{{PLAN_CANVAS}}"]` → change ONLY that line → `set`)
   and in `memory/plan.md`. If it does not hold: one reply in the thread naming the gap (this is your chat message).
   **The resolve note's first line is the verification label**: `verified: <what you read / recomputed, at which

@@ -393,6 +393,7 @@ webhooks:
   "/telegram/pub":     public     # strangers / other groups / DMs
   "/buzz/org":         org        # the org channel (the fleet + Hermes workers)
   "/buzz/org-ambient": org        # overheard org traffic, batched per channel (ingress `ambient_path`)
+  "/buzz/tracker":     org        # NIP-34 issue/PR/status-note events addressed to me, off the relay feed (ingress `tracker_path`)
   "/buzz/public":      public     # open Buzz channels / strangers (ingress POSTs to /buzz/&lt;trust&gt;)
   "/watchlist":        org        # the duck's OWN reminders (watchlist-ingress) — self-set, org-trust by path
 
