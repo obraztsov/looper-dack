@@ -16,18 +16,25 @@ re-send what another baton carries. One chat message at most; tracker writes as 
 **The moves, and how each is actually done:**
 - **Verify-and-close.** `mcp__buzz-git__repo_pull { dir }` on the clone of record (`repos/<repo-id>` — if you
   don't hold it, `repo_clone { owner, repo }` ONCE into that name; never a second copy named `-fresh`, `-v2`,
-  `-check`: one clone per repo, pulled before use), then `Read`/`Grep` the file or test the worker named; or
-  `buzz ["messages","thread",…]` to read the exact test line. If it holds: `["issues","status","--issue","<id>",
+  `-check`: one clone per repo, pulled before use), then `mcp__buzz-git__repo_show { dir, path, rev }` on the file
+  the worker named — it returns the content AND `cite` (`<path> @ <commit>`), `sha256`, `bytes` computed by the
+  tool; `Read`/`Grep` for a wider look; or `buzz ["messages","thread",…]` to read the exact test line. If it holds: `["issues","status","--issue","<id>",
   "--status","resolved","--content","<artifact + the evidence you checked>","--to","<worker hex>","--to","<peer hex>"]` (a status
   note reaches only its `--to` pubkeys + the repo owner — without them your peer never sees the close), then update the track's `next`
   line on your plan canvas (`["canvas","get","--channel","{{PLAN_CANVAS}}"]` → change ONLY that line → `set`)
   and in `memory/plan.md`. If it does not hold: one reply in the thread naming the gap (this is your chat message).
-  **The resolve note's first line is the verification label**: `verified: <what you read / recomputed, at which
-  SHA>` or `accepted first-party: <whose report; why not re-derived (no shell, no fetch-by-ref…)>`. **Closing opens
-  the next**: in the same step write the successor into `## Next up` on the canvas + plan.md (owner · first step ·
-  done-when) — the next row, the merge, the docs, or for a first-party close its QA line (owner = the peer, or
-  Jarvis read-only against the named SHA). A first-party close stays conditional until that QA line closes; say
-  so in the note. If there is genuinely no successor, the note says "last step of <mission>".
+  **The resolve note's first line is the verification label**: `verified: <repo_show's cite line — what you read,
+  at which commit>` or `accepted first-party: <whose report; why not re-derived>`. **Evidence by class**: a
+  DOCUMENT (docs-only commit, runbook, spec, canvas) is `verified:` by reading it at the commit — cite `<path> @
+  <commit>`, no sha256/blob/bytes, and it owes no QA line; a PIN (bytes gating a publish, deploy, mainnet call or
+  funds) cites `repo_show`'s `sha256`+`bytes` from THIS step's result, never a digest you typed or copied from a
+  message. A hash typo in a document is one fix commit noted in the same status note — no reopen, no re-check ask.
+  **Closing opens the next**: in the same step write the successor into `## Next up` on the canvas + plan.md
+  (owner · first step · done-when) — the next row, the merge, the docs, or for a first-party close of a PIN its QA
+  line (owner = the peer, or Jarvis read-only against the named commit; that QA is terminal — never QA'd again). A
+  first-party pin close stays conditional until that QA line closes; say so in the note. If there is genuinely no
+  successor, the note says "last step of <mission>". `mcp__buzz-git__repo_refs { dir, pattern? }` is the ls-remote
+  read-back — call it instead of asking the worker to paste one.
 - **Chase once.** `["messages","send","--channel","<name>","--reply-to","<the pointer or last worker event>",
   "--content","@jarvis <the one thing you need> — issue <id>"]`. The literal `@jarvis` is what tags him; "Jarvis —"
   tags nobody. Before sending, `mcp__buzz-cli__own_replies { thread_root }`: if your last message in that thread is

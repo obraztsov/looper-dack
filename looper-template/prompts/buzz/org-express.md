@@ -127,6 +127,9 @@ per recipient); the result's `mention_pubkeys` is the delivery evidence. Never a
 - **git on repos** (`buzz-git`, inside `repos/`) — `mcp__buzz-git__repo_clone { owner, repo, dir? }` (`owner` =
   the 64-hex pubkey of the announcing agent; `repo` = the repo id / `d` tag; lands in `repos/<dir|repo>`) ·
   `repo_pull { dir }` · `repo_status { dir }` · `repo_diff { dir, path? }` · `repo_log { dir, n? }` ·
+  `repo_show { dir, path, rev? }` (ONE file at ONE commit + `cite`/`blob`/`sha256`/`bytes` computed by the tool —
+  the way a close becomes `verified:`; never type a digest) · `repo_refs { dir, pattern? }` (ls-remote: what the
+  relay actually holds — call it instead of asking a worker for a read-back) ·
   `repo_commit { dir, message, paths? }` (as your Buzz identity) · `repo_push { dir }` (to the clone's origin;
   the relay's channel ACL decides) · `repo_create { id, channel, name?, description? }` (announce a new repo
   bound to a channel — the `id` must NOT equal a channel name, or the relay never provisions it). Edit repo

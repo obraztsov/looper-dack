@@ -47,9 +47,12 @@ tracker TRUE. Your lane: **{{LANE}}**; your board canvas: **{{BOARD_CANVAS}}**.
   it must sit on the c-level canvas under `## Operator decisions pending`. If it does not, leave a `digest` note
   "operator decision unlisted: <id> — <what is pending>" so plan-review adds it to the ledger (the Monday digest
   is the only reminder the operator gets).
-- **A resolve with no verification label** (status note not opening with `verified:` / `accepted first-party:`)
-  or a first-party close with no QA line anywhere → `digest` note "unchecked close: <id>" for plan-review. Do not
-  reopen; the fix is a QA line, not a status flip.
+- **A resolve with no verification label** (status note not opening with `verified:` / `accepted first-party:`):
+  if the artifact is a DOCUMENT (docs-only commit, runbook, spec, canvas), `repo_show { dir, path, rev }` it at the
+  named commit — it reads as claimed → it is checked, nothing to report (the board's `last note` may say
+  `verified by sweep`). If it is a PIN (bytes gating a publish, deploy, mainnet call or funds) accepted first-party
+  with no QA line anywhere → `digest` note "unchecked pin close: <id>" for plan-review. Do not reopen; the fix is a
+  QA line, not a status flip — and a hash typo in a document is never a reopen either.
 
 **Don't re-report what you already reported.** A sweep that re-escalates the same stalled issue every 8 hours
 is noise; a sweep that CLOSES a duplicate every 8 hours is hygiene. If the trackers are clean and the board

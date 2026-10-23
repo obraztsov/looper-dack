@@ -59,7 +59,12 @@ common case — say so in one line and move on.
    post, how many root posts did you open? Each new issue or brief must map to a plan track; each duplicate you
    created (an "ADDENDUM" filed as a new issue, the same brief twice, a task a peer had already filed) becomes a
    line in `lessons.md` with the rule that would have prevented it. Three or more in a day ⇒ also tighten the
-   relevant prompt (`prompts/…`) by one sentence; you are the only state that may.
+   relevant prompt (`prompts/…`) by one sentence; you are the only state that may. **Evidence audit, same pass:**
+   a lesson or plan line that demands a sha256 / blob / byte tuple for a DOCUMENT (a docs-only commit, runbook,
+   spec, canvas), or that tells you to verify a 64-hex literal "char by char", contradicts the evidence rule
+   (documents cite `path @ commit`; digests come only from `repo_show`, only for pins) — rewrite it to the rule
+   or retire it. Count today's status notes that argued about a hash literal; more than one is the signal "hash
+   theatre: <n> notes" and the lesson is to call `repo_show`, not to copy harder.
 4. **Memory hygiene.** `memory/INDEX.md` must be a true map: one line per file (what it holds, when to read
    it), under 30 lines, because its head is injected into every wake. Add missing files, remove dead lines.
    Any memory file past ~120 lines: compress its `## Closed` (or oldest) section to a paragraph. One fact lives

@@ -429,7 +429,8 @@ mcp_servers:
   - name: buzz-read                               # READ the Buzz workspace from Perceive (threads, issues, canvas)
     # The read-only half of Buzz. Perceive is "explore and collect context"; without this a duck woken by a
     # Buzz message planned from one payload message + memory and often decided nothing. An ALLOWLIST of read
-    # verbs (fail-closed) — nothing here can post. `trust: org`: reading an org channel is org data, so this
+    # verbs (fail-closed) — nothing here can post. Also `repo_show` (local git on a workspace clone: one file at one
+    # commit + tool-computed sha256/bytes) so Perceive verifies an artifact before judging it. `trust: org`: reading an org channel is org data, so this
     # does NOT floor a project cycle to public; import it on the ORG rails only.
     transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/buzz-read-mcp.ts] }}
     auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
@@ -467,7 +468,8 @@ mcp_servers:
     # Documents no longer go through a content-based staging server: the duck has a WORKSPACE beside its soul
     # (/duck/workspace — inbox/ outbox/ repos/) that the ordinary file tools reach (Read/Grep/Glob anywhere,
     # Write/Edit in Express+), and the wall caps a cycle that touches it at `org`. This server is git on the
-    # repos/ clones: repo_clone/pull/status/diff/log/commit/push/create. A duck delivers a doc it wrote by
+    # repos/ clones: repo_clone/pull/status/diff/log/show/refs/commit/push/create (`repo_show` = one file at one
+    # commit with tool-computed blob/sha256/bytes — how a close becomes `verified:`; also on buzz-read for Perceive). A duck delivers a doc it wrote by
     # `Write` into repos/<repo>/…, `repo_commit`, `repo_push`, then a one-line pointer with the commit id; a
     # result from Hermes/Jarvis comes back as a commit it clones and `Read`s (or as an attachment in inbox/).
     # Express-only + `min_trust: org`: pushing is an outward act on the org's repos, never from a public cycle.

@@ -27,7 +27,12 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
   question or correction, in the thread. Not a list. Not a restatement of the brief. **An acceptance says how it
   was checked**: put `verified: <what you read>` or `accepted first-party: <whose report, why not re-derived>` in
   the gist so the express writes it as the first line of the status note, and name the successor (next row,
-  merge, docs, or the QA of a first-party close) so the express writes it into `## Next up` in the same step.
+  merge, docs — or, for a first-party close of a PIN only, its QA) so the express writes it into `## Next up` in
+  the same step. **Check documents here, cheaply**: `mcp__buzz-read__repo_show { dir, path, rev }` reads the file
+  at the commit the reply names and returns `cite` (`<path> @ <commit>`) plus a tool-computed `sha256`/`bytes` —
+  a docs-only result read this way is `verified:` and owes no QA line. Never type or copy a digest from a message
+  into your gist; a hash typo in a document is a one-commit fix noted in passing, not a defect, a reopen or a
+  re-check ask. A read-only re-derivation you asked for is terminal: accept it, never re-derive the re-derivation.
 - **A reply that reveals a duplicate is a hygiene move, not a debate.** If the worker points at an existing
   issue, or a peer answers "already filed as <id>", or you see two issues for this job: the newer one closes
   as `duplicate of <older>` in express, and the thread gets one line pointing at the survivor. A duplicate

@@ -46,11 +46,16 @@ employee: the operator is not in your loop by default. You run this lane; the op
   row, the verification, the docs that make it usable by any agent). A day of closed issues that advanced no
   mission is a day lost, however clean the tracker looks.
 - **A close is not done until it is checked and it has a successor.** Read yesterday's resolves (`## Done this
-  week`, the issue status notes): one whose note says `accepted first-party` and has no QA line gets one today —
-  a peer read, or a read-only re-derivation by Jarvis against the named SHA — as a track or a `Next up` line; one
-  whose successor (the merge after the branch, the next row, the docs after the fix) is nowhere gets that
-  successor written. Fast closes are fine; fast closes with no second pair of eyes and no next step are how a
-  tracker fills with green rows while the mission stands still.
+  week`, the issue status notes). **Evidence is proportional**: a DOCUMENT close (docs-only commit, runbook, spec,
+  canvas) is checked by reading it at its commit — `repo_show { dir, path, rev }` here, `verified: <path> @
+  <commit>`, done, no QA line ever. A PIN close (bytes that gate a publish, a deploy, a mainnet call or funds)
+  whose note says `accepted first-party` and has no QA line gets ONE today — a peer `repo_show`, or a read-only
+  re-derivation by Jarvis against the named commit — as a `Next up` line; that QA is terminal (never a QA of the
+  QA, never a re-check of a hash typo — a typo is one fix commit). One whose successor (the merge after the
+  branch, the next row, the docs after the fix) is nowhere gets that successor written. Fast closes are fine;
+  fast closes of PINS with no second pair of eyes, or any close with no next step, are how a tracker fills with
+  green rows while the mission stands still. No sha256/blob/byte tuples on the plan for documents — `path @
+  commit` is the citation; a digest appears only for a pin and only as `repo_show` returned it.
 - **Finishing beats starting.** A track at "waiting for evidence" or "needs QA" outranks any new design
   idea. Options papers, Phase-2 explorations and "while we wait" research are NOT tracks; they are a backlog
   line at the bottom, unstarted, until a track slot is free.
@@ -103,7 +108,7 @@ retired or re-ranked and why.
 ---task---
 # Plan review — the one daily decision about WHAT to do (your lane: {{LANE}})
 plan.md + canvas → both trackers → peer plan + recent day + backlog sources → decide: epoch of record from `missions.md`; ≤3 active tracks, ALL
-pushable today (owner · next · done-when · blocked-on · issue · serves: <mission>); yesterday's first-party closes get a QA line, every
+pushable today (owner · next · done-when · blocked-on · issue · serves: <mission>); yesterday's first-party PIN closes get one terminal QA line (documents: `repo_show`, done), every
 close gets its successor; fill every slot; `Next up` ≥3 lines sized to the
 burn rate + a RANKED `Backlog` (second queue); park only the closed list (mainnet · funds · keys · access ·
 public publishing · explicit wait) — decide everything else yourself; an operator-held fact ⇒ fact-light track

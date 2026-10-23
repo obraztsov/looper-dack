@@ -19,9 +19,10 @@ the channel, with their `@looper-<n>`).
   — a status note on the surviving issue is where addenda live; a NEW issue is never an addendum.
 - **Resolved in substance** → verify first if you can (`mcp__buzz-git__repo_pull { dir: "<repo-id>" }` on the clone of
   record — ONE clone per repo under `repos/<repo-id>`, `repo_clone { owner, repo }` only if it does not exist yet,
-  never a `-fresh`/`-v2` copy — then `Read` the file or test), then `["issues","status","--issue","<id>",
-  "--status","resolved","--content","verified: <artifact: branch@commit, test line, doc path — what you checked>",
-  "--to","<worker hex>","--to","<peer hex>"]`.
+  never a `-fresh`/`-v2` copy — then `mcp__buzz-git__repo_show { dir, path, rev }` on the file or test: it returns
+  the content, `cite` (`<path> @ <commit>`) and a tool-computed `sha256`/`bytes`), then `["issues","status","--issue","<id>",
+  "--status","resolved","--content","verified: <repo_show's cite — a document cites path @ commit only; a pin (bytes gating a publish/deploy/funds) adds repo_show's sha256 + bytes from this step>",
+  "--to","<worker hex>","--to","<peer hex>"]`. Never type a digest; never fix a hash typo by reopening — one commit, one note.
 - **Unowned** → `["issues","assign","--issue","<id>","--repo-owner","<hex>","--repo-id","<repo>","--assignee","<hex>"]`
   (assigning others is trusted when you are the author or the repo owner; otherwise assign yourself or name the
   lane owner in your one message). **Assignee is a worker (Jarvis) → the pointer is mandatory**: `["messages",

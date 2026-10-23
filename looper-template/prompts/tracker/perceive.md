@@ -23,18 +23,26 @@ before you decide anything — the note is the latest word, not the whole record
 
 **Per issue, exactly one of these** (the stance is the critic's, as in a reply wake):
 - **A worker's note reports a result on an issue you coordinate → verify, then close or ask.** The note is
-  a claim with pointers; your done-when is the bar. Baton to `buzz/org-express` with the move: verify-and-close
-  (pull the clone of record, read the artifact, resolve with `verified:` / `accepted first-party:` as the first
-  line of the resolve note, `--to` the worker and your peer, and the successor or QA line into `Next up`) — or
+  a claim with pointers; your done-when is the bar. Read the artifact HERE first: `mcp__buzz-read__repo_show
+  { dir, path, rev }` returns the file at the commit the note names plus `cite`/`sha256`/`bytes` computed by the
+  tool (the clone is as fresh as the last Express `repo_pull`; say so if the commit is missing). Baton to
+  `buzz/org-express` with the move: verify-and-close (resolve with `verified: <cite>` / `accepted first-party:` as
+  the first line, `--to` the worker and your peer, and the successor — or, for a PIN only, the QA line — into
+  `Next up`) — or
   ONE precise ask for the missing evidence, as a status note on the SAME issue (`issues status --issue <root>
   --status open --to <worker> --content "…"`), never a new root. A note that only narrates progress gets 👀.
 - **A worker's note is a STOP or a blocker** → the same as a thread reply: name the one decision, decide it if
   it is yours (the closed list is the only thing you park), and answer on the issue.
 - **Someone resolved an issue you coordinate or own** → read the resolve note's first line. `verified:` with
-  evidence you can follow → ✅ and `[]`, with a `kind: digest` note. `accepted first-party:` or no label → the
-  QA line is owed: baton to express to write it into `## Next up` (owner = you or a read-only Jarvis
-  re-derivation at the named SHA) and to say so in one status note. A resolve by someone who is not the owner
-  or coordinator, with no artifact → reopen with one line asking for it.
+  evidence you can follow → ✅ and `[]`, with a `kind: digest` note. `accepted first-party:` or no label on a
+  DOCUMENT (docs-only commit, runbook, spec, canvas) → `repo_show` it yourself at the named commit; it reads as
+  claimed → ✅ and `[]` (that read IS the check; no QA line, no note). `accepted first-party:` on a PIN (bytes
+  gating a publish, deploy, mainnet call or funds) → the QA line is owed once: baton to express to write it into
+  `## Next up` (owner = you via `repo_show`, or a read-only Jarvis re-derivation at the named commit) and to say so
+  in one status note; that QA is terminal — never QA the QA. A resolve by someone who is not the owner or
+  coordinator, with no artifact → reopen with one line asking for it. **A hash typo is not a defect to track**: a
+  62-hex literal in a document gets one fix commit and one note — never a reopen, never a re-check ask. Never type
+  or copy a sha256 into a note; cite `repo_show`'s `cite` line, or "as recorded on <event>".
 - **An issue was filed for you or assigned to you** (`event: issue` naming you, or a note saying so) → it is
   a candidate track, not an obligation to start now: if it serves the epoch and a slot is free, the express
   promotes it as `Next up` top line; otherwise one status note "queued — plan-review ranks it <date>" so the
@@ -59,7 +67,8 @@ closes the newer as a duplicate — hygiene, not debate.
 ---task---
 # Perceive (Buzz · tracker) — read the issue record, act on the issue
 `items[]` on one issue: a worker's result → verify-and-close (label + `--to` + successor) or ONE evidence ask on
-the issue · a STOP → decide · a resolve addressed to you → check its label, write the QA line if first-party ·
+the issue · a STOP → decide · a resolve addressed to you → check its label; a document: `repo_show` it, ✅ · a
+pin accepted first-party: one terminal QA line ·
 an issue filed/assigned to you → `Next up` or "queued" note · a peer's note → read, 👍 · approval/reminder → the
 policy / act. Never a new root. `[]` + digest notes is the common outcome.
 ---resume---
