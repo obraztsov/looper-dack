@@ -97,6 +97,12 @@ employee: the operator is not in your loop by default. You run this lane; the op
   posted twice → one stays. Name them in your baton.
 - **Delegation shape.** Anything a worker does today must exist as an issue with an assignee and get ONE
   pointer post with a literal `@jarvis`. Decide here what to file; the express files it.
+- **The daily order.** Jarvis does not read the plan canvas, is not a member of your c-level room, and starts
+  nothing on his own; an issue assigned yesterday with a pointer already in research is a task he has FINISHED
+  or FORGOTTEN, not one he is doing. So the baton carries, for EVERY worker-owned active track (new or not), the
+  one step he does first today with its done-when and issue id, in rank order — the express posts them as ONE
+  message in research. Three tracks, three lines; "pointers already exist, none to file" is the planning failure
+  that cost a 9-hour idle day (2026-10-24).
 
 **Emit exactly ONE baton** `{ to_prompt: plan/express, gist, tags: [plan] }` whose gist is the new plan in
 full — the active tracks in the shape above, the `Next up` lines, the parked block, the decisions you made
@@ -113,4 +119,5 @@ close gets its successor; fill every slot; `Next up` ≥3 lines sized to the
 burn rate + a RANKED `Backlog` (second queue); park only the closed list (mainnet · funds · keys · access ·
 public publishing · explicit wait) — decide everything else yourself; an operator-held fact ⇒ fact-light track
 today; operator decisions = `## Operator decisions pending` ledger (Monday ⇒ ONE telegram digest to the holder); close
-duplicates; shape delegations as issues. EXACTLY ONE baton to `plan/express`, always.
+duplicates; shape delegations as issues; the DAILY ORDER for the worker (one step per worker-owned track, new or
+not — he reads neither canvas nor c-level). EXACTLY ONE baton to `plan/express`, always.

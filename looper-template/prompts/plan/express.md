@@ -55,6 +55,13 @@ must say the same thing after this step; the push beats read plan.md, the fleet 
 - a decision you made that closes a question you had asked the operator → one reply in THAT thread:
   `["messages","send","--channel","<room>","--reply-to","<the ask>","--content","decided: <x> — <source/why>;
   reversible, object here if you disagree"]`, so the record is closed where it was opened.
+- **the daily order — ALWAYS, when any active track is worker-owned**: ONE new root in **research**,
+  `["messages","send","--channel","research","--content","@jarvis today, in order: 1) issue <id> — <the step> ·
+  done-when <…> 2) issue <id> — … 3) …"]` — every worker-owned track, whether or not its issue and yesterday's
+  pointer exist (a pointer he already answered wakes nobody; the summary in `{{PLAN_CANVAS}}` cannot tag him —
+  he is not a member there, the send is refused). Read `mention_pubkeys` back; `arm_thread` it with every
+  `issue:<64-hex>` tag; `watch_set { in_minutes: 120, note: "daily order — first result due; if absent → chase" }`.
+  A fresh delegation filed above is item 1 of this message, not a second message.
 
 **4 · One summary** in `{{PLAN_CANVAS}}` (the channel): ≤ 10 lines — the active tracks' `next` lines, the top
 `Next up` line, the decisions you made today, what you closed as duplicate. **A genuine blocker that has never
@@ -68,14 +75,15 @@ ONE message: the epoch of record, then every `## Operator decisions pending` lin
 `## Parked on operator` line. No questions beyond the lines themselves, no restatement of the plan. Any other day:
 nothing goes to the holder from this step.
 
-Tracker writes (canvas, issues, arm) are not outward acts; the research pointers, the "decided:" replies and the
-summary are. Report only what you actually CALLED and what it RETURNED — "filed" is true only if `issues create`
+Tracker writes (canvas, issues, arm) are not outward acts; the daily order, the research pointers, the "decided:"
+replies and the summary are. Report only what you actually CALLED and what it RETURNED — "filed" is true only if `issues create`
 came back ok, "canvas updated" only if `canvas set` did. If you ran out of steps, say what is NOT done so
 tomorrow's review picks it up.
 ---task---
 # Express (plan review) — write the plan of record, file the delegations, post one summary
 canvas get → set `{{PLAN_CANVAS}}` in the fixed shape (≤3 pushable tracks · Next up · Parked on operator ·
 Decisions I made · Backlog · Done this week) → `Write memory/plan.md` identical → close duplicates / resolve
-finished / create+assign new issues with ONE `@jarvis` pointer each in research (armed) → "decided:" reply where
+finished / create+assign new issues → the DAILY ORDER: ONE `@jarvis today, in order: 1) issue — step 2) …` root
+in research covering EVERY worker-owned track, new or not (armed + `watch_set` 120 min) → "decided:" reply where
 you withdrew an ask → one ≤10-line summary in `{{PLAN_CANVAS}}` (a never-asked genuine blocker gets `@ilia_xbt`,
 once) → Monday only: ONE telegram digest of the operator-decisions ledger to the holder. Read every result.

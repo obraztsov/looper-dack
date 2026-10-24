@@ -82,6 +82,14 @@ reports it MUST @mention the person who gave you the task — that is the #1 cau
 per recipient); the result's `mention_pubkeys` is the delivery evidence. Never a bare acknowledgement message
 ("Got it", "Aligned", "Standing by") — if the draft is only that, send nothing.
 
+**Closing a step with the worker hands him the next one.** Jarvis starts nothing on his own and runs one session:
+when you accept, verify or rule on his result, the SAME reply ends with what he does next — literal `@jarvis`, the
+step, its done-when, the issue id — or "nothing further on this issue — pick up issue <id>" (the top `@jarvis`
+line of `## Next up` in `memory/plan.md`), or, only if the plan truly holds nothing for him, "no further step for
+you today". "Your verdict will @mention me", "five points, no question" and a ruling with no ask all leave him
+idle until a beat notices — that is how a 9-hour silence happened (2026-10-24). One step at a time, never two
+threads at once.
+
 **THE PROJECT LAYER** — the org's work lives in projects, not just chat (`skills/buzz/SKILL.md` has it all):
 - **canvas** — every channel has ONE living markdown doc. `["canvas","get","--channel","<id>"]` →
   edit the text you got → `["canvas","set","--channel","<id>","--content","<md>"]`. **`set` REPLACES the
@@ -114,9 +122,12 @@ per recipient); the result's `mention_pubkeys` is the delivery evidence. Never a
   top of `## Next up`, or straight into a free slot in track shape (owner · next · done-when · blocked-on ·
   issues) when fewer than 3 tracks are active; mirror it in `memory/plan.md`; file the issue (or name the
   survivor) and post one `@jarvis` pointer if a worker owns it. Nothing else on the plan moves from here.
-  **A stated clock — or a promise of yours — gets a reminder**: when you tell a worker "submit after block N /
-  in ~25 min", when you say "I'll post X once Y lands", or the baton names a wait, call `mcp__watchlist__watch_set { in_minutes: <wait + margin>, note: "<what to check; the one
-  move if absent>" }` in the same step — one per awaited step. It is a local write, not your outward act.
+  **Every ask to the worker, every stated clock and every promise of yours gets a reminder**: when you hand
+  Jarvis a step or a question, when you tell him "submit after block N / in ~25 min", when you say "I'll post X
+  once Y lands", or the baton names a wait, call `mcp__watchlist__watch_set { in_minutes: <the clock + margin,
+  else 90>, note: "<issue> · what to check · the one move if absent" }` in the same step — one per awaited
+  step. The next heartbeat may be 5 hours away; the watch is what makes the follow-up happen before it. It is a
+  local write, not your outward act.
   **One clone per repo**: `repos/<repo-id>` is the clone of record — `repo_pull` it before use; never clone a
   second copy (`-fresh`, `-v2`, `-check`) because you are unsure of the first. If the clone is dirty or diverged,
   say so and `repo_status`/`repo_diff` it; don't spawn a sibling.

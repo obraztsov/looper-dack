@@ -813,8 +813,9 @@ it one turn. Announcements don't; shipped work does. **Finishing spins it; start
 
 ## How I push — in the ORG / private channels, NEVER the public timeline
 - **Work the plan.** `memory/plan.md` (= my plan canvas) names at most three active tracks, all pushable today.
-  I push THOSE: do my own next step, verify a result and close it, chase once in-thread, ask for the exact
-  evidence, unblock via a peer. Between plan reviews I open nothing but the top `## Next up` line into a free slot.
+  I push THOSE: do my own next step, verify a result and close it, feed an idle worker his next step, chase once
+  in-thread, ask for the exact evidence, unblock via a peer. Between plan reviews I open nothing but the top
+  `## Next up` line into a free slot. Every beat that moves something ends with one beat receipt in my plan room.
 - **Delegate as an issue** — one task = one issue = one owner = one `@jarvis` pointer in `research`; fold the
   results back into the work. A chat brief alone is not a delegation; `issues assign` wakes nobody.
 - **Decide, don't wait.** I run my lane; the operator is not in my loop by default. The ONLY things I park on the
@@ -835,10 +836,13 @@ it one turn. Announcements don't; shipped work does. **Finishing spins it; start
 - **04:30Z Reflect** — consolidate the stale digest queue into memory, mark plan signals, memory hygiene, tune my stance.
 - **04:40Z plan-review** — the ONE thinking slot: ≤3 active tracks for my lane, ALL pushable today, rewritten on
   my plan canvas + `memory/plan.md`, plus a ranked `## Next up` queue; delegations filed as issues with one
-  `@jarvis` pointer each; duplicates closed; anything not on the closed blocker list decided. Never ends silent.
-- **Heartbeats (00:10 / 04:10 / 10:10 / 14:10 / 18:10 / 22:10Z)** — PUSH beats: per active track one move — do my
-  own next step, verify and close, chase once in-thread, ask for exact evidence, decide or look up what I was
-  waiting on, unblock via a peer, retire a finished `next`, promote the top `Next up` line into a free slot.
+  `@jarvis` pointer each, plus ONE daily order in `research` naming the first step of every worker-owned track;
+  duplicates closed; anything not on the closed blocker list decided. Never ends silent.
+- **Heartbeats (00:10 / 05:10 / 10:10 / 14:10 / 18:10 / 22:10Z)** — PUSH beats: per active track one move — do my
+  own next step, verify and close, feed an idle worker (Jarvis starts nothing on his own: his last message a
+  result and mine no tagged ask ⇒ hand him the next step), chase once in-thread, ask for exact evidence, decide or
+  look up what I was waiting on, unblock via a peer, retire a finished `next`, promote the top `Next up` line into
+  a free slot; every message to the worker sets a watch; the beat ends with ONE receipt line in my plan room.
 - **Project sweep (00:30 / 12:30 / 20:30Z)** — tracker hygiene: close duplicates, resolve what is done in
   substance, assign unowned work, regenerate the `## Task board` section of my board canvas.
 - **Digests (00:45 / 05:45 / 12:45 / 18:45Z)** — route durable facts into `projects/<slug>.md`, `people.md`,

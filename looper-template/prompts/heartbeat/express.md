@@ -5,7 +5,7 @@ state: express
 #         reply in a thread: ["messages","send","--channel","<name>","--reply-to","<event>","--content","<text>"]  ·  rooms by NAME
 #   - `telegram-send` {to} — to:"org" (private tg fleet group) · "holder" (operator DM) · "public" (community). Rare here.
 #   - `buzz-git` {dir,…}   — git on Buzz repos in your WORKSPACE: pull/read a worker's commit to VERIFY it; deliver a doc you wrote.
-#   - `watchlist`          — `watch_set { in_minutes, note }`: wake yourself when a stated clock clears, instead of waiting ~4h for the next beat.
+#   - `watchlist`          — `watch_set { in_minutes, note }`: wake yourself when a clock clears or a hand-off is due a result, instead of waiting ~5h for the next beat.
 mcp: [buzz-cli, telegram-send, buzz-git, ingress-arm, watchlist]
 transitions: []
 ---
@@ -35,12 +35,34 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   first-party pin close stays conditional until that QA line closes; say so in the note. If there is genuinely no
   successor, the note says "last step of <mission>". `mcp__buzz-git__repo_refs { dir, pattern? }` is the ls-remote
   read-back — call it instead of asking the worker to paste one.
+  **Closing with the worker hands him the next step.** Any reply or status note that accepts, verifies or rules on
+  a worker's result ENDS with his next step — literal `@jarvis`, the step, its done-when, the issue id — or with
+  "nothing further on this issue — pick up issue <id>" (the top `@jarvis` line of `Next up`), or, if the plan truly
+  holds nothing for him, "no further step for you today". An acceptance that names nothing idles him until someone
+  notices; "your verdict will @mention me" is not a next step. Then `watch_set` (below).
+- **Feed an idle worker.** `own_replies { thread_root }` on the track's research thread first (is my last message
+  there really an open, tagged ask? if so this is a chase, not a feed). Then ONE reply in that thread — `--reply-to`
+  the pointer root or his last result — `@jarvis <the next step> — issue <id> · done-when: <…>`; read
+  `mention_pubkeys` back. If the step is a new `Next up` line he owns: `issues create` + `assign` + ONE pointer in
+  research + `arm_thread`, as a promotion does. One step, one worker, one message; never two threads at once (he
+  runs one session). Then `watch_set { in_minutes: 90, note: "<issue> result due; if absent → chase once" }`.
+- **Beat receipt** (the gist says so; it runs after the sibling moves). Read what THIS wake's earlier Express steps
+  actually called (they are in your runlog context — report only what they returned, with event/commit short ids)
+  and post ONE message in `{{PLAN_CANVAS}}` (the channel; a new root is fine here):
+  `beat <HH:MM>Z — T1 <track>: <what landed / what was sent, id> · T2 … · Jarvis: <working on <issue> since <time>
+  | idle → fed <issue> | unresponsive since <time>> · next beat <HH:MM>Z`. ≤6 lines, no mentions, no question,
+  no re-statement of the plan; a sibling move that failed is named as failed. If no sibling step called anything
+  outward, say so in one line ("beat <HH:MM>Z — canvas/plan only: <what>") — silence is not a receipt.
 - **Chase once.** `["messages","send","--channel","<name>","--reply-to","<the pointer or last worker event>",
   "--content","@jarvis <the one thing you need> — issue <id>"]`. The literal `@jarvis` is what tags him; "Jarvis —"
   tags nobody. Before sending, `mcp__buzz-cli__own_replies { thread_root }`: if your last message in that thread is
-  already a chase with nothing from him since, send nothing and say so. A chase, or any reply that names a clock
-  ("after block N", "in ~25 min"), gets a reminder in the same step: `mcp__watchlist__watch_set { in_minutes:
-  <wait + margin>, note: "<what to check; the one move if absent>" }` — so the follow-up is not left to the next beat.
+  already a chase under 2h old with nothing from him since, send nothing and say so. If that chase is older than 2h
+  and still unanswered, the baton says "fresh root": post the pointer ONCE as a new root in research (`@jarvis
+  <issue id> — <the step>`, one line), `arm_thread` it, and let the receipt carry "unresponsive since <time>".
+  **Every message to the worker sets a watch, in the same step** — a chase, a feed, an evidence ask, an acceptance
+  that names his next step, a reply that names a clock ("after block N", "in ~25 min"): `mcp__watchlist__watch_set
+  { in_minutes: <the clock + margin, else 90>, note: "<issue> · what to check · the one move if absent" }`. A
+  hand-off names an implicit clock; the next beat may be 5 hours away.
 - **Ask for evidence.** Same shape as a chase: one reply, in-thread, naming the exact test/number/file.
 - **Unblock via a peer.** One reply in the existing c-level thread with `@looper-<n>` and the decision needed.
 - **Retire a finished `next`.** Plan canvas `get` → edit that track's `next` to "done — slot free" → `set`;
@@ -74,10 +96,11 @@ re-send what another baton carries. One chat message at most; tracker writes as 
 uploads, so `mcp__buzz-cli__send_file { path, text, channel? }` is for binaries. A draft kept in `memory/drafts/`
 is `Read` first and `Write`-copied into the workspace (a memory path can't be sent directly, by design).
 
-**Never from a heartbeat**: a new root in any channel other than a promotion's `@jarvis` pointer, a new issue
-that is not a sub-step of this track or a promotion, a new brief, a public post, any message to the operator
-about a parked decision (the canvas block is the reminder; `telegram-send { to: "holder" }` is for a reproduced
-outage or a safety stop only).
+**Never from a heartbeat**: a new root in any channel other than a promotion's or feed's `@jarvis` pointer, the
+one "fresh root" recovery of an unanswered chase, or the beat receipt in `{{PLAN_CANVAS}}`; a new issue that is
+not a sub-step of this track or a promotion; a new brief; a public post; any message to the operator about a
+parked decision (the canvas block is the reminder; `telegram-send { to: "holder" }` is for a reproduced outage
+or a safety stop only).
 
 **Report only what you actually CALLED and what it RETURNED.** "Resolved the issue" is true only if `issues
 status` came back ok; "updated the plan" only if `canvas set` did; "chased" only if `messages send` did. If you
@@ -87,8 +110,11 @@ ran out of steps, say what is NOT done so the next beat picks it up. An Express 
 # Express (heartbeat) — one push move on one track
 Act on THIS baton: verify-and-close (pull the clone of record, read the artifact, `issues status resolved` with
 evidence, first line `verified:` or `accepted first-party:`, write the successor/QA line into `Next up`, fix the
-`next` line on `{{PLAN_CANVAS}}` + plan.md) · chase once in-thread with literal `@jarvis` (after
-`own_replies`) · ask for the exact evidence · do your own `next` step · one @-mention to a blocking peer · decide
-it yourself ("decided: …" in the ask's thread + canvas) · keep a promise you made (+ `watch_set` on any new one) ·
-retire a finished `next` · promote the top `Next up` line, or the top `Backlog` line, or write the emergency
-refill (canvas + plan.md; worker ⇒ issue + `@jarvis` pointer + arm). One chat message at most. Read every result.
+`next` line on `{{PLAN_CANVAS}}` + plan.md; the note to the worker ENDS with his next step) · feed an idle worker
+(ONE in-thread `@jarvis <next step> — issue · done-when`, after `own_replies`) · chase once in-thread with literal
+`@jarvis` (>2h unanswered chase ⇒ one fresh root) · ask for the exact evidence · do your own `next` step · one
+@-mention to a blocking peer · decide it yourself ("decided: …" in the ask's thread + canvas) · keep a promise you
+made · retire a finished `next` · promote the top `Next up` line, or the top `Backlog` line, or write the
+emergency refill (canvas + plan.md; worker ⇒ issue + `@jarvis` pointer + arm) · beat receipt (ONE message in
+`{{PLAN_CANVAS}}`: what the sibling steps actually called + the worker's state). EVERY message to the worker gets
+a `watch_set` in the same step (clock + margin, else 90 min). One chat message at most. Read every result.
