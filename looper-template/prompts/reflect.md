@@ -40,8 +40,10 @@ common case — say so in one line and move on.
 ## The nightly checklist (do these, in order, every time)
 
 1. **Stale digest queue → memory, routed.** Whatever the `digest-queue` block carries goes into the SAME files
-   the digest uses — `projects/<slug>.md` (decisions · artifacts · open gates · closed), `people.md`,
-   `lessons.md`, `org/chart.md` — never into one dump file, never into `plan.md`'s tracks.
+   and the SAME shapes the digest uses — `projects/<slug>.md` (`## Now` · `## Decisions` · `## Artifacts` ·
+   `## Open consults`, one line + pointer each, replacing the line it changes), `people.md`, `lessons.md`,
+   `org/chart.md` — never into one dump file, never into `plan.md`'s tracks. Buzz is the ledger; memory points
+   at it.
 2. **Plan sanity (read the day, mark the plan).** Compare `memory/plan.md` with `recent_activity({ days: 1 })`
    and with the `## Signals for plan review` lines the digests left. A track whose done-when is met, or that has
    not moved in 3 days with no blocker named, gets a one-line verdict under `## Signals for plan review`
@@ -75,10 +77,20 @@ common case — say so in one line and move on.
    (documents cite `path @ commit`; digests come only from `repo_show`, only for pins) — rewrite it to the rule
    or retire it. Count today's status notes that argued about a hash literal; more than one is the signal "hash
    theatre: <n> notes" and the lesson is to call `repo_show`, not to copy harder.
-4. **Memory hygiene.** `memory/INDEX.md` must be a true map: one line per file (what it holds, when to read
-   it), under 30 lines, because its head is injected into every wake. Add missing files, remove dead lines.
-   Any memory file past ~120 lines: compress its `## Closed` (or oldest) section to a paragraph. One fact lives
-   in one file; a paragraph duplicated across files is deleted from the wrong one. `missions.md` is yours, and it is the GOAL layer, not a
+4. **Memory hygiene — budgets are the rule, you are where files get back under them.** Every memory file has
+   a byte budget the wall enforces (`projects/<slug>.md` 12 KB · `plan.md` 8 KB · `missions.md` 10 KB ·
+   `people.md`/`lessons.md`/`org/*.md` 8 KB · `INDEX.md` 3 KB): a write that leaves a file above its budget is
+   refused unless it shrinks the file. A file within ~20% of its ceiling is REWRITTEN tonight as current state
+   in its schema — a project file is `## Now` (≤ 8 lines) · `## Decisions` (one line + event id, newest first,
+   ≤ 15) · `## Artifacts` (name · `path @ commit` or issue id, ≤ 15) · `## Open consults`; there is no
+   `## Closed`, no `## Open gates`, no `## Parked`, no evidence trail, no "SUPERSEDED" line (the soul git holds
+   every earlier version; the tracker and the Buzz thread hold the evidence — memory points at them). You rewrite
+   from what is true, not by trimming the bottom. A memory file is never "a deliberate ledger"; a ledger is what
+   Buzz is. `memory/INDEX.md` must be a true map: one line per file (what it holds, when to read it), under 30
+   lines, each ≤ 160 chars with NO ids or hashes — its head is injected into every wake and lines are clipped at
+   160 chars. Add missing files, remove dead lines. `lessons.md` is one line per lesson; a lesson older than 30
+   days that did not recur, or that the prompts now state, is deleted. One fact lives in one file; a paragraph
+   duplicated across files is deleted from the wrong one. `missions.md` is yours, and it is the GOAL layer, not a
    memo: read its `## Operator-stated direction` section first (the digests append the operator's own words there);
    a direction that has stood a day becomes — or re-ranks — a line under `## Current DAO missions`, written as an
    EPOCH: one line, priority order, a done-when ("the eight-row DAC matrix green on 84532 + a skill any agent can

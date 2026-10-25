@@ -34,8 +34,9 @@ consult them like a peer, in one line, and you keep moving while they answer.
    titles sit next to each other; confirm with `tasks_find { text: <title> }`).
 4. The peer plan (`["canvas","get","--channel","{{PEER_PLAN_CANVAS}}"]`) so your tracks do not collide with
    theirs, and the recent day: `recent_activity({ days: 1, min_trust: org })`.
-5. Your backlog sources: `memory/projects/<slug>.md` (its `## Open gates`), `memory/missions.md`, and the
-   `## Backlog` + `## Signals for plan review` lines of plan.md.
+5. Your backlog sources: `memory/projects/<slug>.md` (its `## Now` and `## Open consults` — the state, not a
+   history; the issue notes are the evidence), `memory/missions.md`, and the `## Backlog` + `## Signals for
+   plan review` lines of plan.md.
 
 **Then decide — stingy about slots, generous about moving:**
 - **At most 3 active tracks, and every one of them PUSHABLE today** — by you, a worker or a peer. A track

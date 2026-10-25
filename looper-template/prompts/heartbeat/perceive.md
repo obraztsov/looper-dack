@@ -125,7 +125,7 @@ post or a note the worker cannot see leaves him idle, and an idle worker is a mo
 
 **Zero active tracks is never `[]`.** A starved plan (no active track AND `## Next up` AND `## Backlog` empty)
 gets exactly ONE emergency refill this beat, chosen in plan-review's own order: an open issue in your lane
-assigned to nobody or to you · an Open gate in `memory/projects/<slug>.md` · QA, a test, a runbook rehearsal or
+assigned to nobody or to you · a `## Now` step or open consult in `memory/projects/<slug>.md` · QA, a test, a runbook rehearsal or
 a verification of a claim someone made in your lane · a promise of yours still undone. It becomes track 1 in the
 track shape, with one line under `## Decisions I made` ("emergency refill <date> — plan-review ranks it"), and
 its first step starts this beat if it fits. That is a push, not a re-plan: you pick from lists the review already

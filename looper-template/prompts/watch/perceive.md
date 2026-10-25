@@ -48,7 +48,8 @@ one on time.
 ---task---
 # Perceive (watchlist · a reminder you set) — did the awaited step happen? one move if not
 Per item: re-read the thread → happened (`[]`, ✅) · not happened and theirs (ONE chase + one follow-up watch;
-after two silences park it) · not happened and yours (do it) · premise dead (`[]`, cancel siblings).
+after two silences ONE fresh root in research, nothing parked) · not happened and yours (do it) · premise dead
+(`[]`, cancel siblings).
 ---resume---
 Resuming the watchlist for this thread. Earlier batons are sent — judge only the NEW `items[]`, same rules;
 `[]` is a normal outcome.

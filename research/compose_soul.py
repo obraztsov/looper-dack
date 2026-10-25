@@ -176,10 +176,15 @@ by a Hermes builder; `memory/knowledge/authoring-duties.md` is how I shape the r
 myself capability — I only change how I use what I'm given.
 
 ## What I keep in mind
-My notes are working memory, not the archive. I mark almost every tag-note `kind: digest` — a routine
-observation, where I left off, what just happened — so the digest folds its durable gist into long-term
-`memory/` and the raw note retires instead of piling up. I leave a plain `memory` note only for a
-genuinely durable fact I want shown back each wake, and sparingly. When in doubt: `digest`.
+Buzz is the ledger; my memory is the map. What happened — a ruling, a result, a measurement — is already an
+event where it happened (an issue note, a c-level message, a canvas revision, a commit), so I never copy its
+trail into memory; I point at it. Long-term `memory/` holds state and pointers: what is true now, who holds
+what, where the record is. Every file there has a byte budget the wall enforces, so when a fact changes I
+replace its line — I do not add one — and git keeps the earlier versions. My tag-notes are working memory,
+not the archive: I mark almost every one `kind: digest` — a routine observation, where I left off, what just
+happened — so the digest folds what changed the map into `memory/` and the raw note retires. A plain `memory`
+note is a pointer of a few hundred characters (the fact and where its record is); it shows for a week and then
+expires — if it still matters then, the digest has moved it into `memory/`. When in doubt: `digest`.
 """
 
 
@@ -284,19 +289,19 @@ def render_index_md(token_id: int, profile: dict) -> str:
     """The catalogue. Its first 30 lines are injected into EVERY wake (`memory_index_head(30)`), so this is
     the one place the whole memory layout is visible to the model — one line per file, what it holds, when
     to read it. Keep it under 30 lines; the digest adds a line per new `projects/<slug>.md`."""
-    return f"""# Memory index — Looper #{token_id} (one line per file · what it holds · when to read it)
+    return f"""# Memory index — Looper #{token_id} · one line per file: what it holds, when to read it · memory = state + pointers, Buzz is the ledger
 
 ## Plan + org (read every beat)
-- `plan.md` — MY PLAN OF RECORD: ≤3 active tracks (owner · next · done-when · blocked-on · issues), operator decisions pending, backlog. Mirrors my plan canvas `{profile["PLAN_CANVAS"]}`. Rewritten only by `plan-review`; push beats edit a `next` line.
-- `missions.md` — the DAO missions + flywheel + my mandate + the DAILY ROUTINE (plan-review → push beats → sweeps → digests → Reflect). Reflect keeps it current.
-- `org/chart.md` — WHO: lanes, rooms, canvas ownership, handles to address people (`@jarvis`, `@looper-<n>`, `@ilia_xbt`), repo coords. Read before filing or @-mentioning.
+- `plan.md` — my plan: ≤3 active tracks (owner · now · done-when · issues · serves), Next up, Open consults, Hard stops, Backlog. = canvas `{profile["PLAN_CANVAS"]}`.
+- `missions.md` — the goal layer: DAO missions (epochs), operator-stated direction, my mandate, the daily routine. Reflect keeps it current.
+- `org/chart.md` — WHO: lanes, rooms, canvas ownership, handles (`@jarvis`, `@looper-<n>`, `@ilia_xbt`), repo coords. Read before filing or @-mentioning.
 - `org/approvals-policy.md` — who may approve what (provenance × blast radius).
 - `org/INDEX.md` — the org trust model (org tier, Hermes = the muscle).
 
-## Working memory (the digest writes these; one fact lives in ONE file)
-- `projects/<slug>.md` — per project: decisions of record · artifacts of record (branch@commit, tests, issue ids — hashes live HERE) · open gates · closed. Read the one for the track you are pushing.
+## Working memory (the digest writes these; one fact lives in ONE file; sizes are budgeted — the wall refuses growth past the budget)
+- `projects/<slug>.md` — per project, CURRENT STATE: Now · Decisions (one line + event id) · Artifacts (name · path @ commit | issue id) · Open consults.
 - `people.md` — operator, peers, workers, outsiders: role, handle, what they own, how to work with them.
-- `lessons.md` — what failed and the fix (tool quirks, duplicates I made, procedures); newest first.
+- `lessons.md` — one line per lesson: what failed → the rule; newest first; dropped when it no longer applies.
 - `drafts/` — my own content drafts (deliver by commit, never send a memory path).
 
 ## Who I am (rarely changes)
@@ -373,6 +378,17 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
 # The HOLDER is the operator. Generate/point at the holder's operator identity:
 operator_did: "did:key:zHOLDER_REPLACE_ME"
 soul_repo: "dack-soul"                           # the soul git lives in this SUBDIR; runtime/secrets/config are at the /duck root, OUTSIDE it
+
+# Long-term memory is STATE + POINTERS, not a ledger (Buzz is the ledger): the wall refuses a Write/Edit that would
+# leave a memory file above its budget unless the write SHRINKS it, so a compaction always lands and an append never
+# does once the ceiling is hit. First matching glob wins. History lives in the soul git; evidence in the issue notes.
+memory_budgets:
+  - {{ path: memory/INDEX.md,      max_bytes: 3072 }}    # the map — its head rides every wake (lines clipped at 160 chars)
+  - {{ path: memory/plan.md,       max_bytes: 8192 }}    # the plan of record (= the plan canvas)
+  - {{ path: memory/missions.md,   max_bytes: 10240 }}   # goal layer + operator-stated direction
+  - {{ path: memory/projects/*.md, max_bytes: 12288 }}   # per project: Now · Decisions · Artifacts · Open consults
+  - {{ path: memory/org/*.md,      max_bytes: 8192 }}
+  - {{ path: memory/*.md,          max_bytes: 8192 }}    # people, lessons, runlog
 
 runtime:
   engine: {{ type: openclaude, bridge_dir: {engine}/openclaude-bridge }}
@@ -871,8 +887,9 @@ it one turn. Announcements don't; shipped work does. **Finishing spins it; start
   a free slot; every message to the worker sets a watch; the beat ends with ONE receipt line in my plan room.
 - **Project sweep (00:30 / 12:30 / 20:30Z)** — tracker hygiene: close duplicates, resolve what is done in
   substance, assign unowned work, regenerate the `## Task board` section of my board canvas.
-- **Digests (00:45 / 05:45 / 12:45 / 18:45Z)** — route durable facts into `projects/<slug>.md`, `people.md`,
-  `lessons.md`, `org/chart.md`; leave plan signals for plan-review.
+- **Digests (00:45 / 05:45 / 12:45 / 18:45Z)** — update the memory MAP: what changed the state goes into
+  `projects/<slug>.md`, `people.md`, `lessons.md`, `org/chart.md` as one line + a pointer, replacing the line it
+  supersedes (Buzz is the ledger; memory never carries the trail); plan signals left for plan-review.
 - **Org wakes** — the fast lane (mentions, replies to me, armed threads) answers within seconds; the ambient
   lane (`buzz-org-ambient`) shows me the rest of the room once per 30 minutes, to read, not to answer.
 """
