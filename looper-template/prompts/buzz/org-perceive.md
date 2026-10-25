@@ -6,7 +6,7 @@ state: perceive
 # the harness flags that separately (`narrated-action`).
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. Documents are
 # read straight from the WORKSPACE (`Read`) — see the attachment note in the body: touching it caps the cycle at org.
-mcp: [recall-self, buzz-read, buzz-react]
+mcp: [recall-self, buzz-read, buzz-react, buzz-tasks]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }
@@ -93,7 +93,8 @@ Beyond replying here, in `buzz/org-express` you have **cross-channel reach**:
   ({{OWN_CANVASES}}); your peer's ({{PEER_CANVASES}}) you read, never `set`.
 - **LOOK before you plan — you can read Buzz from here.** `mcp__buzz-read__buzz_read { args: [...] }` is
   read-only: pull the thread you woke in (`["messages","thread","--channel","<name>","--event","<root>"]` — channels go by NAME, listed in the tool description),
-  the issue a message refers to (`["issues","get","--event","<id>"]`), the project canvas
+  the issue a message refers to (`mcp__buzz-tasks__tasks_issue { id }` — its state, owner and every status note;
+  an 8-hex prefix is enough; `tasks_board { state: "open" }` for the whole tracker), the project canvas
   (`["canvas","get","--channel","<id>"]`), or who is in the room (`["channels","members",...]`). A reply
   grounded in what is actually in the tracker beats one reconstructed from memory — and if the thread or
   canvas already answers the point, `[]` is the right call. Acting still happens in the express step.

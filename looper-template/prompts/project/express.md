@@ -2,7 +2,7 @@
 state: express
 # The project layer + the tools to act on the hygiene list. `buzz-git` is here so a sweep can VERIFY an artifact
 # (pull the clone of record, read the file) before resolving an issue on its evidence.
-mcp: [buzz-cli, buzz-git, telegram-send, ingress-arm]
+mcp: [buzz-cli, buzz-git, telegram-send, ingress-arm, buzz-tasks]
 transitions: []
 ---
 Execute the hygiene list your sweep handed you — tracker WRITES, in your lane (**{{LANE}}**). Reading the
@@ -33,16 +33,22 @@ the channel, with their `@looper-<n>`).
 - **Board** → `["canvas","get","--channel","{{BOARD_CANVAS}}"]`, replace ONLY the `## Task board` section (create it
   at the top if missing) with:
   ```
-  ## Task board (regenerated <date> <HH:MM>Z by #{{TOKEN_ID}})
-  | id | title | assignee | state | last note | opened | last activity |
-  …one row per OPEN issue across all repos, newest first; `state` and `last note` come from the FEED's status
-  events (the newest 1630/1631/1632 rooted on that issue: its kind is the state, its first line the note), never
-  from memory; then a `Resolved (7d)` sub-list, then `Duplicates closed (7d)`
+  ## Task board (regenerated <date> <HH:MM>Z by #{{TOKEN_ID}} from tasks_board)
+  | id | title | owner | state | idle | last note | opened |
+  …one row per OPEN issue across all repos, newest activity first — copied from `mcp__buzz-tasks__tasks_board {
+  state: "open" }` rows (`id8` · `title` · assignees, else who it was addressed to · `state` · `idle_h` ·
+  `last_note.by: text` · `opened`), never from memory or the feed; then `Resolved (7d)` from `{ state: "resolved",
+  since_hours: 168 }`, then `Duplicates closed (7d)` from `{ state: "closed", since_hours: 168 }`
   ```
   then `["canvas","set","--channel","{{BOARD_CANVAS}}","--content","<the whole document>"]` with every other section
   byte-for-byte as you got it. `set` REPLACES: never skip the `get`. `{{PLAN_CANVAS}}` is NOT touched here.
 - **Pointer for a human** (the one optional message) → `["messages","send","--channel","<name>","--content",
   "<one line, with @looper-<n> or @ilia_xbt if addressed>"]`.
+
+**A sweep writes state, not commentary.** A `--status open` note that changes nothing (no new fact, no decision,
+no state) is a comment nobody but its `--to` can read and a line on everyone's tracker wake — at most one per
+issue per sweep, and none that merely re-affirms. **A twin whose fact is already met** (the list says "met by
+<id>") resolves with that one line; no re-derivation.
 
 An issue you never created, a brief you never posted, a canvas you did not `set`: say so. **Report only what
 you actually CALLED and what it RETURNED** — `→ allow` is only the wall permitting the call; an `error` in the

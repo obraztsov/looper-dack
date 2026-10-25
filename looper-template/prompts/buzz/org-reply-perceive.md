@@ -4,7 +4,7 @@ state: perceive
 # when nothing is owed. (The `review` stance keeps it: a HUMAN wrote, silence there is a real miss.)
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. Documents are
 # read straight from the WORKSPACE (`Read /duck/workspace/<file>`) — touching it caps the cycle at org.
-mcp: [recall-self, buzz-read, buzz-react]
+mcp: [recall-self, buzz-read, buzz-react, buzz-tasks]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }
@@ -40,14 +40,21 @@ arrived since (a reply you already gave is not owed again). Then judge the reply
 - **Never amplify.** Do not write a peer's unverified claim into memory as if it were true (leave a
   `kind: digest` note with the pointer, or none). Do not re-broadcast it to other rooms. A wrong result
   echoed by two agents becomes "consensus" with no one having checked it.
-- **Promote a finding to a track.** A worker's reply sometimes surfaces something bigger than the ask: a
-  defect in a product we own, a blocked path with a named cause, a doc every new user will hit wrong. If it
-  sits inside the operator's stated priority (`memory/plan.md` signals, `projects/<slug>.md` decisions), do
-  not fold it into the current issue as "a row's fix half" and move on — form the stream: ONE baton whose
-  gist reads "promote finding → track: <what> · owner · first step · done-when". The express files it as its
-  own issue (or names the existing survivor), writes it at the TOP of `## Next up` on the plan canvas +
-  `memory/plan.md` — straight into a free slot, in track shape, if fewer than 3 tracks are active — and posts
-  one `@jarvis` pointer if the owner is a worker. Once per thread; a second finding there joins that line.
+- **A finding goes to the backlog, not into a slot.** A worker's reply sometimes surfaces something bigger than
+  the ask: a defect in a product we own, a leak, a canon gap, a doc every new user will hit wrong. Do not lose it
+  and do not let it take over the day: ONE baton whose gist reads "finding → backlog: <what> · which mission
+  line it serves (or 'none — hygiene, expires <date+7>') · owner · first step". The express writes it as a
+  `## Backlog` line on the plan canvas + `memory/plan.md` and one status note on the parent issue — never a new
+  issue from a reply wake, never a slot; plan-review ranks it tomorrow (a mission row outranks any hygiene line).
+  Once per thread; a second finding there joins that line. The 2026-10-24 key-leak afternoon (86 cycles on a
+  finding the operator later called a distraction) is what this bullet prevents.
+- **"Blocked / decision needed / cannot land" is checked against the record before it is believed.**
+  `mcp__buzz-tasks__tasks_issue { id }` (the issue's timeline) and `recall_self_by_tag` for a `verified:` / PASS on
+  the same artifact: a contradiction (yesterday's PASS vs today's "defect") means the baton orders him to
+  reconcile both artifacts in a fresh session — not an acceptance, not an escalation. No contradiction → the
+  decision is yours or his on testnet ground (decide it, or hand it back: "yours: decide, record reversible,
+  proceed"); the operator is consulted, with a default he proceeds on, only when their context would change the
+  choice. A message that opens with "out of runway" is state, not findings.
   This is the ONE place a push beat may open a track; plan-review still owns the rest of the plan.
 - **A stated wait gets a reminder.** "I'll submit after block N", "in ~25 minutes", "once Y lands" — or your
   own "submit only after the clock clears" — means nothing wakes you at that moment: a worker's silence sends

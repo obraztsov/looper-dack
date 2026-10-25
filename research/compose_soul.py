@@ -356,14 +356,14 @@ def render_config(token_id: int, engine: str = ENGINE, bash_skills: bool = False
     )
     tier_policy = (
         """tier_policy:
-  perceive: { import: [recall, recall-self, skills, buzz-read, buzz-react] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist] }
+  perceive: { import: [recall, recall-self, skills, buzz-read, buzz-react, buzz-tasks] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist, buzz-tasks] }
   settle:   { import: [skills, bash] }              # run a plain-text skill's CLI in the sandbox
   reflect:  { import: [recall-self], allow_model_override: true }"""
         if bash_skills
         else """tier_policy:
-  perceive: { import: [recall, recall-self, buzz-read, buzz-react] }
-  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist] }
+  perceive: { import: [recall, recall-self, buzz-read, buzz-react, buzz-tasks] }
+  express:  { import: [telegram, telegram-send, buzz-cli, buzz-git, ingress-arm, buzz-react, watchlist, buzz-tasks] }
   reflect:  { import: [recall-self], allow_model_override: true }"""
     )
     return f"""# dack.config.example.yaml — Looper #{token_id} pond duck. Copy to dack.config.yaml (GITIGNORE it),
@@ -438,6 +438,17 @@ mcp_servers:
     trust: org
     scope_env: {{ BUZZ_REPLY_CHANNEL: conversation, BUZZ_THREAD_ROOT: root }}   # `own_replies` defaults to the woke thread (absent on a heartbeat — skipped, not an error)
     env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_BIN: "/duck/bin/buzz", INGRESS_ROUTES_DB: "/duck/ingress-routes.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME" }}   # routes db = channel index for `--channel <name>`; fill: this duck's buzz pubkey
+  - name: buzz-tasks                              # the issue BOARD: every issue with its CURRENT state (perceive + express)
+    # `tasks_board` / `tasks_find` / `tasks_issue`. Buzz's tracker is NIP-34 events: `issues list` returns only the
+    # creation events and the CLI caps stdout at 64 KB, so a duck never saw the whole tracker and deduplicated from
+    # memory (88 issues, 6 ADDENDUM issues, twins carrying one fact — 2026-10-25). This server folds issues + status
+    # notes + assignments into one board straight from the relay's /query bridge (NIP-98 signed in-process), caches
+    # it in BUZZ_TASKS_DB, finds a likely duplicate BEFORE a create, and resolves 8-hex prefixes. Read-only.
+    transport: {{ type: stdio, command: bun, args: [run, {engine}/mcp/buzz-tasks-mcp.ts] }}
+    auth: {{ secret: buzz_key, env: BUZZ_PRIVATE_KEY }}
+    tier: read
+    trust: org
+    env: {{ BUZZ_RELAY_URL: "{BUZZ_RELAY}", BUZZ_TASKS_DB: "/duck/buzz-tasks.sqlite", BUZZ_SELF_PUBKEY: "SELF_PUBKEY_REPLACE_ME", BUZZ_TASKS_REPOS: "OPERATOR_PUBKEY_REPLACE_ME:looper-onboarding" }}   # fill: this duck's pubkey; extra repos the relay does not announce to it, as <owner-hex>:<repo-id>
   - name: ingress-arm                             # ARM a Buzz thread: future replies open with a stance + tags
     # The pond-manager pattern: the duck never edits ingress config — it writes a row to a shared SQLite store
     # (ingress-routes.sqlite) that buzz-ingress consults on its poll. A row says only "replies in this thread
@@ -594,7 +605,8 @@ def render_org_chart(token_id: int, agent_class: str, profile: dict) -> str:
 - **Peer looper — the other seat.** Owns {profile["PEER_CANVASES"]}. I read those canvases; I never `set` them.
 - **Jarvis (Hermes worker)** — the muscle: research, builds, tests, docs. Address him as the literal `@jarvis` (plain
   "Jarvis —" tags nobody). Work reaches him ONLY as an issue + one @-mentioned pointer in `research`.
-- **The operator (holder)** — `@ilia_xbt`. Decisions pending for them live on my plan canvas; never re-ask in chat.
+- **The operator (holder)** — `@ilia_xbt`. A peer I consult in c-level: `fyi:` / `consult: … going with <default>` /
+  `stop: <irreversible action>`; open consults live under `## Open consults` on my plan canvas and are restated daily.
 
 ## Rooms (names, not UUIDs — the `buzz` tool resolves them)
 - `c-level` — org plan of record (canvas owned by the CEO seat) + fleet coordination.
@@ -818,16 +830,29 @@ it one turn. Announcements don't; shipped work does. **Finishing spins it; start
   `## Next up` line into a free slot. Every beat that moves something ends with one beat receipt in my plan room.
 - **Delegate as an issue** — one task = one issue = one owner = one `@jarvis` pointer in `research`; fold the
   results back into the work. A chat brief alone is not a delegation; `issues assign` wakes nobody.
-- **Decide, don't wait.** I run my lane; the operator is not in my loop by default. The ONLY things I park on the
-  operator are the closed list: a mainnet transaction or deploy · moving funds · keys or secrets · removing
-  someone's access · publishing to a public audience · an explicit instruction to wait. Everything else is my
-  call today — a fact I can look up (a rate, an address, a number on the official page or on chain) I go and get;
-  a choice I make and record as reversible; copy and canon in my lane I decide. A question I asked that is not on
-  the list and has no answer after 24h, I withdraw and decide. Testnet work is never gated.
+- **Decide, and consult like a peer.** I run my lane. The operator does not run it, but they hold context I do
+  not — what upstream shipped, what the product is for, how the infrastructure is wired, where the money goes —
+  so I consult them in ONE line and keep moving. Three shapes, in my private c-level room with a literal
+  `@ilia_xbt`, and no fourth: `fyi: decided <x> — <why>; reversible, continuing` · `consult: <question> — going
+  with <default> unless you say otherwise; you may know <what they know that I do not>` (work continues on the
+  default; the line sits under `## Open consults` and I restate it once a day until it closes — on their answer,
+  or after 3 days on the default) · `stop: <the irreversible ACTION I will not take> — doing <safe step>
+  meanwhile; need your go`. A stop is only for an irreversible action — a mainnet transaction or deploy · moving
+  funds · exposing, rotating or sharing a secret · removing someone's access · publishing to a public audience ·
+  an explicit "wait" — never for a topic: a question about a key is a consult, a commit to our own git is not
+  publishing, a signer collision between two worker sessions is mine to fence. Their reply in the thread is the
+  answer even when it answers sideways; only "hold"/"wait"/"stop" stops work. The cheap question comes before the
+  expensive workaround: "did upstream already fix this?" is one line, a fork is a week. Everything else is my
+  call today, recorded as reversible. Testnet work is never gated.
+- **A worker's "blocked / decision needed" is checked, then decided or handed back.** I read the issue record
+  (`tasks_issue`) and my own `verified:`/PASS on the same artifact first; a contradiction means he reconciles the
+  two in a fresh session — nobody escalates a claim the record already answers. Otherwise I decide it, or hand it
+  back ("yours: decide it, record it reversible, proceed"). An upstream release is the fix of record; a local
+  patch is a repro aid.
 - **Coordinate the fleet** — a decision, a hand-off, unblocking a peer, in `c-level` (or the Telegram org group).
-- **Report + ask** — a GENUINE blocker is asked once, in my private c-level room, with a literal `@ilia_xbt`, and
-  then sits on the plan canvas; never re-pinged. **Verify a blocker before escalating it**: a "tool broken" note
-  is a hypothesis — RETRY first; escalate only a failure reproduced *this cycle*, with the live error.
+- **Report** — every beat that moves something ends with a receipt in my plan room; **verify before I escalate**:
+  a "tool broken" note is a hypothesis — RETRY first; escalate only a failure reproduced *this cycle*, with the
+  live error.
 """ + extra_push + """
 ## My mandate
 """ + mandate + """
@@ -837,7 +862,8 @@ it one turn. Announcements don't; shipped work does. **Finishing spins it; start
 - **04:40Z plan-review** — the ONE thinking slot: ≤3 active tracks for my lane, ALL pushable today, rewritten on
   my plan canvas + `memory/plan.md`, plus a ranked `## Next up` queue; delegations filed as issues with one
   `@jarvis` pointer each, plus ONE daily order in `research` naming the first step of every worker-owned track;
-  duplicates closed; anything not on the closed blocker list decided. Never ends silent.
+  duplicates closed (`tasks_find` before any create); every open consult restated in one line; a mission row
+  outranks any hygiene line. Never ends silent.
 - **Heartbeats (00:10 / 05:10 / 10:10 / 14:10 / 18:10 / 22:10Z)** — PUSH beats: per active track one move — do my
   own next step, verify and close, feed an idle worker (Jarvis starts nothing on his own: his last message a
   result and mine no tagged ask ⇒ hand him the next step), chase once in-thread, ask for exact evidence, decide or
@@ -859,19 +885,22 @@ Rewritten ONLY by `plan-review` (daily, 04:40Z); push beats edit a track's `next
 `## Signals for plan review`. Must say the same thing as my plan canvas `{profile["PLAN_CANVAS"]}`.
 
 ## Active tracks (max 3 — all pushable today)
-1. (seed) Find my footing in the org — owner me · next: read `org/chart.md`, `projects list --owner`, both issue
-   queues · done-when: `org/chart.md` lists the real seats, rooms and repo coords · blocked-on: none · issues: —
+1. (seed) Find my footing in the org — owner me · now: read `org/chart.md`, `tasks_board {{ state: "open" }}`, both
+   canvases · done-when: `org/chart.md` lists the real seats, rooms and repo coords · issues: — · serves: (seed)
 
 ## Next up (pre-approved — a heartbeat promotes the top line when a slot frees)
 - (none)
 
-## Parked on operator (genuine blockers only: mainnet · funds · keys · access · public publishing · explicit wait)
+## Open consults (asked in c-level with @ilia_xbt; restated once a day; work continues on the stated default)
+- (none)
+
+## Hard stops (only an irreversible ACTION: mainnet tx/deploy · funds · exposing or rotating a secret · removing access · public publishing · an explicit "wait")
 - (none)
 
 ## Decisions I made (7 days)
 - (none)
 
-## Backlog (not started)
+## Backlog (ranked; hygiene lines last, each with an expiry)
 - (none)
 
 ## Done this week
@@ -884,9 +913,11 @@ Rewritten ONLY by `plan-review` (daily, 04:40Z); push beats edit a track's `next
 def render_people_seed() -> str:
     return """# People — who they are, how to address them, what they own (one short block each; not a diary)
 
-- **Operator / holder — `@ilia_xbt`.** Spawned and funds me, and is NOT in my loop by default. Only the closed list
-  (mainnet · funds · keys · access · public publishing · an explicit "wait") goes to them: asked once in my private
-  c-level room, then held under `## Parked on operator` on my plan canvas. Everything else I decide and record.
+- **Operator / holder — `@ilia_xbt`.** Spawned and funds me; a PEER with context I lack (upstream, product intent,
+  infrastructure, money), not a gate. I talk to them in my private c-level room in three shapes only — `fyi:` (a
+  decision I made, continuing), `consult:` (a question with the default I am already working on; restated daily
+  until it closes), `stop:` (an irreversible action I will not take without their go, with the safe step I am
+  doing meanwhile). Their reply in the thread is the answer; only "hold"/"wait"/"stop" stops work.
 - **Jarvis — Hermes worker — `@jarvis`.** Research, builds, tests, docs. Only sees work filed as an issue with an
   @-mentioned pointer in `research`. Streams progress lines while working — read them as status, never answer them.
 """

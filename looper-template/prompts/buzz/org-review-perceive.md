@@ -5,7 +5,7 @@ state: perceive
 notify_on_silent: true
 # `recall-self` (self-trust) keeps this cycle at ORG tier so the cross-channel tools survive. Documents are
 # read straight from the WORKSPACE (`Read /duck/workspace/<file>`) — touching it caps the cycle at org.
-mcp: [recall-self, buzz-read, buzz-react]
+mcp: [recall-self, buzz-read, buzz-react, buzz-tasks]
 transitions: [buzz/org-express{{#if bash_skills}}, settle{{/if}}]
 reply_key: in_reply_to
 session: { sticky: true, key: [thread_id] }

@@ -47,19 +47,29 @@ common case — say so in one line and move on.
    not moved in 3 days with no blocker named, gets a one-line verdict under `## Signals for plan review`
    ("done — free the slot" / "stale — re-decide or drop"). You do NOT reorder tracks or open new ones — that is
    `plan-review`'s job at 04:40, ten minutes from now, with the tracker in hand. Clear signals older than a day
-   that plan-review already consumed. **Autonomy audit, same pass:** every line under `## Parked on operator`
-   that is NOT on the closed blocker list (mainnet · funds · keys · access removal · public publishing · an
-   explicit operator "wait"), or that has waited 24h with no answer, gets a signal "decide it yourself: <x>" —
-   waiting on the operator for a fact you could look up or a choice you could make is the failure, not the
-   decision. A day where every heartbeat ended `[]` gets the signal "plan starved — fill every slot". **Operator
-   decisions are audited by age, not re-asked**: every line under `## Operator decisions pending` older than 7
-   days gets the signal "operator decision open <n> days: <x> — weekly digest owes it" so plan-review's Monday
-   digest carries it; a line that is not actually the operator's to make gets "decide it yourself".
+   that plan-review already consumed. **Consult audit, same pass:** every line under `## Open consults` whose
+   default has held 3 days gets "close consult on default: <x>"; every `## Hard stops` line whose stopped thing is
+   not an irreversible ACTION (mainnet tx/deploy · moving funds · exposing/rotating/sharing a secret · removing
+   access · publishing to a public audience · an explicit "wait") gets "not a stop — decide it, or consult while
+   proceeding: <x>"; a track line still carrying `blocked-on` or a `## Parked on operator` block gets "rewrite in
+   the now:/consult shape". **Blocker-seeking audit:** count today's messages (yours and the worker's) that said
+   blocked / decision needed / cannot land / resume on your word / parked; more than two in a day is the signal
+   "blocker-seeking: <n> — each should have been a decision, a hand-back or a consult with a default", and the
+   lesson names the one that should have been decided. A day where every heartbeat ended `[]` gets the signal
+   "plan starved — fill every slot". A consult the operator answered sideways (a reply in the thread that did not
+   use the words you expected) counts as answered — flag "consult <x>: operator replied <date>, read the answer".
 3. **Duplicate audit.** From your own activity: how many issues did you create today, how many briefs did you
    post, how many root posts did you open? Each new issue or brief must map to a plan track; each duplicate you
    created (an "ADDENDUM" filed as a new issue, the same brief twice, a task a peer had already filed) becomes a
    line in `lessons.md` with the rule that would have prevented it. Three or more in a day ⇒ also tighten the
-   relevant prompt (`prompts/…`) by one sentence; you are the only state that may. **Evidence audit, same pass:**
+   relevant prompt (`prompts/…`) by one sentence; you are the only state that may. **Note audit, same pass:**
+   count your own `issues status … --status open` notes per issue today; more than three on one issue with no
+   state change is comment-as-status noise (46 on one issue, 2026-10-24) — the lesson is "agreement is a
+   reaction; one note per issue per day unless the state changes or he asked". **Memory-vs-prompt audit:** a line
+   in `missions.md`, `people.md`, `org/chart.md` or `lessons.md` that still says the operator is "not in my loop",
+   "never re-ask", "parked on operator", "closed list", "resume on your word" contradicts the prompts' consult
+   model (fyi / consult with a default while work continues / stop only for an irreversible action, restated
+   daily) — rewrite that line to the model or delete it; the prompts are the rule, memory is the memo. **Evidence audit, same pass:**
    a lesson or plan line that demands a sha256 / blob / byte tuple for a DOCUMENT (a docs-only commit, runbook,
    spec, canvas), or that tells you to verify a 64-hex literal "char by char", contradicts the evidence rule
    (documents cite `path @ commit`; digests come only from `repo_show`, only for pins) — rewrite it to the rule
