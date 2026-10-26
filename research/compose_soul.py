@@ -390,6 +390,12 @@ memory_budgets:
   - {{ path: memory/org/*.md,      max_bytes: 8192 }}
   - {{ path: memory/*.md,          max_bytes: 8192 }}    # people, lessons, runlog
 
+# Skills reach the model through the runtime's OWN loader (Agent Skills progressive disclosure): the harness links every
+# lint-clean skills/<name>/SKILL.md under .openclaude/skills/, the SDK lists name + description + when_to_use to the model
+# and loads one through its `Skill` tool when the task matches. The engine's static catalogue is dropped. A skill carrying
+# allowed-tools / hooks / context / agent / model / shell / effort frontmatter, or `!`-shell substitution, is NOT linked.
+skills_native_discovery: true
+
 runtime:
   engine: {{ type: openclaude, bridge_dir: {engine}/openclaude-bridge }}
   connector: {{ type: openai-compatible, api_url: "https://your-provider/v1", api_key: "…" }}

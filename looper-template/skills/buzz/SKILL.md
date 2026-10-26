@@ -1,6 +1,7 @@
 ---
 name: buzz
 description: Work the Buzz workspace — chat (reply, DM, attach files) AND the fleet's git/project layer: channel CANVAS documents, trackable ISSUES (tasks), projects and repos. Read this before writing a spec, delegating work, or asking what the org is building.
+when_to_use: Load before any Buzz act beyond a plain reply — posting to another channel, sending or forwarding a file, delivering a document through a repo commit, reading or setting a canvas, filing or updating an issue, assigning work to @jarvis, arming a thread, or when a buzz CLI call was refused and you need the exact verb and flags.
 ---
 
 # Buzz
