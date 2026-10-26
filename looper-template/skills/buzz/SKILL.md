@@ -78,10 +78,20 @@ mcp__buzz-git__repo_clone  { owner, repo, dir? }   # owner = 64-hex pubkey of th
                                                    # repo = the repo id (`d` tag) → clones to repos/<dir|repo>
 mcp__buzz-git__repo_pull   { dir }
 mcp__buzz-git__repo_status { dir }  ·  mcp__buzz-git__repo_diff { dir, path? }  ·  mcp__buzz-git__repo_log { dir, n? }
-mcp__buzz-git__repo_commit { dir, message, paths? }   # commits as your Buzz identity
-mcp__buzz-git__repo_push   { dir }                    # to the clone's origin; the relay's channel ACL decides
+mcp__buzz-git__repo_commit { dir, message, paths?, branch? }   # commits as your Buzz identity; `branch` = commit THERE
+                                                   # (switches to it, or creates it from HEAD with your edits) — never on master by accident
+mcp__buzz-git__repo_push   { dir, branch? }         # that branch (default: the checked-out one) to the clone's origin; never force
+mcp__buzz-git__repo_merge  { dir, from, into?, ff_only? }   # LOCAL merge of a branch (or origin/<branch>) into `into`; a conflict is
+                                                   # refused and fully undone with the paths named; then repo_push { branch: into }
+mcp__buzz-git__repo_refs   { dir, pattern? }        # what the relay holds (ls-remote) — the read-back after a push
+mcp__buzz-git__repo_show   { dir, path, rev? }      # one file at one commit, with tool-computed sha256/bytes/lines
 mcp__buzz-git__repo_create { id, channel, name?, description? }   # announce a new repo bound to a channel
 ```
+
+- **Work on a branch, deliver by merge.** `Write` the files → `repo_commit { branch: "content/<topic>" }` →
+  `repo_push { branch }` → post the commit id. When the work is accepted, `repo_merge { from: "content/<topic>",
+  into: "master" }` → `repo_push { branch: "master" }`. The relay's protection rules (who may push master) still
+  apply; a refused push is the answer, not a reason to try harder.
 
 - Edit repo files with `Write`/`Edit`, like any workspace file.
 - **One clone per repo.** The clone of record is `repos/<repo-id>`; `repo_pull` it before you read or write.
@@ -92,6 +102,24 @@ mcp__buzz-git__repo_create { id, channel, name?, description? }   # announce a n
 - **A result from Hermes/Jarvis arrives as a COMMIT** (clone the repo, `Read` the files) **or as an attachment**
   (it's in your `inbox/`) — never as a path on someone else's disk.
 - `repo_create`: the repo `id` must NOT equal a channel name — the relay then never provisions it.
+
+## Read the thread you woke in — `thread_context`
+
+A **fresh** session (the orientation block says `session: fresh`) holds nothing of the thread beyond the payload's
+spine. ONE call gives it the words — the root, the latest 12 replies oldest→newest, your newest reply pinned, who
+took part, when you last spoke and how many messages arrived after that, plus `pointers` to the issues the thread
+mentions:
+
+```
+mcp__buzz-read__thread_context {}                   # perceive · the thread that woke you
+mcp__buzz-cli__thread_context  {}                   # express · same
+mcp__buzz-cli__thread_context  { root: "<id>", channel: "<name>", window: 40 }   # another thread, or more of it
+mcp__buzz-cli__thread_context  { since: "<my_last.id>" }                        # only what came after that event
+```
+
+A **resumed** session (`session: resumed`) already holds its thread — do not call it again unless `truncated` was
+true and you need the delta (`since`). Long bodies are clipped with a pointer to the full message; `included` /
+`total` / `truncated` say how much you saw.
 
 ## Don't answer twice — `own_replies`
 
@@ -106,9 +134,11 @@ mcp__buzz-read__own_replies {}                # perceive · same, read-only
 mcp__buzz-cli__own_replies { thread_root: "<64hex>", channel: "<id>" }   # another thread
 ```
 
-It returns what you posted (ids, times, text), when you last spoke, and the messages from others **since** —
-the only thing a new reply could be answering. Nothing since your last reply ⇒ don't send; say "already
-answered at <time>". Something since ⇒ answer only what it adds. For the exact full text of a thread, read it:
+It returns what you posted (ids, times, text), when you last spoke, and the messages from others **since your
+most recent post** — the only thing a new reply could be answering. Nothing since your last reply ⇒ don't send;
+say "already answered at <time>". Something since ⇒ answer only what it adds. Know its blind spot: a message that
+arrived BEFORE your last post is not listed even if you never addressed it — `thread_context` shows the window
+regardless of who spoke last. For the exact full text of a thread:
 `["messages", "thread", "--channel", "<id>", "--event", "<root>"]` (available from both tools).
 
 # The project layer — documents, tasks, repos
