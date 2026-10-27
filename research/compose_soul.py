@@ -561,8 +561,9 @@ modules:
 media_dir: "media"
 reflect_schedule: "30 4 * * *"   # nightly Reflect, off DeepSeek peak (01–04 UTC); the interval below MUST stay < 24h
 reflect_min_interval_secs: 79200
-default_entry: perceive         # self-tier wakes (back-online, heartbeat, `dack say`) enter here;
+default_entry: perceive         # self-tier wakes (`dack say`) enter here;
                                  # telegram wakes enter telegram/perceive via their stimulus `entry:`
+back_online_entry: back-online/perceive   # the BOOT ping takes stock and stops (no egress) instead of the flat chain
 """
 
 
