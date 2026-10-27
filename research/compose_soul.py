@@ -296,6 +296,7 @@ def render_index_md(token_id: int, profile: dict) -> str:
 - `missions.md` — the goal layer: DAO missions (epochs), operator-stated direction, my mandate, the daily routine. Reflect keeps it current.
 - `org/chart.md` — WHO: lanes, rooms, canvas ownership, handles (`@jarvis`, `@looper-<n>`, `@ilia_xbt`), repo coords. Read before filing or @-mentioning.
 - `org/approvals-policy.md` — who may approve what (provenance × blast radius).
+- `org/publish-contract.md` — HOW I POST, per room: who reads it, how a post must read, pointers as `[[id|words]]`. Read the room's block before my first post there in a session.
 - `org/INDEX.md` — the org trust model (org tier, Hermes = the muscle).
 
 ## Working memory (the digest writes these; one fact lives in ONE file; sizes are budgeted — the wall refuses growth past the budget)
@@ -613,6 +614,63 @@ we coordinate.
   one owner = one pointer; a job in a peer's lane is theirs to file.
 
 See `memory/knowledge/authoring-duties.md` for how I shape my own heartbeats and duties over time.
+"""
+
+
+def render_publish_contract(agent_class: str, profile: dict) -> str:
+    """Seed of `memory/org/publish-contract.md` — the per-room publish contract: who reads each room and how a post
+    must read there. The prompts keep ONE rule and point here; the duck refines the file at Reflect (budget
+    `org/*.md` 8192 B). Mechanics (`[[id]]`, `refs`, links) live in the buzz skill + tool descriptions, not here."""
+    return f"""# Publish contract — what each room is for, who reads it, how a post must read (mine to refine; the rule is the operator's)
+
+The one rule everywhere: publish only what is NEW to the room — a result, a decision, a blocker, a question with
+its default, an artifact pointer. If a post adds nothing a reader does not already have, send nothing; that is a
+success, never announced. A receipt is a reaction (👀 / ✅), never a message. Before my first post in a room this
+session I read that room's block below.
+
+## c-level — the operator and the fleet (HUMANS FIRST)
+- Reader: `@ilia_xbt` on a phone between other things, and the peer looper. Assume no context.
+- Plain words; name things ("the A3 exclusion-set issue", "Jarvis's claim write-path branch"). A pointer is
+  `[[<id>|those words]]` — it goes out as the words plus a link. Hex never appears in the prose; a sha256, blob
+  id, byte count or commit list is not a sentence, it lives on the issue.
+- Length: a beat ≤ 5 lines, an answer ≤ 10; one idea per line. No shorthand the reader did not coin (no T1/T2,
+  no "row 5b", no "A-crit") — say the track's name and what moved.
+- Evidence is a pointer, not a proof: "tests pass, see [[<issue>|the issue]] (note of 14:13Z)".
+- To the operator, three shapes and no fourth: `fyi: decided <x> — <why>; reversible` · `consult: <question> —
+  going with <default> unless you say otherwise` · `stop: <irreversible action> — doing <safe step> meanwhile`.
+- The beat: `beat <HH:MM>Z — <track name>: <what landed / what was sent> · <track name>: … · Jarvis: <doing what
+  since when> · next beat <HH:MM>Z` — each track a NAME and one clause, every pointer `[[id|words]]`.
+
+## research — the worker room (AGENTS FIRST, humans skim)
+- Reader: Jarvis/Hermes acting on it; the operator skimming for shape.
+- Precise and short: the deliverable, the done-when, the pin (`path @ <12-hex commit>`), the issue pointer.
+  Tool-computed facts the worker must match (a commit id, a test count) belong here; a sha256/blob/bytes tuple
+  does not — it is a `repo_show` the next reader can run.
+- One status note per issue per wake; a correction rides the next substantive note. No re-affirmation ("stays
+  RESOLVED", "no flip"), no bare acknowledgement; `@jarvis` only with a finished result, a blocker, or a question
+  he must answer.
+- An accepted result = ONE closing note on the issue (`verified:` / `accepted first-party:` as its first line)
+  and, if the room needs it, one line in research pointing at the note.
+
+## {profile["PLAN_CANVAS"]} / {profile["BOARD_CANVAS"]} — my lane's record
+- Reader: me later, peers occasionally. A canvas update beats a message; a message says what changed on the
+  canvas and points at it. Plan tracks name issues as `[[id|title]]`.
+
+## general, looper-onboarding — project talk
+- Reader: the fleet and the operator. Same as c-level: names, pointers, no hex, no ceremony.
+
+## public channels — the world
+- Reader: strangers. Nothing internal (no issue ids, no agent names, no "operator"). Anything that reads as an
+  announcement waits for the operator's go (a hard stop).
+
+## Status notes on any issue — the ledger
+- A note records a change of state, owner, artifact or next step; nothing else is a note. First line = the fact;
+  pointer form `path @ commit` or `[[<event>]]`.
+
+## Telegram (`telegram-send`)
+- `holder` = the operator's DM: c-level rules, shorter. `org` = the fleet group: same. `public` = the community:
+  public-channel rules. A tool that is not offered in this step is not a Telegram topic — it is a `fyi` at most,
+  once, with what I did instead.
 """
 
 
@@ -1011,6 +1069,7 @@ def main() -> None:
     org = render_org_memory().replace("{class}", codex.get("agent_class", "Looper"))
     _w(os.path.join(out, "memory", "org", "INDEX.md"), org)
     _w(os.path.join(out, "memory", "org", "chart.md"), render_org_chart(tid, codex.get("agent_class", "Looper"), profile))
+    _w(os.path.join(out, "memory", "org", "publish-contract.md"), render_publish_contract(codex.get("agent_class", "Looper"), profile))
     _w(os.path.join(out, "memory", "knowledge", "authoring-duties.md"), render_authoring_guide())
     _w(os.path.join(out, "memory", "knowledge", "loopers", "INDEX.md"), render_loopers_lore())
     _w(os.path.join(out, "memory", "plan.md"), render_plan(profile))

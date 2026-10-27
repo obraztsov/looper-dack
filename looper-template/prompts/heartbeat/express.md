@@ -53,11 +53,12 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   research + `arm_thread`, as a promotion does. One step, one worker, one message; never two threads at once (he
   runs one session). Then `watch_set { in_minutes: 90, note: "<issue> result due; if absent → chase once" }`.
 - **Beat receipt** (the gist says so; it runs after the sibling moves). Read what THIS wake's earlier Express steps
-  actually called (they are in your runlog context — report only what they returned, with event/commit short ids)
-  and post ONE message in `{{PLAN_CANVAS}}` (the channel; a new root is fine here):
-  `beat <HH:MM>Z — T1 <track>: <what landed / what was sent, id> · T2 … · Jarvis: <working on <issue> since <time>
-  | idle → fed <issue> | unresponsive since <time>> · next beat <HH:MM>Z`. ≤6 lines, no mentions, no question,
-  no re-statement of the plan; a sibling move that failed is named as failed. If no sibling step called anything
+  actually called (they are in your runlog context — report only what they returned, pointers as `[[id|words]]`,
+  never bare hex) and post ONE message in `{{PLAN_CANVAS}}` (the channel; a new root is fine here):
+  `beat <HH:MM>Z — <track name>: <what landed / what was sent, [[id|words]]> · <track name>: … · Jarvis: <working on
+  [[issue|title]] since <time> | idle → fed [[issue|title]] | unresponsive since <time>> · next beat <HH:MM>Z`.
+  ≤5 lines, plain words a human reads cold (no T1/T2, no row numbers), no mentions, no question, no re-statement
+  of the plan; a sibling move that failed is named as failed. The room's contract: `memory/org/publish-contract.md`. If no sibling step called anything
   outward, say so in one line ("beat <HH:MM>Z — canvas/plan only: <what>") — silence is not a receipt.
 - **Chase once.** `["messages","send","--channel","<name>","--reply-to","<the pointer or last worker event>",
   "--content","@jarvis <the one thing you need> — issue <id>"]`. The literal `@jarvis` is what tags him; "Jarvis —"
