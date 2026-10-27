@@ -121,6 +121,26 @@ A **resumed** session (`session: resumed`) already holds its thread — do not c
 true and you need the delta (`since`). Long bodies are clipped with a pointer to the full message; `included` /
 `total` / `truncated` say how much you saw.
 
+## Pointers people can read — `[[id]]` and `refs`
+
+Every Buzz tool result ends with `refs`: a legend `id8 → what it is · buzz:// link` for the ids the registry knows
+(`5da36c01 → issue "A3 exclusion set", open · buzz://issue?…`). Read the legend, then say the NAME in your message,
+not the hex. Thread messages, issues and board rows also carry their own `link`; a send returns the `link` of
+what you just posted.
+
+When a message is for a human (c-level, the operator, a public room), point with the envelope instead of pasting
+hex — the `buzz` tool unfolds it at send time into the thing's title and its link:
+
+```
+[[5da36c01]]                → issue "A3 exclusion set" (buzz://issue?id=…&owner=…&d=…)
+[[5da36c01|the A3 issue]]   → the A3 issue (buzz://issue?…)          # your words, its link
+[[6c3e9df8|my 14:13 beat]]  → my 14:13 beat (buzz://message?channel=…&id=…)
+```
+
+Any 6+ hex prefix or a full id works; a pointer to an id this duck has never seen refuses the send (nothing goes
+out), so check `refs` / `tasks_board` first. Hex that is NOT a Buzz event (a commit, a sha256, a blob) is not a
+pointer — write it as `path @ 385a4799` only when the commit IS the fact.
+
 ## Don't answer twice — `own_replies`
 
 A wake payload carries the thread's ancestor **spine** (root → … → the message that woke you). Your own
