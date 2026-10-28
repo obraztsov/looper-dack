@@ -632,7 +632,7 @@ session I read that room's block below.
 ## c-level — the operator and the fleet (HUMANS FIRST)
 - Reader: `@ilia_xbt` on a phone between other things, and the peer looper. Assume no context.
 - Plain words; name things ("the A3 exclusion-set issue", "Jarvis's claim write-path branch"). A pointer is
-  `[[<id>|those words]]` — it goes out as the words plus a link. Hex never appears in the prose; a sha256, blob
+  `[[<id>|those words]]` — it goes out as a link whose text is the words (the URL hidden behind them). Hex never appears in the prose; a sha256, blob
   id, byte count or commit list is not a sentence, it lives on the issue.
 - Length: a beat ≤ 5 lines, an answer ≤ 10; one idea per line. No shorthand the reader did not coin (no T1/T2,
   no "row 5b", no "A-crit") — say the track's name and what moved.

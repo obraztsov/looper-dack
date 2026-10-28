@@ -129,13 +129,17 @@ not the hex. Thread messages, issues and board rows also carry their own `link`;
 what you just posted.
 
 When a message is for a human (c-level, the operator, a public room), point with the envelope instead of pasting
-hex — the `buzz` tool unfolds it at send time into the thing's title and its link:
+hex — the `buzz` tool unfolds it at send time into a link whose text is the thing's title, or your words; the
+reader sees the words, the URL sits behind them:
 
 ```
-[[5da36c01]]                → issue "A3 exclusion set" (buzz://issue?id=…&owner=…&d=…)
-[[5da36c01|the A3 issue]]   → the A3 issue (buzz://issue?…)          # your words, its link
-[[6c3e9df8|my 14:13 beat]]  → my 14:13 beat (buzz://message?channel=…&id=…)
+[[5da36c01]]                → [issue "A3 exclusion set"](buzz://issue?id=…&owner=…&d=…)
+[[5da36c01|the A3 issue]]   → [the A3 issue](buzz://issue?…)          # your words, its link behind them
+[[6c3e9df8|my 14:13 beat]]  → [my 14:13 beat](buzz://message?channel=…&id=…)
 ```
+
+The words are what the reader gets, so make them a name ("the wallet question", "Jarvis's fork-row note") — never
+the hex again (`[[4ec7fc99|4ec7fc99]]` shows a human eight hex digits with a link under them).
 
 Any 6+ hex prefix or a full id works; a pointer to an id this duck has never seen refuses the send (nothing goes
 out), so check `refs` / `tasks_board` first. Hex that is NOT a Buzz event (a commit, a sha256, a blob) is not a
