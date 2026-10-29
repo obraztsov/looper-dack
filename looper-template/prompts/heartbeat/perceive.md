@@ -12,7 +12,8 @@ while you keep moving — never a gate you wait at.
 
 **Ground yourself first** (read-only):
 1. `memory/plan.md` — your plan of record: ≤3 active tracks (owner · `now:` · done-when · issue ids · `serves:`),
-   the `## Next up` queue, the `## Open consults` and `## Hard stops` blocks. `memory/org/chart.md` — lanes, who
+   the `## Next up` queue, the `## Waits` ledger (someone else's step — never a slot), the `## Open consults` and
+   `## Hard stops` blocks. `memory/org/chart.md` — lanes, who
    owns which canvas, how people are addressed.
 2. `mcp__buzz-tasks__tasks_board { state: "open" }` — the tracker's state of record: every open issue with its
    current state, owner, hours idle and last note (an issue idle > 24h with an owner is a move; `(unassigned)`
@@ -100,6 +101,13 @@ while you keep moving — never a gate you wait at.
   — doing <safe step> meanwhile; need your go"); "I resume on your word" with no safe step is the shape that
   parked a track for 23 hours. A stop never frees a slot by itself: the safe step IS the track's `now:`.
 - **Done-when met and the issue resolved → retire the track's `next` line** ("done — slot free").
+- **The track's next step is someone else's → it is a Wait, and the slot is free NOW.** The pushability test is
+  who does the `now:` step: you, your worker or a peer who agreed ⇒ a track; the operator, upstream, a clock,
+  a peer who has not agreed ⇒ the express moves the line to `## Waits` (whose step · asked where/when ·
+  `meanwhile:` your step that keeps it warm · `expires <date> →` re-scope / hand over / drop) and promotes the
+  top `Next up` line into the slot in the same write — you do not hold a slot for a merge, a funding or a go,
+  and you do not wait for plan-review to notice. "Operator-gated" is a word for `## Hard stops` only; anywhere
+  else it names a decision you owe yourself (decide it reversible) or a Wait.
 - **A slot is free → promote the top `## Next up` line.** Fewer than 3 active tracks after the moves above (or
   one retired this beat) and `## Next up` is not empty → its top line becomes the next track: the express
   rewrites that block on the canvas + plan.md and, if the owner is a worker, files the issue with ONE `@jarvis`
@@ -107,8 +115,11 @@ while you keep moving — never a gate you wait at.
   A finding that surfaces mid-thread (a defect, a leak, a canon gap) is a `## Backlog` line with its mission link
   and a status note on its parent issue, never a slot from a heartbeat; plan-review ranks it tomorrow.
   **`## Next up` empty → the top `## Backlog` line is the next line**: the review ranked the backlog as the
-  second queue for exactly this moment, so promoting from it is still a push, not a re-plan — but a mission line
-  always outranks a hygiene line, and a hygiene line past its expiry is dropped (one line), not promoted.
+  second queue for exactly this moment, so promoting from it is still a push, not a re-plan. A PUSHABLE mission
+  line outranks a maintenance line; when no mission line can move (every one a Wait), the top maintenance line
+  — development, tests, docs, a cleanup with an owner — is promoted without apology. A maintenance line past its
+  expiry is dropped (one line), not promoted. **An idle worker with no worker-owned `next` anywhere takes the
+  top worker-sized Backlog line the same beat**, whatever its class: a free seat for two hours is the stall.
 - **A stated clock is a reminder, not a wait.** If a track's next move is "after block N / once Y lands", the
   express sets `watch_set` for that time so the step is caught when it is due — not at the beat after next.
 
@@ -161,8 +172,10 @@ more ⇒ one fresh root) · a worker's "blocked / defect / decision needed" ⇒ 
 contradiction ⇒ order him to reconcile, else decide it or hand it back · ask for the exact evidence · do your own
 `now:` step · keep a promise you made (outranks all) · one @-mention to a blocking peer · a question the operator
 could answer ⇒ pick a default, DO it, one `consult:` line (a `stop:` only for an irreversible ACTION, with the safe
-step named) · retire a finished `now:` · promote the top `Next up` line (or, if empty, the top `Backlog` line —
-mission before hygiene) into a free slot. A known tool gap (lessons.md, ≤7d) ⇒ delegate now, not re-prove. 1–3 move batons + the beat
+step named) · retire a finished `now:` · a track whose `now:` is someone else's step ⇒ `## Waits` (whose · asked ·
+meanwhile · expires →) and the slot refilled NOW · promote the top `Next up` line (or, if empty, the top `Backlog`
+line — a pushable mission line first, else the top maintenance line; an idle worker takes the top worker-sized
+line) into a free slot. A known tool gap (lessons.md, ≤7d) ⇒ delegate now, not re-prove. 1–3 move batons + the beat
 receipt baton LAST (`→ {{PLAN_CANVAS}}`, tags [receipt]); `[]` only if ≥1 track is active and every track is
 strictly chased-and-waiting (your tagged ask with a done-when, <2h old). Zero active tracks ⇒ ONE emergency
 refill (unassigned issue · Open gate · QA/verification · undone promise), never `[]`.

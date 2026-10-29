@@ -102,11 +102,16 @@ re-send what another baton carries. One chat message at most; tracker writes as 
   issue <id>`. If the baton says the record contradicts him (a PASS or `verified:` on the same artifact), the reply
   instead names both artifacts and orders the reconciliation, as a fresh root (new session). Neither shape is an
   escalation; nothing goes to c-level from this move. `watch_set` as for any message to him.
+- **Move a track to `## Waits`** (the baton says its `now:` is someone else's step): `canvas get` → the track
+  leaves `## Active tracks` and becomes one `## Waits` line — what · whose step · asked <where/when> · `meanwhile:`
+  <your step> · `expires <date> →` <action> — and the top `## Next up` line takes its slot in the SAME `set`;
+  `Write memory/plan.md` identical; one line under `## Decisions I made`. Never a slot left empty, never a wait
+  left without a `meanwhile:` and an expiry.
 - **Promote from `## Next up`.** `canvas get` → move the TOP `Next up` line into `## Active tracks` as the next
   number, in the track shape (owner · `now:` · done-when · issues · `serves:`) → `set`; `Write memory/plan.md`
-  identical. `Next up` empty → the TOP `## Backlog` line moves the same way — the top MISSION line, skipping any
-  hygiene line while a mission line exists; a hygiene line past its expiry is deleted with one line under
-  `## Decisions I made`, not promoted. An **emergency refill** (the baton
+  identical. `Next up` empty → the TOP `## Backlog` line moves the same way — the top PUSHABLE mission line
+  first; when no mission line can move, the top maintenance line (development, tests, docs, a cleanup), not a
+  skip; a maintenance line past its expiry is deleted with one line under `## Decisions I made`, not promoted. An **emergency refill** (the baton
   says so: zero active tracks, both queues empty) is written in the same shape as track 1 plus one line under
   `## Decisions I made` ("emergency refill <date> — plan-review ranks it"); its first step starts now if it fits. Owner is Jarvis → `["issues","create",…]` (what · why · shape of the answer · done-when), `["issues",
   "assign",…]`, ONE pointer `["messages","send","--channel","research","--content","@jarvis <one line> — issue <id>"]`,

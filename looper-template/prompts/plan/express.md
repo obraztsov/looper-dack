@@ -24,6 +24,8 @@ shape and `["canvas","set","--channel","{{PLAN_CANVAS}}","--content","<md>"]`:
 2. …
 ## Next up (pre-approved — a heartbeat promotes the top line when a slot frees; ≥3, sized to the burn rate)
 - <owner · first step · done-when>
+## Waits (someone else's step — never a slot; each with a date and an exit)
+- <what · whose step: operator/upstream/peer/clock · asked <date> <event id> · meanwhile: <my step keeping it warm> · expires <date> → <re-scope | hand over | drop>>
 ## Open consults (one line each — asked in c-level with @ilia_xbt; restated there once a day while open; work
 ## continues on the stated default; closes on an answer or after 3 days on the default)
 - <question → default I am working on · asked <date> <event id> · <n> days>
@@ -32,18 +34,21 @@ shape and `["canvas","set","--channel","{{PLAN_CANVAS}}","--content","<md>"]`:
 - <the action stopped · the safe step being done instead · asked <date> <event id>>
 ## Decisions I made (7 days)
 - <date> <decision> — <source or why>; reversible
-## Backlog (ranked — second queue: a heartbeat promotes the top line once Next up is empty; hygiene lines last, each
-## with an expiry date)
-- <one line each, in order · expires <date> for hygiene/bookkeeping lines>
+## Backlog (ranked — second queue: a heartbeat promotes the top line once Next up is empty; mission lines above
+## maintenance lines while a mission line is pushable; maintenance lines carry an expiry date)
+- <one line each, in order · owner · first step · expires <date> for maintenance lines>
 ## Done this week
 - <date> <track or issue> — <artifact>
 ```
 Keep the `Done this week` and `Decisions I made` lines the old canvas had (drop ones older than 7 days). No
 commit hashes in the tracks beyond the issue ids — hashes belong in issues and project notes. The whole canvas
 stays under ~70 lines; if it does not fit, the plan is too long, not the canvas too small. There is no
-`blocked-on` field and no `Parked on operator` block: a track that cannot move today is a Backlog line, a
-question for the operator is an Open consult with a default you are already working on, and a Hard stop names
-the irreversible action and the safe step you took instead.
+`blocked-on` field and no `Parked on operator` block: a track whose next step is someone else's is a `Waits`
+line (whose step · asked · meanwhile · expires →) and its slot is refilled in the same write, a question for the
+operator is an Open consult with a default you are already DOING, and a Hard stop names the irreversible action
+and the safe step you took instead. "operator-gated" appears on this canvas only inside `Hard stops`. When the
+gist says the epoch is at hand-over, the **Epoch of record** line names the NEW epoch and the old one's rows sit
+under `Waits`.
 
 **2 · `memory/plan.md`** — `Write` the same content (you may write `memory/` here). plan.md and the canvas
 must say the same thing after this step; the push beats read plan.md, the fleet reads the canvas.
@@ -92,8 +97,8 @@ replies and the summary are. Report only what you actually CALLED and what it RE
 NOT done so tomorrow's review picks it up.
 ---task---
 # Express (plan review) — write the plan of record, file the delegations, post one summary
-canvas get → set `{{PLAN_CANVAS}}` in the fixed shape (≤3 pushable tracks with `now:` · Next up · Open consults ·
-Hard stops · Decisions I made · Backlog with expiries · Done this week) → `Write memory/plan.md` identical →
+canvas get → set `{{PLAN_CANVAS}}` in the fixed shape (≤3 pushable tracks with `now:` · Next up · Waits · Open
+consults · Hard stops · Decisions I made · Backlog with expiries · Done this week) → `Write memory/plan.md` identical →
 close duplicates / resolve "met by" issues / resolve finished / `tasks_find` then create+assign new issues → the
 DAILY ORDER: ONE `@jarvis today, in order: 1) issue — step 2) …` root in research covering EVERY worker-owned
 track, new or not (armed + `watch_set` 120 min) → "closing consult:" reply where a default held → one ≤12-line
